@@ -1,0 +1,81 @@
+---
+title: "Safety"
+description: "Account protection standards, anti-ban safeguards, safe messaging limits, and auto-pause protection in Instance."
+---
+
+## 1. The 24-Hour Messaging Window Rule
+
+Meta enforces a strict standard messaging window across all Instagram business accounts:
+
+- Whenever an Instagram user initiates an interaction (sends a DM, replies to a story, or clicks a button in chat), a **24-hour window** opens.
+- Within this 24-hour window, your account can send automated responses, media, and multi-step message flows.
+- Outside of this 24-hour window, sending automated promotional messages is prohibited by Meta policy.
+
+### How Instance Protects Your Account
+Instance tracks the exact timestamp of every interaction. If an automation sequence is scheduled to send after the 24-hour window has expired, Instance safely stops the message instead of risking a policy violation or account penalty.
+
+---
+
+## 2. Human-Like Delays and Natural Pacing
+
+Sending direct messages within milliseconds of every user interaction looks like robotic bot activity and can trigger Instagram spam filters.
+
+### Protection Safeguards
+- **Randomized Delays (Jitter)**: Instead of replying at the exact same millisecond every time, Instance adds small, natural variations (for example, 4 to 12 seconds) to simulate a real human response.
+- **Conversational Pacing**: In multi-step sequences, Instance spaces out replies to allow the user time to read before sending subsequent buttons or questions.
+- **Thread Pacing**: Consecutive messages sent to the same user are spaced by at least 1.0 second, preventing message flooding in a single conversation thread.
+
+---
+
+## 3. Safe Messaging Limits and Automatic Queue Pacing
+
+To protect your account health, Instance monitors outbound activity and keeps your messaging volume within Meta recommended safety thresholds.
+
+### Messaging Safety Limits
+
+| Interaction Type | Safe Volume Threshold | How Instance Protects You |
+| :--- | :--- | :--- |
+| **Direct Messages (DMs)** | High throughput standard messaging | Paced queue delivery with automatic rate monitoring |
+| **Private Replies (Comment-to-DM)** | Up to 750 messages per hour | Managed hourly queue aligned with Meta rolling hourly limit |
+| **Public Comment Replies** | 60 replies per hour | Safe ceiling to keep public post comments authentic |
+| **Thread Pacing (Same User)** | Minimum 1.0 second between messages | Prevents message bursts to an individual user |
+
+### What Happens When Limits Are Reached
+If your account reaches any of these thresholds during a viral post or high-traffic campaign:
+- **No Messages Are Dropped**: Instance never loses your leads or customer messages.
+- **Automatic Deferral**: Outbound messages are held safely in your queue and automatically spaced out to send as soon as capacity opens up.
+- **Retry Protection**: Queue delays do not count against message delivery attempts, ensuring your automations complete smoothly.
+
+---
+
+## 4. Circuit Breakers and Auto-Pause Protection
+
+If Meta flags a temporary restriction or credential issue on your account, Instance responds immediately to prevent further risk.
+
+### Automatic Safety Actions
+
+- **Temporary Action Block (Error Code 368)**:
+  - If Instagram temporarily restricts an action, Instance immediately trips the circuit breaker for that account.
+  - Active automations for that handle are set to `PAUSED` automatically.
+  - Queued messages are deferred with a safe delay rather than repeatedly hitting the block.
+  - An alert banner is displayed on **Dashboard -> Overview**.
+- **Expired Access Token (Error 190)**:
+  - If your login token expires, Instance halts outbound requests immediately to prevent repeated invalid request errors.
+  - A reconnection banner prompts you to re-authenticate under **Dashboard -> Settings -> Integrations**.
+- **Platform Throttling (Error Code 4 or 429)**:
+  - If Meta reports temporary busy status, Instance pauses outbound delivery for 60 seconds and resumes automatically without requiring manual action.
+
+---
+
+## 5. Account Warm-Up Playbook for New Accounts
+
+If your Instagram account is newly connected or has never used automations before, do not launch high-volume campaigns on day one. Follow this recommended warm-up schedule:
+
+| Timeline | Recommended Daily Volume | Focus Area |
+| :--- | :--- | :--- |
+| **Week 1** | 30 to 50 automated DMs per day | Test with team members, close followers, and internal tests |
+| **Week 2** | 100 to 150 automated DMs per day | Single post comment-to-DM triggers |
+| **Week 3** | 250 to 400 automated DMs per day | Story mentions, keyword triggers, and active posts |
+| **Week 4+** | Scaled production volume | Full lead funnels, viral reels, and keyword automations |
+
+By gradually scaling volume, Instagram trust scoring algorithms register high engagement and low block rates, keeping your account protected and ready for high-growth campaigns.

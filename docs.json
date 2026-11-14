@@ -1,0 +1,50 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "name": "Instance",
+  "theme": "mint",
+  "styling": {
+    "eyebrows": "breadcrumbs"
+  },
+  "customCSS": "/custom.css",
+  "colors": {
+    "primary": "#2563EB",
+    "light": "#60A5FA",
+    "dark": "#1D4ED8"
+  },
+  "favicon": "/favicon.svg",
+  "navbar": {
+    "primary": {
+      "type": "button",
+      "label": "Open App",
+      "href": "https://instance.sales"
+    }
+  },
+  "banner": {
+    "content": "Instance Open source AI sales CRM: Turn Instagram into an automated 24/7 sales engine.",
+    "dismissible": true
+  },
+  "search": {
+    "prompt": "Search for Automations, Qualification, Prompts, APIs..."
+  },
+  "contextual": {
+    "options": [
+      "copy",
+      "view",
+      "chatgpt",
+      "claude",
+      "cursor",
+      "vscode"
+    ]
+  },
+  "navigation": {
+    "pages": [
+      "overview",
+      "installation",
+      "docker",
+      "instagram-setup",
+      "features",
+      "safety",
+      "deployment"
+    ]
+  }
+}

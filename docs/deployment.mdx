@@ -1,0 +1,83 @@
+---
+title: "Deployment"
+description: "Deploy Instance to production with Docker, apply Prisma database migrations, configure production environment variables, and connect Meta webhooks."
+---
+
+Deploying Instance in production is straightforward. Follow the steps below to configure your production environment, apply Prisma database migrations, update Meta credentials and redirect URIs, and launch the application services.
+
+---
+
+## 1. Clone Repository and Create Environment File
+
+Clone the repository and copy the production environment template:
+
+```bash
+git clone https://github.com/instance-inc/instance.git
+cd instance
+cp .env.example .env
+```
+
+---
+
+## 2. Configure Production Environment Variables
+
+Edit `.env` and set your production values:
+
+```bash
+# Core Node Environment
+NODE_ENV="production"
+
+# Application Domains
+NEXT_PUBLIC_APP_URL="https://app.yourdomain.com"
+NEXT_PUBLIC_API_URL="https://api.yourdomain.com"
+
+# Production PostgreSQL Database
+# DATABASE_URL uses connection pooling for high-concurrency queries
+DATABASE_URL="postgresql://user:password@production-host:5432/instance?sslmode=require&pgbouncer=true"
+# DIRECT_URL connects directly without pooling for Prisma schema migrations
+DIRECT_URL="postgresql://user:password@production-host:5432/instance?sslmode=require"
+
+# Production Redis Instance
+REDIS_URL="redis://default:password@production-redis-host:6379"
+
+# Strong Security Secrets
+NEXTAUTH_SECRET="your-strong-random-nextauth-secret-key"
+META_WEBHOOK_VERIFY_TOKEN="your-strong-random-webhook-verify-token"
+
+# Instagram App Credentials and Production Redirect URI
+INSTAGRAM_APP_ID="your-meta-instagram-app-id"
+INSTAGRAM_APP_SECRET="your-meta-instagram-app-secret"
+INSTAGRAM_REDIRECT_URI="https://app.yourdomain.com/api/instagram/callback"
+```
+
+---
+
+## 3. Apply Prisma Database Migrations
+
+Before serving live traffic, apply all pending Prisma schema migrations to your production PostgreSQL database:
+
+```bash
+pnpm run db:deploy
+```
+
+### Important Database Migration Notes:
+- **What it does**: `pnpm run db:deploy` runs `prisma migrate deploy` under `@instance/db`. It applies pending migrations safely without resetting or dropping data.
+- **Why `DIRECT_URL` is mandatory**: If using managed PostgreSQL providers with connection poolers (such as Neon or Supabase with PgBouncer in transaction mode), connection poolers cannot handle Prisma migration locks. Prisma automatically uses `DIRECT_URL` (direct unpooled connection) for schema migrations and `DATABASE_URL` (pooled connection) for runtime application queries.
+- **Docker Compose Automation**: When using the included `docker-compose.yml`, the `db-migrate` service automatically executes `pnpm run db:deploy` and verifies completion before starting the API server and worker engine.
+
+---
+
+## 4. Configure Meta Webhooks for Production
+
+Update your live webhook endpoint in the [Meta Developer Console](https://developers.facebook.com/):
+
+1. In your Meta App dashboard, navigate to the **Configure Webhook** section (or **Webhooks -> Instagram**).
+2. Update the **Callback URL** to point to your live production API endpoint:
+   `https://api.yourdomain.com/api/webhook/instagram`
+   *(Always include the `/api/` path prefix)*.
+3. Enter your production **Verify Token** (matching `META_WEBHOOK_VERIFY_TOKEN`).
+4. Click **Verify and Save**.
+5. Ensure subscriptions are active for: `messages`, `messaging_postbacks`, `comments`, and `message_reactions`.
+
+---
+

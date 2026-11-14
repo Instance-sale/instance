@@ -1,0 +1,58 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "name": "Instance",
+  "theme": "mint",
+  "styling": {
+    "eyebrows": "breadcrumbs"
+  },
+  "customCSS": "/custom.css",
+  "colors": {
+    "primary": "#2563EB",
+    "light": "#60A5FA",
+    "dark": "#1D4ED8"
+  },
+  "favicon": "/favicon.svg",
+  "navbar": {
+    "primary": {
+      "type": "button",
+      "label": "Open App",
+      "href": "https://instance.sales"
+    }
+  },
+  "banner": {
+    "content": "Instance Open source AI sales CRM: Turn Instagram into an automated 24/7 sales engine.",
+    "dismissible": true
+  },
+  "search": {
+    "prompt": "Search for Automations, Qualification, Prompts, APIs..."
+  },
+  "contextual": {
+    "options": [
+      "copy",
+      "view",
+      "chatgpt",
+      "claude",
+      "cursor",
+      "vscode"
+    ]
+  },
+  "navigation": {
+    "pages": [
+      "overview",
+      "installation",
+      "docker",
+      "instagram-setup",
+      "features",
+      "safety",
+      "deployment"
+    ]
+  },
+  "description": "Instance is an AI sales CRM that turns your Instagram into a 24/7 sales pipeline. Let AI handle your DMs, qualify leads, and close deals on autopilot",
+  "logo": {
+    "light": "/favicon.svg",
+    "dark": "/favicon.svg"
+  },
+  "thumbnails": {
+    "background": "/docs/images/web-app-manifest-192x192.webp"
+  }
+}

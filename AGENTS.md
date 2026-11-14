@@ -49,7 +49,7 @@ Documentation is code. Whenever adding, refactoring, or modifying APIs, database
 - **ZERO rect rgb(...)** or opaque bounding boxes that obscure text in dark or light mode.
 - **Exact In-App UI Paths**: Always document real UI navigation (e.g., `Dashboard -> Automation -> New Automation`) rather than raw `.env` edits.
 - **docs.json Sync**: Any newly created `.mdx` doc must be registered in both [docs.json](file:///c:/Users/Sumama/Desktop/instance-oss/docs.json) and [docs/docs.json](file:///c:/Users/Sumama/Desktop/instance-oss/docs/docs.json).
-- **Canonical Online Docs URL**: Reference `https://instance.sales/oss/docs` for all public documentation links.
+- **Canonical Online Docs URL**: Reference `https://docs.instance.sale/oss` for all public documentation links.
 - **Clickable Links**: Use `file:///` links for all local file and code references in assistant output.
 
 ---

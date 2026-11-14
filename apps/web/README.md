@@ -26,8 +26,8 @@ pnpm --filter @instance/web start
 ## Documentation
 
 For full setup guides, flow builder walkthroughs, and UI navigation paths:
-- [Features Deep Dive](https://instance.sales/oss/docs/features)
-- [Installation Guide](https://instance.sales/oss/docs/installation)
-- [Overview & Architecture](https://instance.sales/oss/docs/overview)
-- [Full Documentation Portal](https://instance.sales/oss/docs)
+- [Features Deep Dive](https://docs.instance.sale/oss/features)
+- [Installation Guide](https://docs.instance.sale/oss/installation)
+- [Overview & Architecture](https://docs.instance.sale/oss/overview)
+- [Full Documentation Portal](https://docs.instance.sale/oss)
 

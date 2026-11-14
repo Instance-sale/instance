@@ -23,7 +23,7 @@ pnpm --filter @instance/workers build
 ## Documentation
 
 For deep dives into account health tracking, circuit breakers, and rate limit protections:
-- [Safety & Anti-Ban Guide](https://instance.sales/oss/docs/safety)
-- [Architecture Overview](https://instance.sales/oss/docs/overview)
-- [Full Documentation Portal](https://instance.sales/oss/docs)
+- [Safety & Anti-Ban Guide](https://docs.instance.sale/oss/safety)
+- [Architecture Overview](https://docs.instance.sale/oss/overview)
+- [Full Documentation Portal](https://docs.instance.sale/oss)
 

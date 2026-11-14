@@ -5,7 +5,7 @@
 **The open-source Manychat alternative. Scale your audience with zero subscription fees.**
 
 [![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Documentation](https://img.shields.io/badge/Docs-instance.sales%2Foss%2Fdocs-2563EB)](https://instance.sales/oss/docs)
+[![Documentation](https://img.shields.io/badge/Docs-instance.sale%2Foss%2Fdocs-2563EB)](https://docs.instance.sale/oss)
 [![Next.js](https://img.shields.io/badge/Frontend-Next.js%2016-000000?logo=next.js)](apps/web/)
 [![NestJS](https://img.shields.io/badge/Backend-NestJS%2011-E0234E?logo=nestjs)](apps/api/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
@@ -89,14 +89,14 @@ Complete step-by-step documentation with screenshots, configuration guides, and 
 
 | Document | Purpose | Online Docs Link |
 | :--- | :--- | :--- |
-| **Overview** | Platform architecture, microservices breakdown. | [Read Overview](https://instance.sales/oss/docs/overview) |
-| **Installation** | Rapid 2-minute setup, environment variables reference, and local dev server. | [Read Installation](https://instance.sales/oss/docs/installation) |
-| **Docker** | Container setup, named volume persistence, and docker compose orchestration. | [Read Docker Guide](https://instance.sales/oss/docs/docker) |
-| **Instagram Setup** | Meta Developer App creation, webhook verification, and tester onboarding. | [Read Instagram Setup](https://instance.sales/oss/docs/instagram-setup) |
-| **Meta App Review** | Production live mode, Business Verification, Allow Usage, and screencast guide. | [Read App Review Guide](https://instance.sales/oss/docs/meta-app-review) |
-| **Feature Deep Dive** | In-depth tour of builder canvas, comment engine, story triggers, and CRM. | [Read Features](https://instance.sales/oss/docs/features) |
-| **Safety & Anti-Ban** | Jitter pacing, sliding-window rate limits, and circuit breakers. | [Read Safety Guide](https://instance.sales/oss/docs/safety) |
-| **Production Deployment** | Production VPS deployment with Caddy SSL, Docker, and Railway. | [Read Deployment](https://instance.sales/oss/docs/deployment) |
+| **Overview** | Platform architecture, microservices breakdown. | [Read Overview](https://docs.instance.sale/oss/overview) |
+| **Installation** | Rapid 2-minute setup, environment variables reference, and local dev server. | [Read Installation](https://docs.instance.sale/oss/installation) |
+| **Docker** | Container setup, named volume persistence, and docker compose orchestration. | [Read Docker Guide](https://docs.instance.sale/oss/docker) |
+| **Instagram Setup** | Meta Developer App creation, webhook verification, and tester onboarding. | [Read Instagram Setup](https://docs.instance.sale/oss/instagram-setup) |
+| **Meta App Review** | Production live mode, Business Verification, Allow Usage, and screencast guide. | [Read App Review Guide](https://docs.instance.sale/oss/meta-app-review) |
+| **Feature Deep Dive** | In-depth tour of builder canvas, comment engine, story triggers, and CRM. | [Read Features](https://docs.instance.sale/oss/features) |
+| **Safety & Anti-Ban** | Jitter pacing, sliding-window rate limits, and circuit breakers. | [Read Safety Guide](https://docs.instance.sale/oss/safety) |
+| **Production Deployment** | Production VPS deployment with Caddy SSL, Docker, and Railway. | [Read Deployment](https://docs.instance.sale/oss/deployment) |
 
 ---
 

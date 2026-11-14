@@ -1,0 +1,146 @@
+---
+title: "Docker"
+description: "Launch the entire Instance platform with one command using Docker Compose."
+---
+
+## Prerequisites
+
+Before getting started, make sure you have:
+1. **Docker Desktop installed and running**: Download from [docker.com](https://www.docker.com/products/docker-desktop/).
+2. **Git installed**: Download from [git-scm.com](https://git-scm.com/).
+
+No external cloud database or Redis account is required: Docker provisions PostgreSQL and Redis locally on your machine.
+
+---
+
+## Step-by-Step Launch (3 Minutes)
+
+### Step 1: Clone the Repository
+
+Open your terminal and clone the project:
+
+```bash
+git clone https://github.com/instance-inc/instance.git
+cd instance
+```
+
+### Step 2: Prepare Your Environment File
+
+Copy the environment template:
+
+```bash
+cp .env.example .env
+```
+
+*(On Windows PowerShell, use `Copy-Item .env.example .env`)*
+
+The default `.env.example` is pre-configured to connect directly to the containerized PostgreSQL and Redis services. Configure your `NEXTAUTH_SECRET` (generate with `openssl rand -hex 32` or visit [generate-secret.vercel.app/32](https://generate-secret.vercel.app/32)), Google OAuth credentials, and optional Cloudflare R2 storage keys as outlined in the [Installation](file:///c:/Users/Sumama/Desktop/instance-oss/docs/installation.mdx) guide.
+
+### Step 3: Build and Start Containers
+
+Run the compose command to pull dependencies, build images, and launch all services in detached mode:
+
+```bash
+docker compose up -d
+```
+
+### Step 4: Verify Containers Are Healthy
+
+Check the status of all running services:
+
+```bash
+docker compose ps
+```
+
+All services should report a status of `Up` or `running`.
+
+---
+
+## Container Stack Overview
+
+| Container | Exposed Port | Role in Stack |
+| :--- | :--- | :--- |
+| **web** | `3000:3000` | Next.js frontend, visual flow builder, and CRM dashboard |
+| **api** | `4000:4000` | NestJS backend, REST endpoints, and Meta webhook receiver |
+| **workers** | Internal | BullMQ background workers for message dispatch and scheduled tasks |
+| **postgres** | `5432:5432` | Relational database holding leads, automations, and account data |
+| **redis** | `6379:6379` | In-memory message queues and webhook idempotency locks |
+
+---
+
+## Next Step: Connect Your Instagram Account
+
+Once your Docker containers are running and healthy:
+1. Open your browser and navigate to `http://localhost:3000`.
+2. Sign in to your workspace dashboard.
+3. Head directly to the [Instagram Setup](file:///c:/Users/Sumama/Desktop/instance-oss/docs/instagram-setup.mdx) guide to configure your Meta Developer App, launch your webhook tunnel, and start receiving live events!
+
+---
+
+## Data Volumes and Persistence
+
+Instance uses Docker named volumes to ensure your CRM leads, conversation histories, and automation configurations persist across container restarts and system reboots:
+
+- **`postgres_data`**: Stores the raw PostgreSQL database files.
+- **`redis_data`**: Persists queued BullMQ jobs and rate limit states.
+
+To restart containers without losing data, simply run:
+
+```bash
+docker compose restart
+```
+
+To take down containers while safely keeping all database volume data intact:
+
+```bash
+docker compose down
+```
+
+*(Note: Never pass the `-v` flag to `docker compose down` unless you explicitly intend to wipe your local database and start completely fresh.)*
+
+---
+
+## Helpful Docker Commands
+
+### Stream Live Logs
+View output from all services simultaneously:
+
+```bash
+docker compose logs -f
+```
+
+View logs for a specific service:
+
+```bash
+# View API server logs
+docker compose logs -f api
+
+# View background worker job logs
+docker compose logs -f workers
+
+# View web dashboard logs
+docker compose logs -f web
+```
+
+### Rebuilding Containers After Code Updates
+When pulling new updates from Git, rebuild and restart containers with:
+
+```bash
+docker compose down
+docker compose build --no-cache
+docker compose up -d
+```
+
+### Running Prisma Migrations Inside Docker
+To apply schema updates directly to the containerized database:
+
+```bash
+docker compose exec api pnpm db:push
+```
+
+---
+
+## Troubleshooting
+
+- **Port 5432 or 6379 Already in Use**: If you have a local PostgreSQL or Redis service running natively on your computer, stop them first or change the host port mappings in `docker-compose.yml`.
+- **Containers Exit Unexpectedly**: Run `docker compose logs [service-name]` to view the stack trace. The most common cause is missing mandatory environment variables in `.env`.

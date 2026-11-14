@@ -1,0 +1,265 @@
+---
+title: "Meta App Review & Live Mode"
+description: "Step-by-step guide for Meta App Review, Business Verification, Advanced Access permissions, Allow Usage questions, Data Handling declarations, screencast recording, and transitioning your Instagram automations to Live Mode."
+---
+
+When transitioning your Instagram app from Development Mode to Live Mode, Meta requires you to submit your requested permissions for **Meta App Review** to obtain **Advanced Access**.
+
+In Development Mode, webhooks and automations execute exclusively for Instagram accounts added as Instagram Testers. Once Advanced Access is approved and your app is in Live Mode, your Instance deployment can automate direct messages and comment replies for any public follower worldwide.
+
+---
+
+## 1. Step-by-Step Meta Developer Portal Walkthrough
+
+Follow these preliminary configuration steps inside the [Meta Developer Dashboard](https://developers.facebook.com/):
+
+### Step 1: Toggle App Mode from Development to Live
+1. Locate the top navigation bar of the Meta Developer Console.
+2. Next to your App Name, locate the **App Mode** status toggle currently set to **Development**.
+3. Click the toggle switch to change the mode to **Live**.
+
+### Step 2: Configure Basic App Settings and Public URLs
+Before Meta permits webhook verification or submission, you must provide your basic app identity and public legal documents:
+1. In the left navigation sidebar, navigate to **App settings -> Basic**.
+2. Complete the required fields:
+   - **Display Name**: Enter your application or company name (e.g. `Instance CRM`).
+   - **App Domains**: Enter your live production domain (e.g. `yourdomain.com`).
+   - **Contact Email**: Enter your reachable administrator or developer email address.
+   - **Privacy Policy URL**: Enter your live HTTPS link (e.g. `https://yourdomain.com/privacy`) detailing how user data and Instagram information is collected, processed, and protected.
+   - **Terms of Service URL**: Enter your live HTTPS link (e.g. `https://yourdomain.com/terms`).
+   - **User Data Deletion**: Select **Data Deletion Instructions URL** and provide your live URL (e.g. `https://yourdomain.com/privacy/data-deletion`).
+   - **App Icon**: Upload a clean 1024 x 1024 pixel square image for your application logo.
+   - **Category**: Select **Messaging** (Recommended) or **Business and Pages**.
+3. Click **Save changes** at the bottom of the page.
+
+### Step 3: Complete Business Verification (Mandatory Prerequisite)
+Meta enforces business entity verification before granting Advanced Access to messaging and comment permissions:
+1. On the same **App settings -> Basic** page, scroll down to the **Verification** section (or open **Meta Business Portfolio -> Security Center**).
+2. Click **Start Verification** and select your legal business entity type.
+3. Enter your legal business details. **Your legal name and physical address must match your official registration documents character for character**.
+4. Upload one of the accepted official documents:
+   - Certificate of Incorporation or Business Registration Certificate.
+   - Government Tax Registration Certificate (GST, VAT, EIN, PAN).
+   - Official Business Bank Statement or Business Utility Bill (must clearly display company legal name and physical address).
+5. Verify phone number or business email via one-time verification code (OTP).
+6. Once Meta approves your verification (typically 1 to 3 business days), the verification badge clears the review lock on your App Dashboard.
+
+### Step 4: Configure Production Webhooks in Instagram API Setup
+Now that your domain and basic settings are saved, connect your production webhook endpoint:
+1. In the left navigation sidebar, navigate to **Instagram -> API Setup with Instagram Business login**.
+2. Scroll down to the **Configure Webhook** section.
+3. Enter your production webhook parameters:
+   - **Callback URL**: `https://api.yourdomain.com/api/webhook/instagram` *(always include the `/api/` prefix, as Instance routes through `/api/webhook/instagram`)*.
+   - **Verify Token**: Enter the exact string configured in your production `.env` file for `META_WEBHOOK_VERIFY_TOKEN`.
+   - **Redirect URI**: Verify that `INSTAGRAM_REDIRECT_URI` in your production `.env` points to `https://app.yourdomain.com/api/instagram/callback`.
+4. Click **Verify and Save**. Meta sends a test challenge request to your API. Instance validates the token and confirms the connection immediately.
+
+### Step 5: Select Permissions and Submit for App Review
+1. On the same Instagram API setup page, scroll down to **App Review for Instagram** and click **Go to App** (or **Continue**).
+2. Click **Request Advanced Access and Permissions**.
+3. Select only the permissions actively used by Instance:
+   - **`instagram_business_basic`**: **Check (Required)** - Reads Instagram profile metadata (ID, username, avatar, follower count, account type).
+   - **`instagram_business_manage_messages`**: **Check (Required)** - Ingests incoming direct messages, story mentions, story replies, icebreakers, and dispatches automated DM flows.
+   - **`instagram_business_manage_comments`**: **Check (Required)** - Ingests incoming comments on feed posts and reels, publishes automated public replies, and likes comments.
+   - **`instagram_business_manage_insights`**: **Uncheck** - Analytics metrics are not queried by Instance core.
+   - **`instagram_business_content_publish`**: **Uncheck** - Scheduled feed posting is not used by Instance core.
+   - **Facebook Page Permissions**: **Uncheck All** - Do not request legacy Facebook permissions.
+4. Click **Go to App Review**. Meta now redirects you directly to the **Submit for App Review** dashboard.
+
+---
+
+## 2. Navigating the Submit for App Review Dashboard
+
+When redirected to the **Submit for App Review** screen, Meta organizes your submission into five core sections:
+
+| Review Section | Status | What Is Required |
+| :--- | :--- | :--- |
+| **1. Verification** | **Pre-Completed** | Displays a green checkmark if Step 3 (Business Verification) was completed. |
+| **2. App Settings** | **Pre-Completed** | Displays a green checkmark if Step 2 (App Settings, Icons, URLs) was completed. |
+| **3. Allow Usage** | **Action Required** | You must complete the use-case questions, upload a screencast, and agree to usage terms for each requested permission. |
+| **4. Data Handling** | **Action Required** | You must declare your cloud data processors, controller details, and public authority request disclosures. |
+| **5. Review Instructions** | **Action Required** | You must provide testing URLs, test credentials, step-by-step navigation, and upload your screencast video. |
+
+---
+
+## 3. Allow Usage: Permission Details and Video Walkthroughs
+
+Click **Go to Allow Usage**. For each permission (`instagram_business_basic`, `instagram_business_manage_messages`, `instagram_business_manage_comments`), Meta asks three mandatory requirements:
+1. **Tell us how you are using this permission or feature** (Use case, value added, why it is necessary).
+2. **Provide a detailed step-by-step video walkthrough** showing the end-to-end user experience.
+3. **Agree with Allowed Usage** (Confirmation checkbox).
+
+Use the following policy-compliant templates:
+
+### Permission 1: `instagram_business_basic`
+
+> **Tell us how you are using this permission or feature:**  
+> "We use `instagram_business_basic` only to read basic profile information for the Instagram Business or Creator accounts that a user connects to Instance, and for the Instagram users who message them (for example: username, account ID, profile picture, follower count, and basic public metadata). We do not post content, change account settings, or access private data beyond what is required for this purpose.  
+>  
+> **How it adds value for people using our app:**  
+> Our app is an open-source CRM and automation platform for Instagram direct messages. Basic profile data allows users to see a clean, human-readable view of their conversations and leads instead of raw IDs. Users can:  
+> - Recognize who they are talking to by handle and avatar in a unified inbox.  
+> - View and manage leads in a CRM pipeline, grouped by Instagram profile.  
+> - Prioritize and qualify leads using simple context like follower count.  
+> - View campaign metrics in a way that matches what they see inside Instagram.  
+>  
+> **Why it is necessary for app functionality:**  
+> Without this permission, our app cannot reliably identify which Instagram business account is connected to the workspace, attach incoming DMs and comments to the correct customer profile, or display contact lists. All data stays inside our application, is used only to provide CRM and messaging features to the account owner, and is deleted or anonymized when a user disconnects their Instagram account or closes their workspace."
+
+- **Video Walkthrough**: Upload your screencast showing account connection and profile metadata appearing in Settings.
+- **Allowed Usage Agreement**: Check the box: *"If approved, I agree that any data I receive through instagram_business_basic will be used in accordance with the allowed usage."*
+
+---
+
+### Permission 2: `instagram_business_manage_messages`
+
+> **Tell us how you are using this permission or feature:**  
+> "We agree to comply with Meta's allowed usage for `instagram_business_manage_messages`. Instance uses this permission to read and send messages on authorized Instagram Business and Creator accounts so we can provide a unified CRM and messaging automation platform for Instagram direct messages.  
+>  
+> **How we use this permission:**  
+> - View incoming DMs and store them in a secure inbox for the account owner.  
+> - Send automated replies via configured automations (for example: comment triggers that send a DM, story reply flows, and multi-step interactive DM funnels).  
+> - Support manual team replies from the web dashboard so team members can respond without sharing phone access.  
+> - Keep full conversation history and context in one place (messages, lead notes, tags) to help account owners manage sales and customer support.  
+>  
+> **How it adds value for people using the app:**  
+> - Provides a centralized place to manage Instagram DMs across team members.  
+> - Automations help businesses reply faster, follow up consistently, and avoid missing leads.  
+> - Team members can collaborate with roles and notes, which is not possible in the native mobile app alone.  
+>  
+> **Why it is necessary for app functionality:**  
+> Without `instagram_business_manage_messages`, our app cannot receive incoming DMs or dispatch automated replies. The core purpose of Instance (managing and automating Instagram customer conversations) would not function without this permission. We never use message content for advertising or data resale."
+
+- **Video Walkthrough**: Upload your screencast showing automated DM dispatch triggered by user interactions.
+- **Allowed Usage Agreement**: Check the box: *"If approved, I agree that any data I receive through instagram_business_manage_messages will be used in accordance with the allowed usage."*
+
+---
+
+### Permission 3: `instagram_business_manage_comments`
+
+> **Tell us how you are using this permission or feature:**  
+> "We agree to comply with Meta's allowed usage for `instagram_business_manage_comments`. Instance uses this permission only to read comments and create replies on behalf of the authorized Instagram Business or Creator account owner. We do not delete or bulk-edit comments.  
+>  
+> **How we use this permission:**  
+> - Read comments on feed posts and reels to detect specific keywords that trigger automations (for example, users commenting 'INFO', 'LINK', or 'ACCESS').  
+> - Post automated public replies to comments acknowledging inquiries (for example: 'Thanks for reaching out! We sent you the link in your DMs.').  
+> - Trigger Comment-to-DM flows, sending users private messages with requested links or next steps immediately after they comment.  
+> - Auto-like user comments to confirm engagement.  
+>  
+> **How it adds value for people using the app:**  
+> - Businesses can run comment-to-DM lead generation campaigns and deliver resources automatically instead of manually checking every comment.  
+> - Handles large comment volumes consistently during product launches or promotions without missing potential leads.  
+> - Audiences receive immediate, helpful responses.  
+>  
+> **Why it is necessary for app functionality:**  
+> Without `instagram_business_manage_comments`, the application cannot detect when a user comments a keyword, cannot post public confirmation replies, and cannot trigger Comment-to-DM workflows. These comment automations represent a core capability of Instance."
+
+- **Video Walkthrough**: Upload your screencast showing a test comment triggering an auto-reply and private DM.
+- **Allowed Usage Agreement**: Check the box: *"If approved, I agree that any data I receive through instagram_business_manage_comments will be used in accordance with the allowed usage."*
+
+---
+
+## 4. Data Handling Questions: Declaration Guide
+
+Click **Go to Data Handling**. Meta asks specific technical questions regarding data processors, controllership, and disclosures. Answer according to your production deployment infrastructure:
+
+### Processor Disclosures
+- **`processor-0`**: *Do you have data processors or service providers, including your own companies, that will have access to the Platform Data that you obtain from Meta?*  
+  -> Select **Yes**.
+
+- **`processor-2`**: *List all data processors or service providers that will have access to Platform Data:*  
+  Declare the cloud infrastructure providers utilized by your Instance deployment. Common processors include:
+  1. **Upstash Inc.** (or your Redis provider)  
+     - Category of service: `IT solutions and services, including cloud storage and processing`.  
+     - Countries: Select the countries where your Redis cluster is hosted (e.g. United States, Germany, Ireland, etc.).
+  2. **Supabase Inc. / Neon Inc.** (or your PostgreSQL database host)  
+     - Category of service: `IT solutions and services, including cloud storage and processing`.  
+     - Countries: Select your database hosting regions.
+  3. **Vercel Inc. / Railway / AWS / Hetzner** (or your container hosting provider)  
+     - Category of service: `IT solutions and services, including cloud storage and processing`.  
+     - Countries: Select your server hosting regions.
+  4. **Groq Inc.** (if using Groq AI for automated translations or message generation)  
+     - Category of service: `IT solutions and services, including cloud storage and processing`.  
+     - Countries: Select applicable processing regions.
+
+### Controllership and Legal Entity
+- **`responsible-1`**: *Who is the person or entity that will be responsible for all Platform Data Meta shares with you?*  
+  -> Enter the legal entity name or individual business owner name that controls the application data (must match your Business Verification documents).
+- **`responsible-2`**: *Select the country where this person or entity is located.*  
+  -> Select your official country of registration.
+
+### Government and Public Authority Inquiries
+- **`requests-3`**: *Have you provided the personal data or personal information of users to public authorities in response to national security requests in the past 12 months?*  
+  -> Select **No**.
+- **`requests-4`**: *Which of the following policies or processes do you have in place regarding requests from public authorities?*  
+  -> Select **None of the above**.
+
+---
+
+## 5. Web Reviewer Instructions and Screencast Submission
+
+Click **Go to Review Instructions**. Meta reviewers require clear login access, pre-configured data, and a walkthrough video to test your application.
+
+### Reviewer Instructions Template
+Copy and customize this template in the **Provide instructions for accessing the app** field:
+
+```text
+App URL: https://app.yourdomain.com
+
+1) Sign in (Test Credentials)
+- Login URL: https://app.yourdomain.com/login
+- Test Email: reviewer-test@yourdomain.com
+- Test Password: YourSecurePassword123!
+(If using Magic Links, provide an instant test login shortcut or pre-authenticated test session).
+
+2) Connect an Instagram Professional Account (Pre-Configured)
+- In the dashboard, navigate to Dashboard -> Settings (under Basic Information).
+- A test Instagram Professional account is already pre-connected for your review: @[your_test_instagram_handle].
+- To test the OAuth flow from scratch, click Disconnect Account and click Connect Instagram to launch the official Meta OAuth dialog.
+
+3) Where to View Profile Info
+- Navigate to Dashboard -> Settings (Basic Information) to view the connected Instagram handle, profile avatar, follower count, and connection health.
+
+4) How to Test the Requested Features
+- Navigate to Dashboard -> Automation -> New Automation.
+- A pre-configured automation "Comment-to-DM Test" is active on our pinned post:
+  - Post URL: https://www.instagram.com/p/[your_test_post_id]/
+  - Trigger Keyword: INFO
+- From your Instagram reviewer account, leave a comment containing "INFO" on the post.
+- Confirm that our app automatically likes your comment, posts a public reply, and delivers a private direct message to your inbox.
+
+5) Meta APIs Used
+- Facebook Login: Not used.
+- Meta APIs used: Instagram Graph API only.
+- Permissions requested: instagram_business_manage_messages and instagram_business_manage_comments (with instagram_business_basic as a dependent permission to read basic profile information needed to connect accounts).
+
+We have attached a complete step-by-step screencast video below demonstrating the end-to-end user experience.
+```
+
+---
+
+## 6. Screencast Video Recording Blueprint (Developer Policy 1.6 Compliance)
+
+Meta human reviewers grade your screencast against **Meta Developer Policy 1.6 ("Build a Trustworthy Product")**.
+
+### The #1 Rejection Trap: "Screencast Not Aligned with Use Case Details"
+
+
+> Meta's most common rejection reason states: *"We have determined that your app's use case is allowed, however, the submitted screencast fails to demonstrate the end-to-end experience of the use case described in the submission notes, hence the requested permission is rejected."*
+
+To prevent this rejection, your screencast **must** include:
+1. **The Complete Meta OAuth Login Flow**: Show navigating to the app login page, clicking Connect Instagram, and opening the official Meta OAuth popup dialog.
+2. **User Granting Permissions**: The video must visibly show the user reviewing and approving `instagram_business_manage_messages` and `instagram_business_manage_comments` in the Meta authorization dialog.
+3. **End-to-End Execution**: Show creating an automation, an external user commenting on the post, the comment appearing, and the private DM arriving in the Instagram mobile or web app.
+4. **App UI in English**: The application UI must be set to English. Add captions or narration explaining buttons and actions.
+5. **Account Disconnection**: Demonstrate clicking Disconnect in Settings to prove data retention and revocation compliance.
+
+---
+
+## 7. Final Submission and Live Mode Launch
+
+1. Review all five sections on the **Submit for App Review** dashboard to ensure all items display completed status.
+2. Click **Submit for Review**.
+3. Meta typically reviews submissions within 2 to 5 business days.
+4. Once approved, confirm your app remains toggled to **Live** mode in the Meta Developer Console top bar.
+5. Complete the annual **Data Use Checkup (DUC)** whenever prompted by Meta to certify that your data handling practices comply with Platform Terms.

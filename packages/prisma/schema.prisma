@@ -1,0 +1,578 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// -----------------------------------------------------------------------------
+// Authentication & Organization (Tenancy)
+// -----------------------------------------------------------------------------
+
+// Core system user account authenticated via NextAuth
+model User {
+  id             String    @id @default(cuid())
+  name           String?
+  email          String    @unique
+  emailVerified  DateTime?
+  image          String?
+  role           UserRole  @default(OWNER) // Current workspace role (currently OWNER; multi-user roles planned)
+  companyId      String? // Foreign key to Company.id (the user's active workspace)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  accounts       Account[]
+  ownedCompanies Company[] @relation("CompanyOwner")
+  sessions       Session[]
+  company        Company?  @relation("CompanyMembers", fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@index([email])
+  @@index([companyId])
+}
+
+// Tenant workspace representing a business or creator organization
+model Company {
+  id                 String             @id @default(cuid()) // Internal primary key cuid (used for database relations & foreign keys)
+  name               String // Display name of the business
+  companyId          String             @unique // Public unique slug/identifier used in URLs (/dashboard/[companyId])
+  dashboardKey       String             @unique @default(cuid()) // This is now not being used. This might be deprecated in the future and is going to be removed. (Legacy 3-segment routing key; routing now uses companyId)
+  instagramHandle    String? // Synced handle of the primary connected Instagram account
+  ownerId            String // Foreign key to User.id who created and owns this company
+  ownerName          String? // Onboarding metadata: owner full name
+  ownerRole          String? // Onboarding metadata: role/title within company
+  numberOfEmployees  Int? // Onboarding metadata: team size
+  websiteUrl         String? // Company website URL
+  companyEmail       String? // Business contact email
+  companyImage       String? // Logo or brand avatar URL
+  companyDescription String? // Short business summary / bio
+  customStatuses     Json? // Array of custom CRM status names e.g. ["New", "Engaged", "Qualified"]
+  customTags         Json? // Array of custom CRM tag names e.g. ["VIP", "Hot Lead"]
+  setupComplete      Boolean            @default(false) // Whether initial onboarding setup wizard has finished
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+  owner              User               @relation("CompanyOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  instagramAccounts  InstagramAccount[]
+  users              User[]             @relation("CompanyMembers")
+  notifications      Notification[]
+  audienceLists      AudienceList[]
+
+  @@index([companyId])
+  @@index([ownerId])
+}
+
+// NextAuth OAuth account connection (Google, GitHub, Meta, etc.)
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+// NextAuth session token tracking
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+// NextAuth magic link email verification token
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// -----------------------------------------------------------------------------
+// Instagram Connection & Safety
+// -----------------------------------------------------------------------------
+
+// Connected Instagram Professional (Business or Creator) account
+model InstagramAccount {
+  id                   String                  @id @default(cuid())
+  companyId            String // Foreign key to Company.id
+  instagramUserId      String                  @unique // Meta Instagram-scoped User ID (IGSID)
+  username             String // Instagram @handle
+  profilePictureUrl    String?
+  followersCount       Int?
+  webhookUserId        String? // ID sent in Meta webhook payload (entry[].id) for webhook routing
+  facebookPageId       String? // Linked Facebook Page ID required by Meta Graph API
+  accountType          String? // "PERSONAL", "CREATOR", "BUSINESS" - from Instagram API
+  accessToken          String // Long-lived Meta access token (60-day expiry)
+  accessTokenExpiresAt DateTime?
+  isActive             Boolean                 @default(true) // Master toggle to enable/disable automations for this account
+  connectedAt          DateTime                @default(now())
+  updatedAt            DateTime                @updatedAt
+  automationFolders    AutomationFolder[]
+  userProfiles         InstagramUserProfile[]
+  health               InstagramAccountHealth?
+  queueJobs            QueueJob[] // This is now not being used. This might be deprecated in the future and is going to be removed. (Superseded by BackgroundJob)
+  errorLogs            ApiErrorLog[]
+  storyMentions        StoryMention[]
+  icebreakers          Json? // Array of { question: string, payload: string, automationId?: string }
+  company              Company                 @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@index([companyId])
+  @@index([instagramUserId])
+  @@index([webhookUserId])
+  @@index([facebookPageId])
+}
+
+// Circuit breaker & rate-limit tracker to protect Instagram accounts from platform bans
+model InstagramAccountHealth {
+  id                 String @id @default(cuid())
+  instagramAccountId String @unique
+
+  // Rate Limit Tracking (per-hour and per-day quotas)
+  apiCallsThisHour Int       @default(0)
+  apiCallsToday    Int       @default(0)
+  messagesThisHour Int       @default(0)
+  messagesToday    Int       @default(0)
+  lastApiCallAt    DateTime?
+  hourlyResetAt    DateTime?
+  dailyResetAt     DateTime?
+
+  // Account Status & Circuit Breaker
+  status       AccountHealthStatus @default(HEALTHY)
+  isPaused     Boolean             @default(false) // Outgoing automation paused due to rate limits or errors
+  pausedReason String?
+  pausedAt     DateTime?
+  resumeAt     DateTime? // Auto-resume time after cooldown period
+
+  // Restriction Tracking
+  lastErrorCode     String?
+  lastErrorMessage  String?
+  consecutiveErrors Int       @default(0)
+  lastRestrictionAt DateTime?
+  restrictionCount  Int       @default(0)
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  instagramAccount InstagramAccount @relation(fields: [instagramAccountId], references: [id], onDelete: Cascade)
+}
+
+// This is now not being used. This might be deprecated in the future and is going to be removed.
+// Superseded by BackgroundJob dual-pipeline database poller (DbJobPoller).
+model QueueJob {
+  id                 String       @id @default(cuid())
+  instagramAccountId String
+  jobType            QueueJobType
+  jobId              String       @unique // BullMQ job ID
+
+  // Job Data
+  payload     Json
+  priority    Int  @default(0)
+  attempts    Int  @default(0)
+  maxAttempts Int  @default(3)
+
+  // Status
+  status       QueueJobStatus @default(PENDING)
+  errorMessage String?
+  result       Json?
+
+  // Timing
+  scheduledFor DateTime?
+  startedAt    DateTime?
+  completedAt  DateTime?
+  createdAt    DateTime  @default(now())
+
+  instagramAccount InstagramAccount @relation(fields: [instagramAccountId], references: [id], onDelete: Cascade)
+
+  @@index([instagramAccountId])
+  @@index([status])
+  @@index([jobType])
+}
+
+// Diagnostic error log capturing Meta Graph API exceptions for debugging and rate limit detection
+model ApiErrorLog {
+  id                 String       @id @default(cuid())
+  instagramAccountId String
+  errorCode          String
+  errorType          ApiErrorType
+  errorMessage       String       @db.Text
+  endpoint           String
+  requestPayload     Json?
+  responseBody       Json?
+  automationId       String?
+  userId             String?
+  occurredAt         DateTime     @default(now())
+
+  instagramAccount InstagramAccount @relation(fields: [instagramAccountId], references: [id], onDelete: Cascade)
+
+  @@index([instagramAccountId])
+  @@index([errorCode])
+  @@index([occurredAt])
+}
+
+// -----------------------------------------------------------------------------
+// CRM, Leads & Audience
+// -----------------------------------------------------------------------------
+
+// Captured Instagram user profile data for lead qualification and CRM views
+model InstagramUserProfile {
+  id                      String           @id @default(cuid())
+  instagramAccountId      String // The client's IG account
+  instagramUserId         String // The user being profiled (external Instagram user)
+  username                String?
+  fullName                String?
+  profilePictureUrl       String?
+  email                   String?
+  phone                   String?
+  biography               String?          @db.Text
+  website                 String?
+  externalUrl             String?
+  followersCount          Int?
+  followingCount          Int?
+  mediaCount              Int?
+  isFollowingBusiness     Boolean?
+  isBusinessFollowing     Boolean?
+  isVerified              Boolean?
+  isBusinessAccount       Boolean?
+  isBrandedContentCreator Boolean?
+  accountType             String?
+  category                String?
+  status                  String? // Custom CRM lead pipeline status (e.g. "New", "Qualified")
+  tags                    Json? // Array of CRM tag strings e.g. ["VIP", "Interested"]
+  firstInteractionType    String? // Initial trigger: "DM", "COMMENT", "STORY_MENTION"
+  firstInteractionAt      DateTime?
+  lastProfileFetchAt      DateTime         @default(now())
+  createdAt               DateTime         @default(now())
+  updatedAt               DateTime         @updatedAt
+  instagramAccount        InstagramAccount @relation(fields: [instagramAccountId], references: [id], onDelete: Cascade)
+
+  @@unique([instagramAccountId, instagramUserId])
+  @@index([instagramAccountId])
+  @@index([instagramUserId])
+}
+
+// Captured contact info (email/phone) from automations (Wait-for-Reply, DM capture forms)
+model ContactCapture {
+  id                   String   @id @default(cuid())
+  instagramAccountId   String
+  instagramUserId      String
+  username             String?
+  emails               Json? // Array of email strings collected from user replies
+  phoneNumbers         Json? // Array of phone number strings collected from user replies
+  targetAudienceListId String? // Optional direct default audience list assignment
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  audienceListMembers AudienceListMember[]
+
+  @@unique([instagramAccountId, instagramUserId])
+  @@index([instagramAccountId])
+  @@index([instagramUserId])
+}
+
+// Grouping and segmentation for captured contacts (by product, promotion, or campaign)
+model AudienceList {
+  id          String   @id @default(cuid())
+  companyId   String
+  name        String
+  description String?
+  color       String   @default("blue")
+  isPinned    Boolean  @default(false)
+  pinnedOrder Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  company Company              @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  members AudienceListMember[]
+
+  @@index([companyId])
+  @@index([isPinned, pinnedOrder])
+}
+
+// Many-to-many relationship linking ContactCapture records to AudienceLists
+model AudienceListMember {
+  id               String   @id @default(cuid())
+  audienceListId   String
+  contactCaptureId String
+  createdAt        DateTime @default(now())
+
+  audienceList   AudienceList   @relation(fields: [audienceListId], references: [id], onDelete: Cascade)
+  contactCapture ContactCapture @relation(fields: [contactCaptureId], references: [id], onDelete: Cascade)
+
+  @@unique([audienceListId, contactCaptureId])
+  @@index([audienceListId])
+  @@index([contactCaptureId])
+}
+
+// -----------------------------------------------------------------------------
+// Background Jobs & Queue Engine
+// -----------------------------------------------------------------------------
+
+// Transactional background job queue executed by DbJobPoller in @instance/workers
+// Uses row-level locks (lockedAt, lockedBy) for safe distributed processing
+model BackgroundJob {
+  id String @id @default(cuid())
+
+  jobType            String // "SEND_DM", "REPLY_COMMENT", "FETCH_PROFILE", "SEND_EMAIL"
+  payload            Json // Job-specific payload parameters
+  status             String    @default("PENDING") // PENDING, PROCESSING, COMPLETED, FAILED, RETRYING
+  priority           Int       @default(5) // Execution priority (lower number = higher priority)
+  attempts           Int       @default(0)
+  maxAttempts        Int       @default(3)
+  lastError          String?   @db.Text
+  runAfter           DateTime  @default(now()) // Scheduled execution time (enables delayed retries & jitter)
+  lockedAt           DateTime? // Timestamp when a worker claimed this job
+  lockedBy           String? // Worker instance identifier holding the execution lock
+  createdAt          DateTime  @default(now())
+  startedAt          DateTime?
+  completedAt        DateTime?
+  instagramAccountId String? // Associated Instagram account (enables per-account concurrency limits)
+
+  @@index([status, runAfter, priority]) // Primary polling index for DbJobPoller
+  @@index([instagramAccountId, status]) // Per-account queries
+  @@index([jobType, status]) // Per-type queries
+  @@index([lockedAt]) // Stale lock cleanup & reaper
+}
+
+// -----------------------------------------------------------------------------
+// Visual Automations & Workflow Engine
+// -----------------------------------------------------------------------------
+
+// Hierarchical folder organization for visual automations
+model AutomationFolder {
+  id                 String             @id @default(cuid())
+  instagramAccountId String
+  name               String
+  description        String?
+  color              String?
+  parentId           String? // Nested folder parent ID
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+  automations        Automation[]
+  instagramAccount   InstagramAccount   @relation(fields: [instagramAccountId], references: [id], onDelete: Cascade)
+  parent             AutomationFolder?  @relation("FolderHierarchy", fields: [parentId], references: [id])
+  children           AutomationFolder[] @relation("FolderHierarchy")
+
+  @@index([instagramAccountId])
+  @@index([parentId])
+}
+
+// Visual automation workflow definition
+model Automation {
+  id               String                @id @default(cuid())
+  folderId         String
+  name             String
+  description      String?
+  isActive         Boolean               @default(false)
+  triggerType      AutomationTriggerType // Event type that kicks off this automation
+  mediaId          String? // Meta media ID for post/reel specific triggers
+  mediaType        String? // "IMAGE", "VIDEO", "REEL"
+  triggerKeywords  String[] // Trigger keywords for DM and comment matching
+  triggerMatchType String? // "exact", "contains", "any"
+  flowData         Json? // Canvas visual state (sticky notes, viewport position, editor annotations)
+  createdAt        DateTime              @default(now())
+  updatedAt        DateTime              @updatedAt
+  folder           AutomationFolder      @relation(fields: [folderId], references: [id], onDelete: Cascade)
+  executions       AutomationExecution[]
+  nodes            AutomationNode[] // The compiled executable DAG nodes
+
+  @@index([folderId])
+  @@index([triggerType])
+}
+
+// Executable node in an automation workflow DAG
+model AutomationNode {
+  id           String             @id @default(cuid())
+  automationId String
+  nodeId       String // Client-side React Flow node identifier (e.g. "node_1")
+  type         AutomationNodeType // Node action/condition behavior
+  position     Json // Canvas coordinates: { x: number, y: number }
+  config       Json // Node configuration payload (messages, delays, condition logic)
+  nextNodeIds  String[] // Outgoing adjacency list of child nodeIds in the execution graph
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+  automation   Automation         @relation(fields: [automationId], references: [id], onDelete: Cascade)
+
+  @@unique([automationId, nodeId])
+  @@index([automationId])
+}
+
+// Active or completed runtime execution of an automation for a user
+model AutomationExecution {
+  id              String          @id @default(cuid())
+  automationId    String
+  instagramUserId String // Instagram user ID navigating the automation
+  status          ExecutionStatus @default(PENDING)
+  currentNodeId   String? // Node currently being processed or waiting on user reply
+  variables       Json? // Runtime key-value variables set during execution
+  errorMessage    String?
+  startedAt       DateTime        @default(now())
+  completedAt     DateTime?
+  automation      Automation      @relation(fields: [automationId], references: [id], onDelete: Cascade)
+  steps           ExecutionStep[]
+
+  @@index([automationId])
+  @@index([instagramUserId])
+}
+
+// Step-by-step execution log of an individual node for debugging and analytics
+model ExecutionStep {
+  id           String              @id @default(cuid())
+  executionId  String
+  nodeId       String
+  status       String // "SUCCESS", "FAILED", "SKIPPED"
+  input        Json? // Input parameters passed into node
+  output       Json? // Output result produced by node
+  errorMessage String?
+  executedAt   DateTime            @default(now())
+  execution    AutomationExecution @relation(fields: [executionId], references: [id], onDelete: Cascade)
+
+  @@index([executionId])
+}
+
+// -----------------------------------------------------------------------------
+// Story Mentions & User Generated Content (UGC)
+// -----------------------------------------------------------------------------
+
+// Tracks brand story mentions, repost status, and automated promo code incentives
+model StoryMention {
+  id                 String    @id @default(cuid())
+  instagramAccountId String
+  instagramUserId    String // User who tagged the business in their story
+  username           String?
+  followerCount      Int?
+  mediaUrl           String?   @db.Text
+  storyExpiresAt     DateTime? // Instagram stories expire after 24 hours
+  repostStatus       String    @default("PENDING") // PENDING, REPOSTED, DISMISSED
+  dynamicPromoCode   String? // Automatically generated discount coupon for UGC incentive
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  instagramAccount InstagramAccount @relation(fields: [instagramAccountId], references: [id], onDelete: Cascade)
+
+  @@index([instagramAccountId])
+  @@index([instagramUserId])
+  @@index([repostStatus])
+}
+
+// -----------------------------------------------------------------------------
+// Notifications
+// -----------------------------------------------------------------------------
+
+// In-app notification center for workspace alerts and milestones
+model Notification {
+  id        String           @id @default(cuid())
+  companyId String
+  type      NotificationType @default(SYSTEM)
+  title     String
+  message   String
+  metadata  Json?
+  linkUrl   String?
+  isRead    Boolean          @default(false)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  company   Company          @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@index([companyId, isRead])
+  @@index([companyId, createdAt])
+}
+
+enum UserRole {
+  OWNER
+}
+
+enum AutomationTriggerType {
+  DM_RECEIVED
+  DM_KEYWORD
+  COMMENT_POST
+  COMMENT_REEL
+  STORY_MENTION
+  STORY_REPLY
+  NEW_FOLLOWER
+}
+
+enum AutomationNodeType {
+  TRIGGER_DM
+  TRIGGER_COMMENT
+  TRIGGER_STORY
+  TRIGGER_FOLLOWER
+  ACTION_SEND_DM
+  ACTION_REPLY_DM
+  ACTION_REPLY_COMMENT
+  ACTION_WAIT
+  ACTION_WAIT_FOR_REPLY
+  ACTION_CONDITION
+  ACTION_SET_VARIABLE
+  FLOW_SPLIT
+  FLOW_RANDOM
+  FLOW_END
+}
+
+enum ExecutionStatus {
+  PENDING
+  RUNNING
+  WAITING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum AccountHealthStatus {
+  HEALTHY // Account is active and within safe thresholds
+  WARNING // Approaching rate limits
+  THROTTLED // Hit rate limit, waiting on reset
+  RESTRICTED // Meta restriction detected
+  BLOCKED // Account blocked/banned by Meta
+}
+
+// This is now not being used. This might be deprecated in the future and is going to be removed.
+// Superseded by BackgroundJob.
+enum QueueJobType {
+  FETCH_PROFILE
+  SEND_DM
+  REPLY_COMMENT
+  SEND_MEDIA
+}
+
+// This is now not being used. This might be deprecated in the future and is going to be removed.
+// Superseded by BackgroundJob.
+enum QueueJobStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+  DELAYED // Waiting due to rate limit
+}
+
+enum NotificationType {
+  MILESTONE
+  STORY_MENTION
+  QUALIFIED_LEAD
+  AUTOMATION_ALERT
+  SYSTEM
+}
+
+enum ApiErrorType {
+  RATE_LIMIT // 429 errors
+  PERMISSION // Access denied
+  NOT_FOUND // User/resource not found
+  VALIDATION // Invalid parameters
+  RESTRICTION // Account restricted
+  NETWORK // Connection issues
+  UNKNOWN // Other errors
+}

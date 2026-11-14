@@ -1,0 +1,80 @@
+{
+    "name": "instance",
+    "version": "0.1.1",
+    "private": true,
+    "packageManager": "pnpm@10.28.2",
+    "scripts": {
+        "dev": "turbo run dev",
+        "dev:api": "turbo run dev --filter=@instance/api",
+        "dev:web": "turbo run dev --filter=@instance/web",
+        "dev:workers": "turbo run dev --filter=@instance/workers",
+        "build": "turbo run build",
+        "start": "pnpm --filter @instance/web start",
+        "lint": "turbo run lint",
+        "typecheck": "turbo run typecheck",
+        "test": "vitest run",
+        "test:watch": "vitest",
+        "test:e2e": "pnpm --filter @instance/web test:e2e",
+        "docs:dev": "cd docs \u0026\u0026 mintlify dev",
+        "db:generate": "pnpm --filter @instance/db db:generate",
+        "db:push": "pnpm --filter @instance/db db:push",
+        "db:migrate": "pnpm --filter @instance/db db:migrate",
+        "db:deploy": "pnpm --filter @instance/db db:deploy",
+        "translate": "tsx scripts/translate.ts",
+        "postinstall": "pnpm --filter @instance/db run build && pnpm --filter @instance/types run build"
+    },
+    "dependencies": {
+        "@prisma/adapter-pg": "^7.4.2",
+        "@prisma/client": "^7.4.2",
+        "@prisma/client-runtime-utils": "^7.4.2",
+        "@xyflow/react": "^12.10.1",
+        "bullmq": "^5.70.4",
+        "clsx": "^2.1.1",
+        "framer-motion": "^12.35.2",
+        "ioredis": "^5.10.0",
+        "lucide-react": "^0.563.0",
+        "next": "16.1.6",
+        "next-auth": "^4.24.13",
+        "pg": "^8.20.0",
+        "react": "19.2.3",
+        "react-dom": "19.2.3",
+        "recharts": "^3.8.0",
+        "tailwind-merge": "^3.5.0"
+    },
+    "devDependencies": {
+        "@tailwindcss/postcss": "^4.2.1",
+        "@types/node": "^20.19.37",
+        "@types/pg": "^8.18.0",
+        "@types/react": "^19.2.14",
+        "@types/react-dom": "^19.2.3",
+        "dotenv": "^17.3.1",
+        "eslint": "^9.39.4",
+        "eslint-config-next": "16.1.1",
+        "groq-sdk": "^0.15.0",
+        "mintlify": "^4.2.1085",
+        "prisma": "^7.4.2",
+        "tailwindcss": "^4.2.1",
+        "tsx": "^4.21.0",
+        "turbo": "^2.10.12",
+        "typescript": "^5.9.3",
+        "vitest": "^4.0.18"
+    },
+    "browserslist": [
+        "last 2 Chrome versions",
+        "last 2 Firefox versions",
+        "last 2 Safari versions",
+        "last 2 Edge versions"
+    ],
+    "pnpm": {
+        "overrides": {
+            "fast-xml-parser": "\u003e=5.3.6",
+            "hono": "\u003e=4.12.4",
+            "@hono/node-server": "\u003e=1.19.10",
+            "minimatch": "\u003e=10.2.3",
+            "lodash": "\u003e=4.17.23",
+            "ajv": "\u003e=8.18.0",
+            "rollup": "\u003e=4.59.0",
+            "ioredis": "5.10.0"
+        }
+    }
+}

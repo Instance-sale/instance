@@ -1,0 +1,144 @@
+---
+title: "Instagram Setup"
+description: "Step-by-step guide to connecting your Instagram Professional account, configuring the Meta Developer App, and receiving webhooks."
+---
+
+## Step 1: Instagram Account Prerequisites
+
+Before configuring the Meta Developer Console, your Instagram account must meet three requirements:
+
+1. **Convert to a Professional Account**:
+   - In the Instagram mobile app, navigate to **Settings -> Account type and tools -> Switch to professional account**.
+   - Choose either **Creator** or **Business** (Personal accounts do not have API access).
+2. **Link to a Facebook Page**:
+   - Meta requires every professional Instagram account to be connected to a Facebook Page.
+   - In Instagram, go to **Edit profile -> Public business information -> Page**, and connect or create a Facebook Page where you are an admin.
+3. **Enable Message Access (Crucial)**:
+   - In the Instagram mobile app, navigate to **Settings -> Messages and story replies -> Message controls**.
+   - Under **Connected tools**, toggle **Allow access to messages** to **ON**. If this is turned off, Meta will block Instance from receiving or sending DMs.
+
+---
+
+## Step 2: Create a Meta Developer App
+
+1. Visit the [Meta for Developers Portal](https://developers.facebook.com/) and log in with your Facebook account.
+2. Click **My Apps** in the top navigation, then click **Create App**.
+3. When prompted to select what you want your app to do, select **Other**, then click **Next**.
+4. Select **Business** as the app type, then click **Next**.
+5. Enter an **App name** (e.g. `Instance Sales Engine`) and your contact email.
+6. Click **Create App** and complete the security verification.
+
+---
+
+## Step 3: Add Instagram and Copy Credentials
+
+From your app dashboard:
+
+1. In the left sidebar, click **Add Product**.
+2. Locate **Instagram** (or **Set up Instagram Business login**) and click **Set Up**.
+3. Meta will redirect you to the **"API Setup with Instagram Business login"** view.
+4. Right at the top of this page, copy your credentials into your `.env` file:
+   - **Instagram App ID**: Displayed at the top. Copy this into `INSTAGRAM_APP_ID`.
+   - **Instagram App Secret**: Click **Show** to reveal the secret. Copy this into `INSTAGRAM_APP_SECRET`.
+
+*(Always use the Instagram App ID and Secret found on this Instagram setup view, rather than the generic Facebook app credentials).*
+
+---
+
+## Step 4: Add Your Account via "Generate Access Token"
+
+You do not need to hunt through sidebar navigation menus. You can add your Instagram tester directly on this setup screen:
+
+1. On the same API setup page, locate **Step 1: Generate Access Token**.
+2. Click the **Add Account** button.
+3. Click **Continue** on the prompt.
+4. In the modal that appears ("Add people to your app"), select **Instagram Tester**.
+5. Enter your personal Instagram username and click **Add**.
+6. On your mobile phone (or desktop browser logged into Instagram):
+   - Navigate to **Settings -> Website permissions -> Apps and websites -> Tester invites**.
+   - Tap **Accept** to approve the invitation from your app.
+
+Your account is now authorized to test and receive automations while the app is in Development Mode.
+
+---
+
+## Step 5: Configure Webhooks for Local Development
+
+Directly below on the same setup page, you will see the **Configure Webhook** section. When developing locally, Meta needs a public HTTPS tunnel to deliver notifications to your API.
+
+### 1. Launch Your Local Tunnel
+
+In a separate terminal window, forward traffic to port 4000 (where the NestJS API runs):
+
+```bash
+ngrok http 4000
+```
+
+Copy the forwarding HTTPS URL provided by ngrok (e.g. `https://abc-123.ngrok-free.app`).
+
+### 2. Enter Webhook Details
+
+1. Under the **Configure Webhook** section, click to add your endpoint details:
+   - **Callback URL**: `https://your-ngrok-domain.ngrok-free.app/api/webhook/instagram`
+     *(Important: Always include the `/api/` prefix, as the backend controller routes under `/api/webhook/instagram`)*.
+   - **Verify Token**: Enter the exact string you configured in your `.env` file for `META_WEBHOOK_VERIFY_TOKEN`.
+2. Click **Verify and Save**. Meta sends a challenge request to your API. Instance automatically validates the token and confirms the connection immediately.
+
+*(Note on App Mode: In Development Mode, webhooks are delivered exclusively for accounts added as Instagram Testers in Step 4. When switching to public followers or live production domains, make sure your App Mode is toggled to Live at the top of the Meta Developer Console).*
+
+### 3. Verify Instagram Redirect URI in Environment
+
+In your local `.env` file, ensure `INSTAGRAM_REDIRECT_URI` is set to your local callback endpoint:
+
+```bash
+INSTAGRAM_REDIRECT_URI="https://your-ngrok-domain.ngrok-free.app/api/instagram/callback"
+```
+
+*(When later deploying to production, update this environment variable to your production domain, e.g. `https://app.yourdomain.com/api/instagram/callback`).*
+
+---
+
+## Step 6: Subscribe to Webhook Fields
+
+Once verified, Meta displays the list of subscription fields. Subscribe to the following four fields processed by Instance:
+
+| Field | Required | What It Handles in Instance |
+| :--- | :--- | :--- |
+| **`messages`** | Required | Ingests incoming direct messages, text replies, quick replies, story mentions, and story replies |
+| **`messaging_postbacks`** | Required | Ingests interactive button taps, icebreaker selections, and quick action clicks |
+| **`comments`** | Required | Ingests comments on your posts and reels for the Comment-to-DM automation engine |
+| **`message_reactions`** | Recommended | Ingests emoji reactions on direct messages |
+
+---
+
+## Step 7: Connect Your Account in Instance
+
+Once webhooks and credentials are in place, connect your Instagram account inside the web app:
+
+### First-Time Onboarding
+1. Open your browser and navigate to `http://localhost:3000`.
+2. Sign in to your account. You will automatically land on the initial onboarding screen at `/setup`.
+3. Enter your workspace or company name, then click **Connect Instagram**.
+4. Log in with your authorized Instagram Professional account and approve the requested permissions.
+
+### Reconnecting or Managing Existing Connections
+If you have already completed onboarding and want to connect or reconnect an account later:
+1. Navigate to **Dashboard -> Settings** (under the **Basic Information** tab).
+2. Scroll down to the **Instagram Account Connection** section.
+3. Click **Connect Account** (or **Reconnect Account** if refreshing an existing token).
+4. Complete the authorization popup to refresh your access token and verify that webhooks are subscribed.
+
+---
+
+## Step 8: Going to Production (Live Mode & Meta App Review)
+
+In Development Mode, webhooks and automations are active exclusively for accounts added as Instagram Testers in Step 4. When you are ready to automate direct messages and comment replies for any public follower:
+
+1. **Submit for Meta App Review**: Request Advanced Access for `instagram_business_basic`, `instagram_business_manage_messages`, and `instagram_business_manage_comments` (uncheck unused permissions like insights).
+2. **Complete Business Verification**: Verify your business entity with official legal documents inside your Meta Business Portfolio.
+3. **Record Screencast**: Provide an authentic 2-minute screencast demonstrating login, campaign setup, a user commenting on a recent post, automated comment reply, and private DM delivery.
+4. **Switch to Live Mode**: Once approved, toggle the app from **Development** to **Live** at the top of the Meta Developer Dashboard.
+
+For the complete step-by-step walkthrough, reviewer scripts, copy-paste submission answers, and screencast blueprint, see the dedicated [Meta App Review & Live Mode Guide](/meta-app-review).
+
+To deploy your production VPS, configure Caddy reverse proxy with automatic SSL, and run Docker containers, check out the [Deployment](/deployment) guide.

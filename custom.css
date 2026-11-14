@@ -1,0 +1,235 @@
+/* ==========================================================================
+   Instance Documentation Custom Styling
+   ========================================================================== */
+
+/* Global Full-Width Layout on Large Screens */
+div[class*="max-w-8xl"],
+div[class*="peer-[.is-not-custom]"] {
+  max-width: 100% !important;
+  padding-left: 2rem !important;
+  padding-right: 2rem !important;
+}
+
+/* Left Navigation Sidebar (Clean 240px dock) */
+#sidebar,
+nav#sidebar,
+aside:has(nav),
+aside:first-of-type {
+  width: 240px !important;
+  min-width: 240px !important;
+  max-width: 240px !important;
+  flex: 0 0 240px !important;
+}
+
+/* Left Sidebar Items & Links */
+#sidebar a,
+nav#sidebar a,
+aside:has(nav) a {
+  font-size: 0.875rem !important;
+  padding-top: 5px !important;
+  padding-bottom: 5px !important;
+}
+
+/* Right Sidebar: Table of Contents (210px compact) */
+#content-side-layout {
+  width: 210px !important;
+  min-width: 210px !important;
+  max-width: 210px !important;
+  flex: 0 0 210px !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+#table-of-contents-layout {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  padding-left: 1rem !important;
+  padding-right: 0 !important;
+}
+
+/* Center Content Area */
+#content-area {
+  max-width: 960px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* Typography & Headings */
+[class*="prose"] h1 {
+  font-size: 1.65rem !important;
+  line-height: 1.3 !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em !important;
+  margin-bottom: 0.75rem !important;
+}
+
+h2:not([data-component-part="card-title"]):not(.card h2),
+.prose h2:not([data-component-part="card-title"]):not(.card h2),
+#content h2:not([data-component-part="card-title"]):not(.card h2) {
+  font-size: 1.35rem !important;
+  line-height: 1.35 !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.015em !important;
+  margin-top: 1.75rem !important;
+  margin-bottom: 0.65rem !important;
+}
+
+h3,
+.prose h3,
+#content h3 {
+  font-size: 1.15rem !important;
+  line-height: 1.4 !important;
+  font-weight: 600 !important;
+  margin-top: 1.25rem !important;
+  margin-bottom: 0.5rem !important;
+}
+
+/* Cards & Card Titles */
+.card,
+[class*="CardGroup"]>*,
+[class*="card"] {
+  border-radius: 12px !important;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.card:hover,
+[class*="CardGroup"]>*:hover,
+[class*="card"]:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 10px 24px -6px rgba(15, 23, 42, 0.12), 0 4px 10px -2px rgba(0, 0, 0, 0.04) !important;
+}
+
+[data-component-part="card-title"],
+h2[data-component-part="card-title"],
+.card h2,
+.card [data-component-part="card-title"] {
+  font-size: 1.05rem !important;
+  font-weight: 600 !important;
+  line-height: 1.3 !important;
+  margin-top: 0.35rem !important;
+  margin-bottom: 0.2rem !important;
+}
+
+[data-component-part="card-content"],
+.card [data-component-part="card-content"],
+.card p,
+.card span {
+  font-size: 0.85rem !important;
+  line-height: 1.45 !important;
+}
+
+/* Custom Search Bar */
+[data-search-button],
+.search-button,
+[aria-label*="search"],
+[placeholder*="Search"],
+button[data-testid*="search"],
+.mintlify-search,
+.DocSearch-Button {
+  background: rgba(15, 23, 42, 0.04) !important;
+  border: 1.5px solid #2563EB !important;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.12), 0 3px 10px rgba(37, 99, 235, 0.08) !important;
+  border-radius: 10px !important;
+  transition: all 0.2s ease !important;
+}
+
+[data-search-button]:hover,
+.search-button:hover,
+.DocSearch-Button:hover {
+  border-color: #3B82F6 !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2), 0 6px 18px rgba(37, 99, 235, 0.16) !important;
+}
+
+/* Branded Scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #2563EB transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #2563EB;
+  border-radius: 9999px;
+}
+
+/* Status Badges */
+.badge-hot {
+  background-color: rgba(239, 68, 68, 0.12);
+  color: #DC2626;
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+}
+
+.badge-qualified {
+  background-color: rgba(16, 185, 129, 0.12);
+  color: #059669;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+}
+
+.badge-automation {
+  background-color: rgba(59, 130, 246, 0.12);
+  color: #2563EB;
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Code Blocks & Tables */
+pre code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+  font-size: 0.825rem !important;
+}
+
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  margin-top: 0.75rem !important;
+  margin-bottom: 1.25rem !important;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(229, 231, 235, 0.8);
+  font-size: 0.825rem !important;
+}
+
+table th {
+  background-color: rgba(24, 24, 27, 0.05);
+  font-weight: 600;
+  text-align: left;
+  padding: 8px 12px !important;
+  border-bottom: 1px solid rgba(229, 231, 235, 1);
+}
+
+table td {
+  padding: 8px 12px !important;
+  border-bottom: 1px solid rgba(243, 244, 246, 1);
+}
+
+table tr:last-child td {
+  border-bottom: none;
+}
+

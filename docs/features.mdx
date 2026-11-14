@@ -1,0 +1,222 @@
+---
+title: "Features"
+description: "Comprehensive overview of Instance features: icebreakers, pre-made templates, visual flow builder, comment-to-DM, story triggers, messaging, follower gate, logic routing, CRM, pipeline, audience segmentation, analytics, and internationalization."
+---
+
+Instance is a complete open-source Instagram automation platform and social sales CRM designed to capture, nurture, and close leads directly through Instagram direct messages and public engagement.
+
+Below is the complete feature suite built into Instance.
+
+---
+
+## 1. Instagram Icebreakers
+
+Capture immediate interest from users opening a direct message thread for the first time:
+
+- **Up to 4 Icebreaker Prompts**: Configure up to 4 conversation starter questions (Meta platform maximum).
+- **Automation Linkage**: Map each icebreaker prompt directly to an automated flow or specific payload.
+- **Live Mobile Preview Simulator**: Preview how icebreakers appear inside an authentic mobile Instagram DM interface before going live. Tap simulated buttons to verify responses.
+- **Direct Meta Graph API Sync**: Push icebreaker configurations directly to your connected Instagram Professional account with one click.
+
+---
+
+## 2. Pre-Made Automation Templates
+
+Instance provides battle-tested, ready-to-deploy templates tailored for e-commerce brands, sales agencies, creators, and coaches. Launch high-converting funnels in seconds with built-in interactive previews and one-click setup:
+
+- **E-Commerce and Retail**: Auto-DM links from comments, sell directly from Reel comments, share affiliate product links, and deliver story promo coupons.
+- **Lead Generation and Agencies**: Qualify inbound leads with multi-step DM funnels, run interactive quizzes, deliver follower freebie lead magnets, and capture webinar RSVPs.
+- **Audience and Growth**: Grow verified email lists, answer recurring story FAQs automatically, and run compliant follower giveaways.
+
+---
+
+## 3. Visual Automation Flow Builder
+
+Build custom, multi-step conversation funnels on an intuitive drag-and-drop canvas powered by React Flow:
+
+- **Full Canvas Control**: Smooth infinite canvas with zoom, pan, minimap, auto-alignment, and node search.
+- **Branch Wires**: Every condition branch, button option, or quick reply pill sprouts dedicated connecting wires to route contacts down custom pathways.
+- **Visual Sticky Notes**: Drop color-coded sticky notes on the canvas to document funnel logic and collaborate with teammates.
+- **Interactive Flow Simulation**: Test conversations before publishing using the built-in desktop and mobile iPhone chat simulator. Send test replies, tap quick reply pills, and test branches in real time.
+- **Import and Export Blueprints**: Export complete funnels as JSON blueprints to back them up or share them. Import existing automation JSON files with one click.
+- **One-Click Duplication**: Clone any automation instantly to create variations without rebuilding from scratch.
+
+---
+
+## 4. Comment-to-DM Engine
+
+Convert public engagement on your Instagram feed posts, viral reels, and boosted ads into private direct message sales conversations:
+
+- **Flexible Target Scope**: Attach automations to specific live or scheduled posts and reels, filter by media type (posts only or reels only), or monitor your entire Instagram account globally.
+- **Keyword and Exact Matching**: Trigger flows when comments contain specific keywords (e.g. `PRICE`, `SEND`, `INFO`, `ACCESS`), or trigger on every incoming comment.
+- **Smart Typo Tolerance (Fuzzy Matching)**: Built-in fuzzy matching with configurable sensitivity catches common mobile keyboard typos (e.g. "prcing", "ifo", "deall") so no lead is missed.
+- **Negative Sentiment and Spam Shield**: Automatically detect and hide toxic comments, competitor links, and spam. Choose sensitivity settings, add custom blocked words, and skip sending DMs to harmful accounts.
+- **Public Comment Auto-Replies**: Automatically post a public reply under the user comment to boost algorithmic post ranking.
+- **Rotational Variations (Anti-Spam)**: Define multiple unique public reply variations. Instance cycles through them randomly to keep public replies natural and prevent Meta spam flags.
+- **Auto-Like Comments**: Automatically like the user comment as instant engagement confirmation.
+
+---
+
+## 5. Instagram Story Interactions and Mentions
+
+Stories generate some of the highest-intent engagement on Instagram. Instance captures and automates three distinct story events:
+
+- **Story Mentions**: Instantly detect when a user tags your account in their story, sending an immediate thank-you message, coupon, or gift.
+- **Story Replies**: Automatically handle direct responses to your daily stories with interactive qualification questions.
+- **Story Emoji Reactions**: Acknowledge quick emoji reactions with conversational engagement starters.
+- **Ephemeral Media Persistence**: While Instagram stories expire after 24 hours, Instance permanently stores lead profiles, story mention timestamps, and conversation transcripts in your CRM.
+
+---
+
+## 6. Instagram Direct Messaging Capabilities
+
+Instance offers a rich message composition engine that supports diverse media formats, dynamic variables, and interactive controls:
+
+### Message Variations
+Avoid repetitive messaging patterns that trigger Meta spam filters. Define multiple message variations for any direct message or comment reply step. Instance rotates through variants dynamically for each recipient.
+
+### Dynamic Variable Personalization
+Personalize every message using real-time contact data:
+- `{name}`: Contact display name.
+- `{username}`: Instagram handle (@handle).
+- `{comment}`: The keyword or text that triggered the flow.
+- `{promo_code}`: Dynamically generated discount or promotional code.
+- Custom collected variables: Any data collected during the conversation (e.g. quiz answers, company name).
+
+### Interactive Carousels
+Deliver swipeable multi-card carousels directly inside Instagram Direct Messages:
+- Build carousels with up to 10 visual cards.
+- Each card includes an image, headline title, description subtitle, and up to 3 interactive CTA buttons.
+- Buttons can open external URLs (product pages, checkout, calendars) or trigger automated reply branches.
+
+### Interactive Buttons and Quick Replies
+- **Inline Buttons (up to 3)**: Buttons embedded directly inside the chat bubble. Support both external URL links and quick tap responses.
+- **Quick Reply Pills (up to 13)**: Horizontal floating pills displayed above the user keyboard for one-tap replies. Tapping a pill sends the text immediately and advances the conversation down a connected branch wire.
+
+### Rich Media Attachments
+Send images, videos, product demos, audio voice notes, and document links directly through direct messages.
+
+### Send DM vs Reply DM Logic
+- **Send DM**: Initiates a new outbound message thread.
+- **Reply DM**: Responds directly within an existing conversation within Meta 24-hour messaging window.
+- **Conversation State Control**: Configure automations to message all prospects or selectively skip users who already have an active conversation thread.
+
+---
+
+## 7. Follower Status Verification Gate
+
+Protect your resources and grow your follower base with customizable follower verification gates:
+
+Ensure only genuine followers receive your valuable links, digital downloads, discounts, or lead magnets:
+- **Fully Customizable Prompts**: Compose your own custom message explaining that the user needs to follow your account to unlock the offer.
+- **Custom Buttons and Profile Links**: Add custom buttons to guide the user, including direct link buttons pointing to your Instagram profile or interactive reply buttons (e.g. "I followed!", "Check again").
+- **Configurable Retry Limits (e.g. up to 3 Retries)**: Set the exact number of retry attempts allowed (e.g. 1, 2, or 3 retries). Every time the user taps the reply button, Instance performs a real-time Meta Graph API follower check.
+- **Instant Gate Unlock**: The moment follower status is verified, the gate immediately unlocks, delivers the promised link or content, and routes the lead down the success branch wire.
+- **Clean Fallback Exit**: If the contact fails to follow after the configured retry limit is reached, the flow exits gracefully to prevent conversations from getting trapped in an infinite loop.
+
+---
+
+## 8. Logic and Routing Engine
+
+Build intelligent funnels with advanced decision-making and automated data extraction:
+
+- **Multi-Group Condition Builder**: Branch conversations using flexible AND/OR rule groups evaluated against:
+  - Lead tags (has tag, does not have tag, contains any tag, contains all tags).
+  - Pipeline stages (lead is or is not in a specific stage).
+  - Custom variables (quiz results, lead answers).
+  - Numeric comparisons (follower count, quiz score, budget threshold).
+  - Boolean flags.
+- **Randomizer Nodes (A/B Testing)**: Split incoming traffic by percentage across multiple paths to compare different copy, lead magnets, or CTA offers.
+- **Timed Delays and Natural Typing**: Add pauses (seconds, minutes, or hours) between messages and display a simulated typing indicator for natural conversation flow.
+- **Automated Email Capture and Validation**: Automatically extract email addresses from user replies. If the user sends an invalid email, Instance sends a polite retry prompt with configurable maximum retry attempts before moving forward.
+- **Automated Phone Number Extraction**: Detect and extract phone numbers from replies, formatting them into standard contact records.
+
+---
+
+## 9. Built-in Instagram CRM and Pipeline
+
+Instance includes a native CRM built specifically for Instagram social selling, eliminating the need for third-party databases:
+
+### Comprehensive Lead Inspection Drawer
+Clicking on any contact in your CRM opens a full-height inspection drawer displaying:
+- **Profile Identity**: Profile photo, Instagram username, full display name, and direct link to their Instagram profile.
+- **Follower Count and Badges**: Total follower count and entry channel badge (DM, Comment, Story Mention, Story Reply, Follow).
+- **Origin Attribution**: Exact folder and automation that captured the lead.
+- **Assigned Audience List**: Current audience list or project segment.
+- **Discovered Contact Information**: All extracted email addresses and phone numbers, complete with one-click copy buttons.
+- **Deal Milestones Stepper**: Visual step-by-step pipeline tracker. Click any stage to move the lead forward or backward.
+- **Lead Tags**: Active tags attached to the lead, with one-click tag removal and an assignment picker showing all company tags.
+- **Bio and Website**: Complete Instagram bio text and clickable external website link.
+- **Direct Message Shortcut**: One-click action to open or resume a direct Instagram conversation.
+
+### Visual Drag-and-Drop Kanban Pipeline
+- Organize leads across customizable sales funnel columns (e.g. New Lead, Engaged, Qualified, Call Booked, Closed Won).
+- Drag and drop cards between columns to update lead stages instantly.
+- Infinite scrolling per column to handle high-volume contact databases smoothly.
+- Colored dot indicators and count badges on each stage column.
+- Filter cards by tags, stage, follower counts, and interaction date.
+
+### Customizable Pipeline Stages and Company Tags
+- Configure pipeline stages to match your exact sales process. Add custom stages, reorder stages, or customize stage names.
+- Create global company tags (e.g. `VIP`, `Hot Lead`, `High Budget`, `Agency`) in settings. These tags are instantly available across CRM cards, automation action nodes, and condition branches.
+
+### Story Mentions Log and Leads Table View
+- Switch effortlessly between the visual Kanban board and a dense table view.
+- Dedicated Story Mentions log tracking every account mention with media references and engagement timestamps.
+
+### Lead Data Export
+- Export complete lead records to CSV or XML format.
+- Selectively choose export categories: Standard fields (ID, username, name, bio, website, creation date), Contact fields (emails, phone numbers), and Sales Discovery fields (tags, budget, timeline, status, followers).
+
+---
+
+## 10. Audience Lists and Segmentation
+
+Segment contacts into targeted lists for focused campaigns, retargeting, and outreach:
+
+- **List Creation and Organization**: Create custom audience lists with color coding, descriptions, and pinned status for quick access.
+- **Origin Folders and Automation Tracking**: Track which campaign folder or automation flow generated each contact in the list.
+- **Channel Filtering**: Filter contacts by available communication channels: contacts with verified email, contacts with phone number, or contacts with both.
+- **Granular CSV Export**: Export specific audience segments with custom date filters and column configurations.
+
+---
+
+## 11. End-to-End Analytics and Execution Telemetry
+
+Track every impression, message, drop-off, and conversion across your entire workspace:
+
+### Automation Funnel Analytics
+- **Node-by-Node Funnel Telemetry**: Inspect step-by-step conversion drop-off from node 1 to node 2, node 3, and beyond.
+- **KPI Overview Cards**: Total trigger runs, completed funnel runs, overall completion rate, and dropped or failed executions.
+- **Business Attribution**: Track qualified leads generated, deals closed, and total revenue driven by each specific automation.
+- **Stage and Tag Distribution**: Visualize how contacts who entered this automation are distributed across pipeline stages and company tags.
+
+### Real-Time Execution Runtime Inspector
+- **Live Execution Log**: Review every single execution run with execution status (`COMPLETED`, `FAILED`, `RUNNING`, `PENDING`, `CANCELLED`).
+- **Step-by-Step Execution Traces**: Inspect every node executed during a run, including exact input payloads, output data, error messages, and execution timestamps.
+- **Raw JSON Payload Inspector**: View and copy full JSON event payloads for debugging.
+- **Search and Filter**: Filter execution logs by run status or search by Instagram username.
+
+### Workspace Analytics Dashboard
+- Comprehensive metrics covering total leads captured, active conversations, average response times, and conversion rates.
+- Origin attribution charts identifying which posts, stories, or automations generate the highest lead volume.
+- Interactive charts: sparkline trends, hero engagement graphs, pipeline stage distributions, and audience growth charts.
+- Export all workspace analytics metrics directly to CSV.
+
+---
+
+## 12. Internationalization (i18n)
+
+Instance is engineered from the ground up for international sales teams and global audiences:
+
+- **8 Supported Languages**:
+  - English 🇺🇸 (`en`)
+  - Portuguese (Brazil) 🇧🇷 (`pt`)
+  - Spanish 🇪🇸 (`es`)
+  - Hindi 🇮🇳 (`hi`)
+  - German 🇩🇪 (`de`)
+  - French 🇫🇷 (`fr`)
+  - Indonesian 🇮🇩 (`id`)
+  - Turkish 🇹🇷 (`tr`)
+- **Clean Cookie-Based Locale Persistence**: Locale preference is stored cleanly via cookies without adding disruptive language subpaths (such as `/en/` or `/es/`) to dashboard URLs.
+- **Single Source of Truth**: All UI strings are managed through centralized English catalogs with automated AI translations, ensuring consistent terminology across every screen.

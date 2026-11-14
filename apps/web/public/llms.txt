@@ -1,0 +1,72 @@
+# Instance
+
+> Open source Sales CRM for Instagram.
+
+Instance is an Open Source Sales CRM designed specifically for Instagram. It transforms your Instagram DMs and engaged commenters into qualified leads, automated follow-ups, and organized pipelines. Built for creators, coaches, businesses, and brands who sell or grow on Instagram.
+
+## Core Features
+
+- [CRM Dashboard](https://instance.sale): Unified dashboard for managing leads, conversations, automations, and analytics
+- [Lead Management](https://instance.sale): Automatically organize leads from DMs and comments, capture emails and phone numbers
+- [Sales Automation](https://instance.sale): Build custom automation workflows with visual flow builder for follow-ups, asset sending, and lead nurturing
+- [Analytics](https://instance.sale): Track engagement metrics, conversion funnels, and sales performance
+- [Follow-up System](https://instance.sale): Automated follow-up sequences to nurture leads through the sales funnel
+
+## Getting Started
+
+- [Sign Up](https://instance.sale/signup): Create your free account to start converting Instagram leads
+- [Login](https://instance.sale/login): Access your Instance dashboard
+- [Setup Guide](https://instance.sale/setup): Connect your Instagram account and configure your sales automation
+
+## Product Information
+
+- [Privacy Policy](https://instance.sale/privacy-policy): How we handle your data and privacy
+- [Terms of Service](https://instance.sale/terms): Terms and conditions for using Instance
+- [Homepage](https://instance.sale): Learn more about Instance and its features
+
+## Technical Details
+
+Instance uses Instagram's official APIs and follows Meta's developer guidelines. The platform includes account health monitoring, rate limit management, and safe integration with Instagram accounts. Built with Next.js, React, Prisma, and PostgreSQL.
+
+### API Integration Example
+
+When implementing Instagram API authentication, you might encounter error 401 (Unauthorized) if your access token expires. Instance handles this automatically:
+
+```javascript
+// Instance automatically refreshes expired tokens
+const response = await fetch('https://graph.instagram.com/me/messages', {
+  headers: {
+    'Authorization': `Bearer ${accessToken}`,
+    'Content-Type': 'application/json'
+  }
+});
+
+if (response.status === 401) {
+  // Instance refreshes token and retries automatically
+  const newToken = await refreshAccessToken();
+  // Retry request with new token
+}
+```
+
+### Common Pitfalls
+
+**Pitfall 1: Using unofficial APIs**
+- **Problem:** Some tools use web scraping or unofficial APIs, violating Instagram's Terms of Service
+- **Solution:** Instance uses only official Meta Graph API endpoints as documented in [Meta for Developers](https://developers.facebook.com/docs/instagram-api)
+- **Result:** Account remains safe, no risk of restrictions
+
+**Pitfall 2: Rate limit violations**
+- **Problem:** Sending too many requests too quickly triggers rate limits (error 429)
+- **Solution:** Instance includes built-in rate limit management and request queuing
+- **Result:** Requests are automatically throttled to stay within Instagram's limits
+
+### References
+
+- [Meta for Developers - Instagram API](https://developers.facebook.com/docs/instagram-api)
+- [Meta Business Help Center - Messaging](https://www.facebook.com/business/help/994476827272050)
+- [Instagram Professional Account Setup](https://help.instagram.com/502981923235522)
+
+## Optional
+
+- [FAQ](https://instance.sale#faq): Frequently asked questions about Instance
+- [Documentation](https://github.com/instancesale): Technical documentation and guides

@@ -1,0 +1,176 @@
+@import "tailwindcss";
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+}
+
+:root {
+  --font-urbanist: 'Urbanist', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-hanken: 'Hanken Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  --bg: #f5f4ef;
+  --mesh-a: #f5dfcf;
+  --mesh-b: #d7e4d5;
+  --mesh-c: #f7ebc8;
+
+  /* Glassmorphism surfaces */
+  --glass: rgba(255, 255, 255, 0.72);
+  --glass-2: rgba(255, 255, 255, 0.88);
+  --glass-3: #ffffff;
+  --rim: rgba(255, 255, 255, 0.8);
+  --rim-dark: rgba(23, 25, 26, 0.08);
+  --shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset, 0 20px 40px -24px rgba(40, 30, 20, 0.12), 0 2px 6px rgba(0, 0, 0, 0.02);
+  --shadow-pop: 0 24px 60px -18px rgba(40, 30, 20, 0.22), 0 2px 6px rgba(40, 30, 20, 0.06);
+
+  /* Colors */
+  --ink: #17191a;
+  --muted: #676a66;
+  --faint: #8e918c;
+  --butter: #f2c94c;
+  --pine: #2f5c50;
+  --tomato: #c8431f;
+  --good: #25693e;
+  --good-bg: #e5f6e8;
+  --warn: #a4500f;
+  --warn-bg: #fef0e3;
+
+  /* Geometry */
+  --r-card: 22px;
+  --r-ctl: 999px;
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  --background: #f8f7f4;
+  --foreground: #17191a;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-urbanist);
+  --font-display: var(--font-hanken);
+  --font-size-2xs: 10px;
+  --font-size-3xs: 9px;
+  --shadow-2xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-urbanist);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Tabular figures for crisp financial and numerical display */
+.tnum,
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Atmospheric Mesh Gradients */
+.mesh-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.mesh-bg i {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.75;
+  will-change: transform;
+}
+
+.mesh-bg .mesh-a {
+  background: radial-gradient(closest-side, var(--mesh-a), transparent);
+  width: 60vmax;
+  height: 60vmax;
+  top: -20vmax;
+  left: -15vmax;
+}
+
+.mesh-bg .mesh-b {
+  background: radial-gradient(closest-side, var(--mesh-b), transparent);
+  width: 65vmax;
+  height: 65vmax;
+  bottom: -25vmax;
+  right: -20vmax;
+}
+
+.mesh-bg .mesh-c {
+  background: radial-gradient(closest-side, var(--mesh-c), transparent);
+  width: 45vmax;
+  height: 45vmax;
+  top: -10vmax;
+  right: 10vmax;
+}
+
+/* Tactile Glass Card */
+.glass-panel {
+  background: var(--glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--rim);
+  box-shadow: var(--shadow);
+  border-radius: var(--r-card);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset, 0 16px 36px -20px rgba(24, 28, 30, 0.08);
+  border-radius: 20px;
+  transition: all 0.25s var(--ease);
+}
+
+.glass-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.9) inset, 0 22px 48px -20px rgba(24, 28, 30, 0.14);
+}
+
+.seg-track {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(23, 25, 26, 0.05);
+  border: 1px solid rgba(23, 25, 26, 0.06);
+  border-radius: 999px;
+  padding: 3px;
+  gap: 2px;
+}
+
+.seg-pill-active {
+  background: #ffffff;
+  color: #1d4ed8;
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 2px 8px -2px rgba(29, 78, 216, 0.12);
+  border: 1px solid rgba(29, 78, 216, 0.16);
+}
+
+/* Custom Scrollbar Styles */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.25);
+  border-radius: 999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.45);
+}
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(100, 116, 139, 0.25) transparent;
+}

@@ -34,38 +34,9 @@ const nextConfig: NextConfig = {
   },
   async rewrites() {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
-    const mintlifyUrl = process.env.MINTLIFY_DOCS_URL ? process.env.MINTLIFY_DOCS_URL.replace(/\/$/, '') : '';
-
-    const mintlifyRewrites = mintlifyUrl
-      ? [
-        // Mintlify OSS Documentation rewrites (served under /oss)
-        {
-          source: '/_mintlify/:path*',
-          destination: `${mintlifyUrl}/_mintlify/:path*`,
-        },
-        {
-          source: '/api/request',
-          destination: `${mintlifyUrl}/_mintlify/api/request`,
-        },
-        {
-          source: '/oss',
-          destination: `${mintlifyUrl}/oss`,
-        },
-        {
-          source: '/oss/:match*',
-          destination: `${mintlifyUrl}/oss/:match*`,
-        },
-        {
-          source: '/mintlify-assets/:path*',
-          destination: `${mintlifyUrl}/mintlify-assets/:path*`,
-        },
-      ]
-      : [];
-
     return [
-      ...mintlifyRewrites,
-      // Proxy API routes to NestJS backend, strictly excluding all NextAuth handlers (/api/auth/*) and OpenGraph image routes
       {
+        // Proxy API routes to NestJS backend, strictly excluding all NextAuth handlers (/api/auth/*) and OpenGraph image routes
         source: '/api/:path((?!auth/(?:signin|signout|callback|session|csrf|providers|_log|error|verify-request)|og).*)',
         destination: `${apiUrl}/api/:path`,
       },

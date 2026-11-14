@@ -18,7 +18,7 @@ Security and data privacy are fundamental to Instance. Because Instance connects
 If you discover a security vulnerability, please do **NOT** open a public GitHub issue.
 
 Please report the issue confidentially via email to:
-**security@instance.sales**
+**security@instance.sale**
 
 ### What to Include in Your Report:
 - **Title**: Clear vulnerability title (e.g., `Webhook signature timing attack vulnerability`).

@@ -13,12 +13,12 @@ By participating in this project, you agree to treat everyone with respect, main
 ## Getting Started & Development Setup
 
 To get your local development environment configured, follow the comprehensive guides in our documentation portal:
-- [Local Installation Guide](https://instance.sales/oss/docs/installation)
-- [Docker Guide](https://instance.sales/oss/docs/docker)
-- [Instagram Setup Guide](https://instance.sales/oss/docs/instagram-setup)
-- [Meta App Review & Live Mode](https://instance.sales/oss/docs/meta-app-review)
-- [Architecture Overview](https://instance.sales/oss/docs/overview)
-- [Production Deployment](https://instance.sales/oss/docs/deployment)
+- [Local Installation Guide](https://docs.instance.sale/oss/installation)
+- [Docker Guide](https://docs.instance.sale/oss/docker)
+- [Instagram Setup Guide](https://docs.instance.sale/oss/instagram-setup)
+- [Meta App Review & Live Mode](https://docs.instance.sale/oss/meta-app-review)
+- [Architecture Overview](https://docs.instance.sale/oss/overview)
+- [Production Deployment](https://docs.instance.sale/oss/deployment)
 
 ---
 

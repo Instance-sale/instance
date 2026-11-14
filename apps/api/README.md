@@ -26,8 +26,8 @@ pnpm --filter @instance/api typecheck
 ## Documentation
 
 For full setup instructions, environment variable references, and Meta Developer Portal configurations:
-- [Installation Guide](https://instance.sales/oss/docs/installation)
-- [Instagram Setup Guide](https://instance.sales/oss/docs/instagram-setup)
-- [Meta App Review & Live Mode](https://instance.sales/oss/docs/meta-app-review)
-- [Full Documentation Portal](https://instance.sales/oss/docs)
+- [Installation Guide](https://docs.instance.sale/oss/installation)
+- [Instagram Setup Guide](https://docs.instance.sale/oss/instagram-setup)
+- [Meta App Review & Live Mode](https://docs.instance.sale/oss/meta-app-review)
+- [Full Documentation Portal](https://docs.instance.sale/oss)
 

@@ -1,4 +1,4 @@
-﻿FROM node:20-alpine AS base
+FROM node:20-alpine AS base
 RUN apk add --no-cache libc6-compat openssl
 RUN npm install -g pnpm@10.28.2
 WORKDIR /app

@@ -64,6 +64,7 @@ pnpm run db:deploy
 - **What it does**: `pnpm run db:deploy` runs `prisma migrate deploy` under `@instance/db`. It applies pending migrations safely without resetting or dropping data.
 - **Why `DIRECT_URL` is mandatory**: If using managed PostgreSQL providers with connection poolers (such as Neon or Supabase with PgBouncer in transaction mode), connection poolers cannot handle Prisma migration locks. Prisma automatically uses `DIRECT_URL` (direct unpooled connection) for schema migrations and `DATABASE_URL` (pooled connection) for runtime application queries.
 - **Docker Compose Automation**: When using the included `docker-compose.yml`, the `db-migrate` service automatically executes `pnpm run db:deploy` and verifies completion before starting the API server and worker engine.
+- **API container startup**: The `api` Docker image also runs `pnpm --filter @instance/db db:deploy` every time it starts, before launching the API server. If you deploy the API image on its own (for example on a cloud container host without Docker Compose), pending migrations are applied automatically, so set both `DATABASE_URL` and `DIRECT_URL` on that container. If the migration fails, the API server does not start.
 
 ---
 

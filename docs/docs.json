@@ -55,9 +55,6 @@
     "light": "/images/web-app-manifest-192x192.webp",
     "dark": "/favicon.svg"
   },
-  "thumbnails": {
-    "background": "/docs/images/web-app-manifest-192x192.webp"
-  },
   "background": {
     "image": "/images/web-app-manifest-192x192.webp"
   },

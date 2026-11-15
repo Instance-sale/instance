@@ -61,7 +61,7 @@ services:
       - path: .env
         required: false
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=development
       - PORT=4000
       - REDIS_URL=redis://redis:6379
       - DATABASE_URL=${DOCKER_DATABASE_URL:-postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/${POSTGRES_DB:-instance}?sslmode=disable}
@@ -84,7 +84,7 @@ services:
       - path: .env
         required: false
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=development
       - REDIS_URL=redis://redis:6379
       - DATABASE_URL=${DOCKER_DATABASE_URL:-postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/${POSTGRES_DB:-instance}?sslmode=disable}
       - DIRECT_URL=${DOCKER_DIRECT_URL:-postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/${POSTGRES_DB:-instance}?sslmode=disable}
@@ -108,7 +108,7 @@ services:
       - path: .env
         required: false
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=development
       - PORT=3000
       - HOSTNAME=0.0.0.0
       - NEXT_PUBLIC_APP_URL=http://localhost:3000

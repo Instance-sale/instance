@@ -16,7 +16,7 @@
     "primary": {
       "type": "button",
       "label": "Open App",
-      "href": "https://docs.instance.sale"
+      "href": "https://instance.sale"
     }
   },
   "banner": {
@@ -54,5 +54,13 @@
   },
   "thumbnails": {
     "background": "/docs/images/web-app-manifest-192x192.webp"
+  },
+  "background": {
+    "image": "/images/web-app-manifest-192x192.webp"
+  },
+  "integrations": {
+    "ga4": {
+      "measurementId": "G-N0BD0ZVNLD"
+    }
   }
 }

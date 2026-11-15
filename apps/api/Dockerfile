@@ -1,4 +1,4 @@
-﻿FROM node:20-alpine AS base
+FROM node:20-alpine AS base
 RUN apk add --no-cache libc6-compat openssl
 RUN npm install -g pnpm@10.28.2
 WORKDIR /app
@@ -35,5 +35,5 @@ COPY --from=builder /app/apps/api/node_modules ./apps/api/node_modules
 
 EXPOSE 4000
 
-WORKDIR /app/apps/api
-CMD ["node", "dist/main.js"]
+WORKDIR /app
+CMD ["sh", "-c", "pnpm --filter @instance/db db:deploy && cd /app/apps/api && node dist/main.js"]

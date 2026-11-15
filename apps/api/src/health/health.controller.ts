@@ -14,26 +14,15 @@ export class HealthController {
   async check(@Res({ passthrough: true }) res: Response) {
     let dbStatus = 'disconnected';
     try {
-      await this.prisma.user.findFirst({ select: { id: true } });
+      await this.prisma.client.$queryRaw`SELECT 1`;
       dbStatus = 'connected';
     } catch (error) {
       this.logger.error('Health check DB error:', error);
       dbStatus = 'error';
     }
 
-    if (dbStatus === 'error') {
-      res.status(HttpStatus.SERVICE_UNAVAILABLE);
-      return {
-        status: 'error',
-        service: '@instance/api',
-        uptime: process.uptime(),
-        timestamp: new Date().toISOString(),
-        database: dbStatus,
-      };
-    }
-
     return {
-      status: 'ok',
+      status: dbStatus === 'connected' ? 'ok' : 'degraded',
       service: '@instance/api',
       uptime: process.uptime(),
       timestamp: new Date().toISOString(),

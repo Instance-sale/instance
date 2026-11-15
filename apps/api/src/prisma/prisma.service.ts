@@ -40,6 +40,7 @@ export class PrismaService implements OnModuleInit, OnModuleDestroy {
   get apiErrorLog() { return this.client.apiErrorLog; }
   get backgroundJob() { return this.client.backgroundJob; }
   get $transaction() { return this.client.$transaction.bind(this.client); }
+  get $queryRaw() { return this.client.$queryRaw.bind(this.client); }
   get storyMention() { return this.client.storyMention; }
   get notification() { return this.client.notification; }
   get audienceList() { return (this.client as any).audienceList; }

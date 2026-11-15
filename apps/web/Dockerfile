@@ -12,7 +12,7 @@ COPY packages/ ./packages/
 COPY apps/web/ ./apps/web/
 
 # Install dependencies without running scripts before symlinks exist
-RUN --mount=type=cache,id=pnpm,target=/root/.local/share/pnpm/store pnpm install --frozen-lockfile --ignore-scripts
+RUN pnpm install --frozen-lockfile --ignore-scripts
 
 # Build required workspace packages and Next.js frontend
 RUN pnpm --filter @instance/db run build \

@@ -50,6 +50,19 @@ INSTAGRAM_APP_SECRET="your-meta-instagram-app-secret"
 INSTAGRAM_REDIRECT_URI="https://app.yourdomain.com/api/instagram/callback"
 ```
 
+### Pass public URLs to the web image at build time
+
+Next.js reads `NEXT_PUBLIC_APP_URL` and `NEXT_PUBLIC_API_URL` when it builds the web dashboard, including the rewrites that proxy `/api` requests to the API server. The web Docker image does not copy your `.env` file, so pass both values as build arguments when you build it. Otherwise the image falls back to `http://localhost:3000` and `http://localhost:4000`.
+
+```bash
+docker build -f apps/web/Dockerfile \
+  --build-arg NEXT_PUBLIC_APP_URL="https://app.yourdomain.com" \
+  --build-arg NEXT_PUBLIC_API_URL="https://api.yourdomain.com" \
+  -t instance-web .
+```
+
+If your hosting platform builds the image from the repository, set both variables as build-time variables in its settings.
+
 ---
 
 ## 3. Apply Prisma Database Migrations

@@ -15,6 +15,11 @@ COPY apps/web/ ./apps/web/
 RUN pnpm install --frozen-lockfile --ignore-scripts
 
 # Build required workspace packages and Next.js frontend
+ARG NEXT_PUBLIC_API_URL
+ARG NEXT_PUBLIC_APP_URL
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_APP_URL=$NEXT_PUBLIC_APP_URL
+
 RUN pnpm --filter @instance/db run build \
     && pnpm --filter @instance/types run build \
     && pnpm --filter @instance/web run build
@@ -22,6 +27,10 @@ RUN pnpm --filter @instance/db run build \
 FROM base AS runner
 WORKDIR /app
 
+ARG NEXT_PUBLIC_API_URL
+ARG NEXT_PUBLIC_APP_URL
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_APP_URL=$NEXT_PUBLIC_APP_URL
 ENV NODE_ENV=production
 ENV PORT=3000
 ENV HOSTNAME=0.0.0.0

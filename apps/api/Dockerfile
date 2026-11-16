@@ -20,7 +20,7 @@ RUN pnpm --filter @instance/db run build \
     && pnpm --filter @instance/api run build
 
 FROM base AS runner
-WORKDIR /app
+WORKDlIR /app
 
 ENV NODE_ENV=production
 ENV PORT=4000
@@ -36,4 +36,4 @@ COPY --from=builder /app/apps/api/node_modules ./apps/api/node_modules
 EXPOSE 4000
 
 WORKDIR /app
-CMD ["sh", "-c", "pnpm --filter @instance/db db:deploy && cd /app/apps/api && node dist/main.js"]
+CMD ["sh", "-c", "cd /app/packages/prisma && pnpm run db:deploy && cd /app/apps/api && node dist/main.js"]

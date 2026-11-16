@@ -5,9 +5,9 @@ You are an expert full-stack developer working on Instance, an open-source sales
 ## Sub-Package Specializations
 
 When working in specific workspace apps, consult their specialized instructions:
-- Backend REST API: [apps/api/AGENTS.md](file:///c:/Users/Sumama/Desktop/instance-oss/apps/api/AGENTS.md)
-- Frontend Web App: [apps/web/AGENTS.md](file:///c:/Users/Sumama/Desktop/instance-oss/apps/web/AGENTS.md)
-- Background Workers: [apps/workers/AGENTS.md](file:///c:/Users/Sumama/Desktop/instance-oss/apps/workers/AGENTS.md)
+- Backend REST API: [apps/api/AGENTS.md](/apps/api/AGENTS.md)
+- Frontend Web App: [apps/web/AGENTS.md](/apps/web/AGENTS.md)
+- Background Workers: [apps/workers/AGENTS.md](/apps/workers/AGENTS.md)
 
 ---
 
@@ -48,7 +48,7 @@ Documentation is code. Whenever adding, refactoring, or modifying APIs, database
 - **ZERO graph diagrams** (e.g., `graph TD`, `graph LR`). All architectural diagrams must use clean Mermaid `sequenceDiagram` or `erDiagram` syntax.
 - **ZERO rect rgb(...)** or opaque bounding boxes that obscure text in dark or light mode.
 - **Exact In-App UI Paths**: Always document real UI navigation (e.g., `Dashboard -> Automation -> New Automation`) rather than raw `.env` edits.
-- **docs.json Sync**: Any newly created `.mdx` doc must be registered in both [docs.json](file:///c:/Users/Sumama/Desktop/instance-oss/docs.json) and [docs/docs.json](file:///c:/Users/Sumama/Desktop/instance-oss/docs/docs.json).
+- **docs.json Sync**: Any newly created `.mdx` doc must be registered in both [docs.json](/docs/docs.json) and [docs/docs.json](/docs/docs.json).
 - **Canonical Online Docs URL**: Reference `https://docs.instance.sale/oss` for all public documentation links.
 - **Clickable Links**: Use `file:///` links for all local file and code references in assistant output.
 
@@ -56,7 +56,7 @@ Documentation is code. Whenever adding, refactoring, or modifying APIs, database
 
 ## Internationalization (i18n) Law
 
-- **Single Source of Truth**: Edit UI strings only in [apps/web/locales/en.json](file:///C:/Users/Sumama/Desktop/instance-oss/apps/web/locales/en.json). Never manually edit secondary locale catalogs.
+- **Single Source of Truth**: Edit UI strings only in [apps/web/locales/en.json](/apps/web/locales/en.json). Never manually edit secondary locale catalogs.
 - **Automated Sync**: Run `pnpm run translate` locally or let the GitHub Actions CI/CD workflow translate catalogs using Groq AI.
-- **Language Selector Location**: Language selector resides exclusively under `Dashboard -> Settings -> Account Profile` ([BasicInformation.tsx](file:///C:/Users/Sumama/Desktop/instance-oss/apps/web/app/dashboard/[companyId]/settings/components/BasicInformation.tsx)). Do not place language switchers on login, signup, or public landing pages.
+- **Language Selector Location**: Language selector resides exclusively under `Dashboard -> Settings -> Account Profile` ([BasicInformation.tsx](/apps/web/app/dashboard/[companyId]/settings/components/BasicInformation.tsx)). Do not place language switchers on login, signup, or public landing pages.
 - **URL Cleanliness**: Preserve clean URLs (`/dashboard/[companyId]`) without locale subpath prefixes; locale state is stored strictly in the `NEXT_LOCALE` cookie.

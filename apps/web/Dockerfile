@@ -44,5 +44,5 @@ COPY --from=builder /app/apps/web ./apps/web
 EXPOSE 3000
 
 WORKDIR /app/apps/web
-CMD ["node", "node_modules/next/dist/bin/next", "start", "-H", "0.0.0.0", "-p", "3000"]
+CMD ["node", "docker-entrypoint.js"]
 

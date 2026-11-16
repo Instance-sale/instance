@@ -106,7 +106,6 @@ export class CompanyService {
       data: {
         name: data.name,
         companyId,
-        dashboardKey: this.generateCompanyId(),
         instagramHandle: data.instagramHandle || null,
         ownerId: userId,
         ownerName: data.ownerName || null,
@@ -204,7 +203,6 @@ export class CompanyService {
           data: {
             name: data.name,
             companyId,
-            dashboardKey: this.generateCompanyId(),
             instagramHandle: data.instagramHandle || null,
             ownerId: userId,
             ownerName: data.ownerName || null,

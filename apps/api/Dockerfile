@@ -20,7 +20,7 @@ RUN pnpm --filter @instance/db run build \
     && pnpm --filter @instance/api run build
 
 FROM base AS runner
-WORKDlIR /app
+WORKDIR /app
 
 ENV NODE_ENV=production
 ENV PORT=4000

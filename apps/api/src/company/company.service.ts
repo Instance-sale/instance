@@ -7,6 +7,7 @@ import {
   ForbiddenException,
   InternalServerErrorException,
   Optional,
+  Logger,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
@@ -32,6 +33,8 @@ export function buildCompanyDashboardPath(company: {
 
 @Injectable()
 export class CompanyService {
+  private readonly logger = new Logger(CompanyService.name);
+
   constructor(
     private readonly prisma: PrismaService,
   ) { }
@@ -103,6 +106,7 @@ export class CompanyService {
       data: {
         name: data.name,
         companyId,
+        dashboardKey: this.generateCompanyId(),
         instagramHandle: data.instagramHandle || null,
         ownerId: userId,
         ownerName: data.ownerName || null,
@@ -113,7 +117,8 @@ export class CompanyService {
         websiteUrl: data.websiteUrl || null,
         companyEmail: data.companyEmail || null,
         companyImage: data.companyImage || null,
-        companyDescription: data.companyDescription || null,        setupComplete: data.setupComplete === true,
+        companyDescription: data.companyDescription || null,
+        setupComplete: data.setupComplete === true,
       },
     });
 
@@ -129,97 +134,105 @@ export class CompanyService {
   }
 
   async saveProgress(userId: string, data: UpdateCompanyDto) {
-    const user = await this.prisma.user.findUnique({
-      where: { id: userId },
-      include: { company: true },
-    });
-
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
-
-    if (user.company && data.createNewAccount !== true) {
-      if (user.role && !['OWNER', 'ADMIN'].includes(user.role)) {
-        throw new ForbiddenException('Access denied: Requires OWNER or ADMIN role');
-      }
-      if (user.companyId !== user.company.id) {
-        throw new ForbiddenException('Unauthorized: Company mismatch');
-      }
-
-      const company = await this.prisma.company.update({
-        where: { id: user.company.id },
-        data: {
-          name: data.name || user.company.name,
-          instagramHandle:
-            data.instagramHandle !== undefined
-              ? data.instagramHandle
-              : user.company.instagramHandle,
-          ownerName:
-            data.ownerName !== undefined
-              ? data.ownerName
-              : user.company.ownerName,
-          ownerRole:
-            data.ownerRole !== undefined
-              ? data.ownerRole
-              : user.company.ownerRole,
-          numberOfEmployees:
-            data.numberOfEmployees !== undefined
-              ? Number(data.numberOfEmployees)
-              : user.company.numberOfEmployees,
-          websiteUrl:
-            data.websiteUrl !== undefined
-              ? data.websiteUrl
-              : user.company.websiteUrl,
-          companyEmail:
-            data.companyEmail !== undefined
-              ? data.companyEmail
-              : user.company.companyEmail,
-          companyImage:
-            data.companyImage !== undefined
-              ? data.companyImage
-              : user.company.companyImage,
-          companyDescription:
-            data.companyDescription !== undefined
-              ? data.companyDescription
-              : user.company.companyDescription,          setupComplete: data.setupComplete === true ? true : undefined,
-        },
-      });
-
-      return { success: true, company };
-    } else {
-      if (!data.name) {
-        throw new BadRequestException('Company name is required');
-      }
-
-      const companyId = await this.generateUniqueCompanyId();
-
-      const company = await this.prisma.company.create({
-        data: {
-          name: data.name,
-          companyId,
-          instagramHandle: data.instagramHandle || null,
-          ownerId: userId,
-          ownerName: data.ownerName || null,
-          ownerRole: data.ownerRole || null,
-          numberOfEmployees: data.numberOfEmployees
-            ? Number(data.numberOfEmployees)
-            : null,
-          websiteUrl: data.websiteUrl || null,
-          companyEmail: data.companyEmail || null,
-          companyImage: data.companyImage || null,
-          companyDescription: data.companyDescription || null,          setupComplete: data.setupComplete === true,
-        },
-      });
-
-      await this.prisma.user.update({
+    try {
+      const user = await this.prisma.user.findUnique({
         where: { id: userId },
-        data: {
-          companyId: company.id,
-          role: 'OWNER',
-        },
+        include: { company: true },
       });
 
-      return { success: true, company };
+      if (!user) {
+        throw new NotFoundException('User not found');
+      }
+
+      if (user.company && data.createNewAccount !== true) {
+        if (user.role && !['OWNER', 'ADMIN'].includes(user.role)) {
+          throw new ForbiddenException('Access denied: Requires OWNER or ADMIN role');
+        }
+        if (user.companyId !== user.company.id) {
+          throw new ForbiddenException('Unauthorized: Company mismatch');
+        }
+
+        const company = await this.prisma.company.update({
+          where: { id: user.company.id },
+          data: {
+            name: data.name || user.company.name,
+            instagramHandle:
+              data.instagramHandle !== undefined
+                ? data.instagramHandle
+                : user.company.instagramHandle,
+            ownerName:
+              data.ownerName !== undefined
+                ? data.ownerName
+                : user.company.ownerName,
+            ownerRole:
+              data.ownerRole !== undefined
+                ? data.ownerRole
+                : user.company.ownerRole,
+            numberOfEmployees:
+              data.numberOfEmployees !== undefined
+                ? Number(data.numberOfEmployees)
+                : user.company.numberOfEmployees,
+            websiteUrl:
+              data.websiteUrl !== undefined
+                ? data.websiteUrl
+                : user.company.websiteUrl,
+            companyEmail:
+              data.companyEmail !== undefined
+                ? data.companyEmail
+                : user.company.companyEmail,
+            companyImage:
+              data.companyImage !== undefined
+                ? data.companyImage
+                : user.company.companyImage,
+            companyDescription:
+              data.companyDescription !== undefined
+                ? data.companyDescription
+                : user.company.companyDescription,
+            setupComplete: data.setupComplete === true ? true : undefined,
+          },
+        });
+
+        return { success: true, company };
+      } else {
+        if (!data.name) {
+          throw new BadRequestException('Company name is required');
+        }
+
+        const companyId = await this.generateUniqueCompanyId();
+
+        const company = await this.prisma.company.create({
+          data: {
+            name: data.name,
+            companyId,
+            dashboardKey: this.generateCompanyId(),
+            instagramHandle: data.instagramHandle || null,
+            ownerId: userId,
+            ownerName: data.ownerName || null,
+            ownerRole: data.ownerRole || null,
+            numberOfEmployees: data.numberOfEmployees
+              ? Number(data.numberOfEmployees)
+              : null,
+            websiteUrl: data.websiteUrl || null,
+            companyEmail: data.companyEmail || null,
+            companyImage: data.companyImage || null,
+            companyDescription: data.companyDescription || null,
+            setupComplete: data.setupComplete === true,
+          },
+        });
+
+        await this.prisma.user.update({
+          where: { id: userId },
+          data: {
+            companyId: company.id,
+            role: 'OWNER',
+          },
+        });
+
+        return { success: true, company };
+      }
+    } catch (error) {
+      this.logger.error(`Error saving company progress for user ${userId}:`, error);
+      throw error;
     }
   }
 

@@ -34,7 +34,7 @@ cp .env.example .env
 
 *(On Windows PowerShell, use `Copy-Item .env.example .env`)*
 
-The default `.env.example` is pre-configured to connect directly to the containerized PostgreSQL and Redis services. Configure your `NEXTAUTH_SECRET` (generate with `openssl rand -hex 32` or visit [generate-secret.vercel.app/32](https://generate-secret.vercel.app/32)), Google OAuth credentials, and optional Cloudflare R2 storage keys as outlined in the [Installation](file:///c:/Users/Sumama/Desktop/instance-oss/docs/installation.mdx) guide.
+The default `.env.example` is pre-configured to connect directly to the containerized PostgreSQL and Redis services. Configure your `NEXTAUTH_SECRET` (generate with `openssl rand -hex 32` or visit [generate-secret.vercel.app/32](https://generate-secret.vercel.app/32)), Google OAuth credentials, and optional Cloudflare R2 storage keys as outlined in the [Installation](/installation) guide.
 
 ### Step 3: Build and Start Containers
 
@@ -73,7 +73,7 @@ All services should report a status of `Up` or `running`.
 Once your Docker containers are running and healthy:
 1. Open your browser and navigate to `http://localhost:3000`.
 2. Sign in to your workspace dashboard.
-3. Head directly to the [Instagram Setup](file:///c:/Users/Sumama/Desktop/instance-oss/docs/instagram-setup.mdx) guide to configure your Meta Developer App, launch your webhook tunnel, and start receiving live events!
+3. Head directly to the [Instagram Setup](/instagram-setup) guide to configure your Meta Developer App, launch your webhook tunnel, and start receiving live events!
 
 ---
 

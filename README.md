@@ -35,7 +35,13 @@ Instance brings that entire sales automation engine and social CRM to software y
 - **Built on the official Meta Graph API**: Strictly compliant with official Instagram APIs. No fragile web scraping, no headless browser automation, and no Instagram passwords required.
 - **Built-in anti-ban safeguards**: Built-in human jitter delays, token bucket rate limits, automatic circuit breakers, and warm-up schedules to keep your Instagram account safe.
 
-</br>
+<br />
+
+---
+### One Click Deployments
+
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/instance-open-source-sales-crm-and-insta?referralCode=hKG5AX&utm_medium=integration&utm_source=template&utm_campaign=generic)
+
 
 ## Key Features
 

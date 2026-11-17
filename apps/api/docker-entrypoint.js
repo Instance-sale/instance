@@ -4,9 +4,10 @@ const path = require('path');
 console.log('[api-entrypoint] Initializing API container...');
 
 // 1. Run database migrations before launching NestJS
+const prismaDir = path.resolve('/app/packages/prisma');
+console.log(`[api-entrypoint] Applying database migrations from: ${prismaDir}`);
+
 try {
-  const prismaDir = path.resolve(__dirname, '../../packages/prisma');
-  console.log(`[api-entrypoint] Applying database migrations from: ${prismaDir}`);
   execSync('pnpm run db:deploy', {
     cwd: prismaDir,
     stdio: 'inherit',

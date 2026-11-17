@@ -32,8 +32,9 @@ COPY --from=builder /app/packages ./packages
 COPY --from=builder /app/apps/api/package.json ./apps/api/
 COPY --from=builder /app/apps/api/dist ./apps/api/dist
 COPY --from=builder /app/apps/api/node_modules ./apps/api/node_modules
+COPY --from=builder /app/apps/api/docker-entrypoint.js ./apps/api/docker-entrypoint.js
 
 EXPOSE 4000
 
-WORKDIR /app
-CMD ["sh", "-c", "cd /app/packages/prisma && pnpm run db:deploy && cd /app/apps/api && node dist/main.js"]
+WORKDIR /app/apps/api
+ENTRYPOINT ["node", "docker-entrypoint.js"]

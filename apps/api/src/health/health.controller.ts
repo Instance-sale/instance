@@ -21,8 +21,19 @@ export class HealthController {
       dbStatus = 'error';
     }
 
+    if (dbStatus === 'error') {
+      res.status(HttpStatus.SERVICE_UNAVAILABLE);
+      return {
+        status: 'error',
+        service: '@instance/api',
+        uptime: process.uptime(),
+        timestamp: new Date().toISOString(),
+        database: dbStatus,
+      };
+    }
+
     return {
-      status: dbStatus === 'connected' ? 'ok' : 'degraded',
+      status: 'ok',
       service: '@instance/api',
       uptime: process.uptime(),
       timestamp: new Date().toISOString(),

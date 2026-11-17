@@ -209,3 +209,4 @@ META_CONVERSATION_RATE_LIMIT_PER_SEC=2
 - **Prisma Client Generation Fails**: Run `pnpm postinstall` to rebuild shared monorepo packages.
 - **Port In Use (3000, 4000, or 6379)**: Check if other processes are occupying these ports before starting dev servers.
 - **Worker Jobs Not Executing**: Ensure Redis is running and reachable via the `REDIS_URL` in `.env`.
+- **Magic Link Email Not Arriving**: Instance connects to your SMTP server over IPv4 and stops trying to connect after 15 seconds. If sending fails, the API logs the error followed by a `[FALLBACK SIGN-IN URL]` block containing the sign-in link, so you can still log in by opening that URL. Outside production (`NODE_ENV` not set to `production`), the API also logs every link as `[DEV MAGIC LINK]`. Check your `EMAIL_SERVER_*` values and confirm your host allows outbound SMTP traffic on `EMAIL_SERVER_PORT`.

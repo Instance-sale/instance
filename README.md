@@ -106,6 +106,14 @@ Complete step-by-step documentation with screenshots, configuration guides, and 
 
 ---
 
+## Need Help or Custom Deployment?
+
+Looking for a managed deployment, custom scaling, or dedicated support for your brand?
+- **Email**: [support@sumama.me](mailto:support@sumama.me)
+- **Book a Call / Demo**: [instance.sale](https://instance.sale)
+
+---
+
 ## Tech Stack
 
 - **Frontend**: Next.js 16 (App Router), React 19, next-intl, HeroUI, Tailwind CSS, Lucide Icons, React Flow (XYFlow)

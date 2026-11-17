@@ -110,8 +110,6 @@ Complete step-by-step documentation with screenshots, configuration guides, and 
 
 Looking for a managed deployment, custom scaling, or dedicated support for your brand?
 - **Email**: [support@sumama.me](mailto:support@sumama.me)
-- **Book a Call / Demo**: [instance.sale](https://instance.sale)
-
 ---
 
 ## Tech Stack

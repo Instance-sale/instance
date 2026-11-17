@@ -168,6 +168,8 @@ Configure SMTP to send passwordless login links and system alert emails:
   EMAIL_FROM="noreply@yourdomain.com"
   ```
 
+Instance connects to your SMTP server over IPv4. If the sign-in email fails to send, for example because of wrong credentials or a host that blocks outbound SMTP, the API logs the link under `[FALLBACK SIGN-IN URL]` so you can still sign in. With Docker, view it with `docker compose logs -f api`.
+
 ### 4. Background Cron Security
 Instance runs periodic background crons (such as hourly rate limit quota resets and paused account health checks). Generate a dedicated authorization key:
 - **Terminal**: Run `openssl rand -hex 32` in your command line.

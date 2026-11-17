@@ -165,7 +165,7 @@ export const authOptions: NextAuthOptions = {
         if (session.companyId !== undefined) {
           token.companyId = session.companyId;
         }
-        
+
       }
       return token;
     },

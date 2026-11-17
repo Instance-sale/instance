@@ -191,15 +191,18 @@ export class AuthService {
       this.logger.log(`\n=======================================================\n[DEV MAGIC LINK] To: ${to}\n🔗 Sign-in URL: ${url}\n=======================================================\n`);
     }
     try {
+      const isSecure = process.env.EMAIL_SERVER_PORT === '465';
       const transporter = nodemailer.createTransport({
         host: process.env.EMAIL_SERVER_HOST || 'smtp.gmail.com',
         port: parseInt(process.env.EMAIL_SERVER_PORT || '587', 10),
-        secure: process.env.EMAIL_SERVER_PORT === '465',
+        secure: isSecure,
+        family: 4,
         auth: {
           user: process.env.EMAIL_SERVER_USER,
           pass: process.env.EMAIL_SERVER_PASSWORD,
         },
-      });
+        connectionTimeout: 15000,
+      } as any);
 
       const from =
         process.env.EMAIL_FROM ||
@@ -271,6 +274,7 @@ export class AuthService {
       return { success: true };
     } catch (err: any) {
       this.logger.error('Failed to send verification email', err);
+      this.logger.warn(`\n=======================================================\n[FALLBACK SIGN-IN URL] To: ${to}\n🔗 Sign-in URL: ${url}\n=======================================================\n`);
       return { success: false, error: err.message };
     }
   }

@@ -91,5 +91,5 @@ Have an idea for a new automation trigger, CRM filter, or messaging node?
 
 ## Security Vulnerabilities
 
-Please do **NOT** report security vulnerabilities via public GitHub issues. Refer to [SECURITY.md](file:///c:/Users/Sumama/Desktop/instance-oss/SECURITY.md) for our private disclosure process.
+Please do **NOT** report security vulnerabilities via public GitHub issues. Refer to [SECURITY.md](/instance-oss/SECURITY.md) for our private disclosure process.
 

@@ -6,6 +6,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import { randomBytes } from 'crypto';
+import * as dns from 'node:dns';
 import * as nodemailer from 'nodemailer';
 import { PrismaService } from '../prisma/prisma.service';
 import { SyncUserDto } from './dto/sync-user.dto';
@@ -191,15 +192,31 @@ export class AuthService {
       this.logger.log(`\n=======================================================\n[DEV MAGIC LINK] To: ${to}\n🔗 Sign-in URL: ${url}\n=======================================================\n`);
     }
     try {
+      const rawHost = process.env.EMAIL_SERVER_HOST || 'smtp.gmail.com';
+      let resolvedHost = rawHost;
+      try {
+        const lookup = await dns.promises.lookup(rawHost, { family: 4 });
+        if (lookup?.address) {
+          resolvedHost = lookup.address;
+        }
+      } catch (dnsErr) {
+        this.logger.warn(`Could not force IPv4 lookup for ${rawHost}:`, dnsErr);
+      }
+
+      const isSecure = process.env.EMAIL_SERVER_PORT === '465';
       const transporter = nodemailer.createTransport({
-        host: process.env.EMAIL_SERVER_HOST || 'smtp.gmail.com',
-        port: parseInt(process.env.EMAIL_SERVER_PORT || '587', 10),
-        secure: process.env.EMAIL_SERVER_PORT === '465',
+        host: resolvedHost,
+        port: parseInt(process.env.EMAIL_SERVER_PORT || '465', 10),
+        secure: isSecure,
+        tls: {
+          servername: rawHost,
+        },
         auth: {
           user: process.env.EMAIL_SERVER_USER,
           pass: process.env.EMAIL_SERVER_PASSWORD,
         },
-      });
+        connectionTimeout: 15000,
+      } as any);
 
       const from =
         process.env.EMAIL_FROM ||
@@ -271,6 +288,7 @@ export class AuthService {
       return { success: true };
     } catch (err: any) {
       this.logger.error('Failed to send verification email', err);
+      this.logger.warn(`\n=======================================================\n[FALLBACK SIGN-IN URL] To: ${to}\n🔗 Sign-in URL: ${url}\n=======================================================\n`);
       return { success: false, error: err.message };
     }
   }

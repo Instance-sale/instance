@@ -6,7 +6,7 @@ This app is the core REST backend and webhook ingestion engine for Instance, bui
 
 ### 1. Webhook Ingestion & Deduplication
 - **Immediate 200 OK**: Meta webhooks will timeout and retry if not acknowledged within 3 seconds. Ingest the payload, reserve the event key, enqueue downstream jobs, and return `200 OK` immediately.
-- **HMAC Signature Verification**: All requests to `/api/webhook/instagram` must verify `X-Hub-Signature-256` against `INSTAGRAM_APP_SECRET` using `crypto.timingSafeEqual` ([instagram-webhook-router.service.ts](file:///c:/Users/Sumama/Desktop/instance-oss/apps/api/src/instagram/services/instagram-webhook-router.service.ts#L26-L56)).
+- **HMAC Signature Verification**: All requests to `/api/webhook/instagram` must verify `X-Hub-Signature-256` against `INSTAGRAM_APP_SECRET` using `crypto.timingSafeEqual` ([instagram-webhook-router.service.ts](/apps/api/src/instagram/services/instagram-webhook-router.service.ts#L26-L56)).
 - **Redis Idempotency**: Always call `redisService.reserveWebhookEvent` before executing logic for comment IDs or message IDs to prevent duplicate triggers from Meta webhook retries.
 
 ### 2. Database & State Mutations
@@ -21,5 +21,5 @@ This app is the core REST backend and webhook ingestion engine for Instance, bui
 - Update `InstagramAccountHealth` counters and trigger throttling status on error codes 4 or 429.
 
 ### 5. Documentation Sync
-- Any new controller endpoint, webhook topic, or cron job must be documented in `docs/` and synced with [docs.json](file:///c:/Users/Sumama/Desktop/instance-oss/docs.json).
+- Any new controller endpoint, webhook topic, or cron job must be documented in `docs/` and synced with [docs.json](/docs/docs.json).
 

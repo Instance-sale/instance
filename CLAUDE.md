@@ -12,4 +12,4 @@ Please follow all instructions in the master rules file:
 - **Prisma Client Generation**: `pnpm db:generate`
 - **Prisma Schema Sync**: `pnpm db:push`
 - **Run Tests**: `pnpm test`
-- **Documentation**: Refer to [docs/](file:///c:/Users/Sumama/Desktop/instance-oss/docs/) and [docs.json](file:///c:/Users/Sumama/Desktop/instance-oss/docs.json)
+- **Documentation**: Refer to [docs/](/docs/) and [docs.json](/docs/docs.json)

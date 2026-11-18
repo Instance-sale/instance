@@ -11,7 +11,10 @@
     "light": "#60A5FA",
     "dark": "#1D4ED8"
   },
-  "favicon": "/favicon.svg",
+  "favicon": {
+    "light": "/images/web-app-manifest-192x192.webp",
+    "dark": "/favicon.svg"
+  },
   "navbar": {
     "links": [
       {
@@ -26,7 +29,7 @@
     }
   },
   "banner": {
-    "content": "Instance Open source AI sales CRM: Turn Instagram into an automated 24/7 sales engine.",
+    "content": "Instance: The open-source Instagram sales CRM and automation platform",
     "dismissible": true
   },
   "search": {
@@ -62,10 +65,35 @@
   },
   "description": "Instance is an AI sales CRM that turns your Instagram into a 24/7 sales pipeline. Let AI handle your DMs, qualify leads, and close deals on autopilot",
   "logo": {
-    "light": "/favicon.svg",
+    "light": "/images/web-app-manifest-192x192.webp",
     "dark": "/favicon.svg"
   },
+  "integrations": {
+    "ga4": {
+      "measurementId": "G-N0BD0ZVNLD"
+    }
+  },
+  "seo": {
+    "metatags": {
+      "description": "Documentation for Instance OSS: the open-source Instagram automation and sales CRM engine by Instance.",
+      "keywords": "instance, open source, instagram automation, sales crm, manychat alternative, instagram dm automation",
+      "og:site_name": "Instance",
+      "twitter:card": "summary_large_image",
+      "og:image": "https://www.instance.sale/web-app-manifest-192x192.png"
+    },
+    "organization": {
+      "id": "https://instance.sale/#organization",
+      "name": "Instance",
+      "legalName": "Instance",
+      "url": "https://instance.sale",
+      "logo": "https://www.instance.sale/web-app-manifest-192x192.png",
+      "sameAs": [
+        "https://github.com/Instance-sale/instance"
+      ]
+    },
+    "indexing": "all"
+  },
   "thumbnails": {
-    "background": "/docs/images/web-app-manifest-192x192.webp"
+    "background": "/images/web-app-manifest-192x192.webp"
   }
 }

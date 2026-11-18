@@ -14,7 +14,7 @@ export class HealthController {
   async check(@Res({ passthrough: true }) res: Response) {
     let dbStatus = 'disconnected';
     try {
-      await this.prisma.user.findFirst({ select: { id: true } });
+      await this.prisma.client.$queryRaw`SELECT 1`;
       dbStatus = 'connected';
     } catch (error) {
       this.logger.error('Health check DB error:', error);

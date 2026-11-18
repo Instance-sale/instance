@@ -1,4 +1,4 @@
-﻿FROM node:20-alpine AS base
+FROM node:20-alpine AS base
 RUN apk add --no-cache libc6-compat openssl
 RUN npm install -g pnpm@10.28.2
 WORKDIR /app
@@ -12,7 +12,7 @@ COPY packages/ ./packages/
 COPY apps/api/ ./apps/api/
 
 # Install dependencies without running scripts before symlinks exist
-RUN --mount=type=cache,id=pnpm,target=/root/.local/share/pnpm/store pnpm install --frozen-lockfile --ignore-scripts
+RUN pnpm install --frozen-lockfile --ignore-scripts
 
 # Build required packages and NestJS API
 RUN pnpm --filter @instance/db run build \
@@ -32,8 +32,9 @@ COPY --from=builder /app/packages ./packages
 COPY --from=builder /app/apps/api/package.json ./apps/api/
 COPY --from=builder /app/apps/api/dist ./apps/api/dist
 COPY --from=builder /app/apps/api/node_modules ./apps/api/node_modules
+COPY --from=builder /app/apps/api/docker-entrypoint.js ./apps/api/docker-entrypoint.js
 
 EXPOSE 4000
 
 WORKDIR /app/apps/api
-CMD ["node", "dist/main.js"]
+ENTRYPOINT ["node", "docker-entrypoint.js"]

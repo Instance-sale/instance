@@ -48,8 +48,7 @@
   "footer": {
     "socials": {
       "website": "https://instance.sale",
-      "github": "https://github.com/Instance-sale/instance",
-      "instagram": "https://instagram.com/instance.sale"
+      "github": "https://github.com/Instance-sale/instance"
     }
   },
   "navigation": {
@@ -91,7 +90,7 @@
         "https://github.com/Instance-sale/instance"
       ]
     },
-    "indexing": "all"
+    "indexing": "navigable"
   },
   "thumbnails": {
     "background": "/images/web-app-manifest-192x192.webp"

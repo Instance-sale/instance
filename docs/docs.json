@@ -19,7 +19,8 @@
     "links": [
       {
         "type": "github",
-        "href": "https://github.com/Instance-sale/instance"
+        "href": "https://github.com/Instance-sale/instance",
+        "label": "Github"
       }
     ],
     "primary": {
@@ -30,7 +31,8 @@
   },
   "banner": {
     "content": "Instance: The open-source Instagram sales CRM and automation platform",
-    "dismissible": true
+    "dismissible": true,
+    "type": "info"
   },
   "search": {
     "prompt": "Search for Automations, Qualification, Prompts, APIs..."
@@ -90,7 +92,7 @@
         "https://github.com/Instance-sale/instance"
       ]
     },
-    "indexing": "navigable"
+    "indexing": "all"
   },
   "thumbnails": {
     "background": "/images/web-app-manifest-192x192.webp"

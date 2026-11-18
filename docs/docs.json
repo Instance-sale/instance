@@ -78,7 +78,7 @@
         "https://github.com/Instance-sale/instance"
       ]
     },
-    "indexing": "navigable"
+    "indexing": "all"
   },
   "thumbnails": {
     "background": "/images/web-app-manifest-192x192.webp"

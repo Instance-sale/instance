@@ -21,7 +21,6 @@
 
 Instance turns your Instagram presence into a 24/7 sales engine: building visual funnels, qualifying inbound leads, verifying followers before unlocking links, and capturing emails and phone numbers, all on your own infrastructure with zero monthly subscription fees and zero contact limits.
 
----
 
 ## Why this exists
 
@@ -79,7 +78,6 @@ Instance gives you a complete Instagram sales automation suite and social CRM:
 
 16. **Built-in Internationalization (i18n)**: Run global campaigns without language barriers. Instance provides 8 localized interface languages out of the box: English (`en`), Portuguese (Brazil) (`pt`), Spanish (`es`), Hindi (`hi`), German (`de`), French (`fr`), Indonesian (`id`), and Turkish (`tr`), with cookie-based locale preferences that keep your URLs clean.
 
----
 
 ## Instagram Anti-Ban & Safety Architecture
 
@@ -104,13 +102,11 @@ Complete step-by-step documentation with screenshots, configuration guides, and 
 | **Safety & Anti-Ban** | Jitter pacing, sliding-window rate limits, and circuit breakers. | [Read Safety Guide](https://docs.instance.sale/oss/safety) |
 | **Production Deployment** | Production VPS deployment with Caddy SSL, Docker, and Railway. | [Read Deployment](https://docs.instance.sale/oss/deployment) |
 
----
 
 ## Need Help or Custom Deployment?
 
 Looking for a managed deployment, custom scaling, or dedicated support for your brand?
 - **Email**: [support@sumama.me](mailto:support@sumama.me)
----
 
 ## Tech Stack
 
@@ -121,19 +117,16 @@ Looking for a managed deployment, custom scaling, or dedicated support for your 
 - **Media Storage**: Cloudflare R2 (S3-compatible, zero egress fees)
 - **Monorepo Engine**: Turborepo, pnpm workspaces
 
----
 
 ## Contributing
 
 Contributions from the open-source community are warmly welcome! Please review [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines, branch conventions, and development workflows.
 
----
 
 ## Security
 
 For vulnerability disclosures and security policies, please consult [SECURITY.md](SECURITY.md).
 
----
 
 ## License
 

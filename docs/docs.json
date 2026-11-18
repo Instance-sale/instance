@@ -13,6 +13,12 @@
   },
   "favicon": "/favicon.svg",
   "navbar": {
+    "links": [
+      {
+        "type": "github",
+        "href": "https://github.com/Instance-sale/instance"
+      }
+    ],
     "primary": {
       "type": "button",
       "label": "Open App",
@@ -35,6 +41,13 @@
       "cursor",
       "vscode"
     ]
+  },
+  "footer": {
+    "socials": {
+      "website": "https://instance.sale",
+      "github": "https://github.com/Instance-sale/instance",
+      "instagram": "https://instagram.com/instance.sale"
+    }
   },
   "navigation": {
     "pages": [

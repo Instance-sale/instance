@@ -13,6 +13,12 @@
   },
   "favicon": "/favicon.svg",
   "navbar": {
+    "links": [
+      {
+        "type": "github",
+        "href": "https://github.com/Instance-sale/instance"
+      }
+    ],
     "primary": {
       "type": "button",
       "label": "Open App",
@@ -36,6 +42,13 @@
       "vscode"
     ]
   },
+  "footer": {
+    "socials": {
+      "website": "https://instance.sale",
+      "github": "https://github.com/Instance-sale/instance",
+      "instagram": "https://instagram.com/instance.sale"
+    }
+  },
   "navigation": {
     "pages": [
       "overview",
@@ -46,5 +59,13 @@
       "safety",
       "deployment"
     ]
+  },
+  "description": "Instance is an AI sales CRM that turns your Instagram into a 24/7 sales pipeline. Let AI handle your DMs, qualify leads, and close deals on autopilot",
+  "logo": {
+    "light": "/favicon.svg",
+    "dark": "/favicon.svg"
+  },
+  "thumbnails": {
+    "background": "/docs/images/web-app-manifest-192x192.webp"
   }
 }

@@ -58,7 +58,7 @@
     },
     "pipeline": {
       "title": "Custom Pipeline Stages",
-      "subtitle": "Configure your custom workflow stages (e.g. 1 to 8 stages). The final stage is always locked to Follow-up Due.",
+      "subtitle": "Configure your custom workflow stages (e.g. 1 to 8 stages).",
       "customStage": "Custom Stage",
       "customStagesCount": "{count, plural, =1 {1 custom stage} other {# custom stages}}",
       "followUpDue": "Follow-up Due",
@@ -66,7 +66,7 @@
       "followUpDueDesc": "Leads with automated follow-ups scheduled",
       "addStagePlaceholder": "e.g. Discovery Call, Proposal Sent, Won",
       "addStage": "Add Stage",
-      "maxStagesReached": "Maximum of 4 custom stages reached (+ Follow-up Due = 5 total pipeline columns).",
+      "maxStagesReached": "Maximum of 8 custom stages reached.",
       "moveUp": "Move Up",
       "moveDown": "Move Down",
       "removeStatus": "Remove Status",
@@ -85,7 +85,7 @@
       "save": "Save Pipeline Configuration",
       "saving": "Saving Changes...",
       "saveSuccess": "Pipeline configuration, tags, and shortcuts saved successfully!",
-      "errorMinStatuses": "You must have at least 1 custom status (in addition to Follow-up Due).",
+      "errorMinStatuses": "You must have at least 1 custom status.",
       "errorStatusExists": "A status with this name already exists.",
       "errorMaxStatuses": "Maximum 8 custom statuses allowed.",
       "errorShortcutValidation": "Please enter both a shortcut command (e.g. /hello) and message text."

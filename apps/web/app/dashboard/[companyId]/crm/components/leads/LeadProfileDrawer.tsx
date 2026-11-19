@@ -161,7 +161,7 @@ export function LeadProfileDrawer({
                       onChange={(e) => handleUpdateStatus(selectedLead.id, e.target.value)}
                       className="px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-xs font-semibold text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 cursor-pointer shadow-xs"
                     >
-                      {[...pipelineConfig.customStatuses, 'Follow-up Due'].map((st) => (
+                      {pipelineConfig.customStatuses.map((st) => (
                         <option key={st} value={st}>
                           {st}
                         </option>

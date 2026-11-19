@@ -20,7 +20,7 @@ export default function Header({ initials, userName, userEmail, basePath }: Head
 
     return (
         <>
-            <header className="sticky top-0 z-30 px-4 sm:px-6 lg:px-8 py-4 bg-white/70 backdrop-blur-xl border-b border-slate-200/60 flex items-center justify-between w-full transition-all">
+            <header className="px-4 sm:px-6 lg:px-8 py-4 bg-transparent flex items-center justify-between w-full transition-all">
                 <div className="flex flex-col min-w-0">
                     <div className="flex items-center gap-2.5">
                         <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight font-display">

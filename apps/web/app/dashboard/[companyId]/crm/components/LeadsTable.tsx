@@ -45,7 +45,7 @@ export default function LeadsTable({ instagramAccountId, basePath }: LeadsTableP
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
   const [exportFormat, setExportFormat] = useState<'csv' | 'xml'>('csv');
 
-  // Pipeline configuration (Custom statuses: 1+ + Follow-up Due, and custom tags)
+  // Pipeline configuration (Custom statuses and custom tags)
   const [pipelineConfig, setPipelineConfig] = useState<{
     customStatuses: string[];
     customTags: string[];
@@ -284,11 +284,7 @@ export default function LeadsTable({ instagramAccountId, basePath }: LeadsTableP
       });
 
       try {
-        const isFollowUp =
-          statusName.toLowerCase() === 'follow-up due' ||
-          statusName.toLowerCase() === 'follow up due';
         const isFirstCustom =
-          !isFollowUp &&
           pipelineConfig.customStatuses.length > 0 &&
           statusName.toLowerCase() === pipelineConfig.customStatuses[0].toLowerCase();
 
@@ -381,8 +377,7 @@ export default function LeadsTable({ instagramAccountId, basePath }: LeadsTableP
   // Load initial top 10 for each pipeline column when in Kanban view or when custom statuses change
   useEffect(() => {
     if (viewMode === 'kanban' && pipelineConfig.customStatuses.length > 0) {
-      const allStages = [...pipelineConfig.customStatuses, 'Follow-up Due'];
-      allStages.forEach((stage) => {
+      pipelineConfig.customStatuses.forEach((stage) => {
         // Fetch if column leads haven't been loaded yet
         if (!pipelineColumns[stage] || pipelineColumns[stage].leads.length === 0) {
           fetchColumnLeads(stage, 1, false);
@@ -585,7 +580,7 @@ export default function LeadsTable({ instagramAccountId, basePath }: LeadsTableP
   };
 
   // Dynamic Pipeline Board Columns: Computed completely independently from pipelineColumns!
-  // Supports 1, 2, 3, 4+ custom statuses + locked Follow-up Due.
+  // Supports dynamic custom statuses configured by the user
   const kanbanColumns = useMemo(() => {
     const palette = [
       { dotColor: 'bg-amber-400', badgeColor: 'bg-amber-50 text-amber-700 border-amber-200/60' },
@@ -624,36 +619,12 @@ export default function LeadsTable({ instagramAccountId, basePath }: LeadsTableP
       };
     });
 
-    // Final column: Locked Follow-up Due
-    const followupData = pipelineColumns['Follow-up Due'] || {
-      leads: [],
-      page: 1,
-      total: 0,
-      hasMore: false,
-      loading: false,
-      loadingMore: false,
-    };
-
-    const followupCol = {
-      id: 'followup-due',
-      name: 'Follow-up Due',
-      dotColor: 'bg-rose-500',
-      badgeColor: 'bg-rose-50 text-rose-700 border-rose-200/60',
-      leads: followupData.leads,
-      total: followupData.total,
-      page: followupData.page,
-      hasMore: followupData.hasMore,
-      loading: followupData.loading,
-      loadingMore: followupData.loadingMore,
-      isLocked: true,
-    };
-
-    return [...customCols, followupCol];
+    return customCols;
   }, [pipelineConfig.customStatuses, pipelineColumns]);
 
   return (
     <div className="space-y-6">
-      <LeadsStatsCards stats={stats} />
+      {/* <LeadsStatsCards stats={stats} /> */}
 
       <LeadsToolbar
         search={search}

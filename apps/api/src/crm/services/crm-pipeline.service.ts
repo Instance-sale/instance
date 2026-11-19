@@ -8,7 +8,7 @@ import { PrismaService } from '../../prisma/prisma.service';
 
 @Injectable()
 export class CrmPipelineService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
   async updateLeadStatus(userCompanyId: string, profileId: string, status: string) {
     if (!userCompanyId) {
@@ -99,11 +99,9 @@ export class CrmPipelineService {
     return {
       customStatuses,
       customTags,
-      followUpStatus: 'Follow-up Due',
       config: {
         customStatuses,
         customTags,
-        followUpStatus: 'Follow-up Due',
       },
     };
   }
@@ -122,7 +120,7 @@ export class CrmPipelineService {
     // Validate custom statuses: require at least 1 status stage
     if (data.customStatuses) {
       if (!Array.isArray(data.customStatuses) || data.customStatuses.length < 1) {
-        throw new BadRequestException('At least 1 custom status stage is required (in addition to Follow-up Due).');
+        throw new BadRequestException('At least 1 custom status stage is required.');
       }
     }
 
@@ -146,11 +144,9 @@ export class CrmPipelineService {
       success: true,
       customStatuses,
       customTags,
-      followUpStatus: 'Follow-up Due',
       config: {
         customStatuses,
         customTags,
-        followUpStatus: 'Follow-up Due',
       },
     };
   }

@@ -8,7 +8,6 @@ import {
   Sparkles,
   Plus,
   Trash2,
-  Lock,
   ArrowUp,
   ArrowDown,
   Check,
@@ -60,7 +59,7 @@ export default function PipelineSettings() {
     setErrorMessage(null);
 
     if (customStatuses.length < 1) {
-      const err = "You must have at least 1 custom status (in addition to Follow-up Due).";
+      const err = "You must have at least 1 custom status.";
       setErrorMessage(err);
       toast.error(err);
       setSaving(false);
@@ -192,8 +191,7 @@ export default function PipelineSettings() {
               </h2>
             </div>
             <p className="text-xs text-slate-500 mt-1">
-              Configure your custom workflow stages (e.g. 1 to 8 stages). The final stage is always locked to{" "}
-              <strong className="text-slate-800">Follow-up Due</strong>.
+              Configure your custom workflow stages (e.g. 1 to 8 stages).
             </p>
           </div>
           <span className="text-xs font-extrabold px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200 font-mono">
@@ -251,28 +249,10 @@ export default function PipelineSettings() {
               </div>
             </div>
           ))}
-
-          {/* Locked 5th Stage: Follow-up Due */}
-          <div className="flex items-center justify-between p-3 bg-rose-50/50 border border-rose-200/80 rounded-xl">
-            <div className="flex items-center gap-3">
-              <span className="w-6 h-6 rounded-lg bg-rose-100 text-rose-700 text-xs font-bold flex items-center justify-center font-mono">
-                {customStatuses.length + 1}
-              </span>
-              <span className="text-sm font-bold text-rose-900">
-                Follow-up Due
-              </span>
-              <span className="text-[10px] text-rose-700 bg-rose-100/70 px-2 py-0.5 rounded-full font-bold uppercase tracking-wider flex items-center gap-1">
-                <Lock className="w-3 h-3" /> System Default
-              </span>
-            </div>
-            <p className="text-[11px] text-rose-800/70 italic hidden sm:block">
-              Leads with automated follow-ups scheduled
-            </p>
-          </div>
         </div>
 
         {/* Add Status Input */}
-        {customStatuses.length < 4 ? (
+        {customStatuses.length < 8 ? (
           <div className="flex items-center gap-2 pt-1">
             <input
               type="text"
@@ -292,7 +272,7 @@ export default function PipelineSettings() {
           </div>
         ) : (
           <p className="text-xs text-slate-400 italic">
-            Maximum of 4 custom stages reached (+ Follow-up Due = 5 total pipeline columns).
+            Maximum of 8 custom stages reached.
           </p>
         )}
       </div>

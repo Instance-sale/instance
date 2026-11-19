@@ -61,7 +61,10 @@ export function LeadsKanbanView({
   fetchColumnLeads,
 }: LeadsKanbanViewProps) {
   return (
-    <div className="overflow-x-auto pb-4 custom-scrollbar">
+    <div
+      className="overflow-x-auto pb-4 no-scrollbar"
+      style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+    >
       <div
         className="flex gap-4 items-start min-w-full"
         style={{
@@ -109,7 +112,8 @@ export function LeadsKanbanView({
             {/* Column Cards with Independent Scroll */}
             <div
               onScroll={(e) => handleColumnScroll(col.name, e)}
-              className="space-y-2.5 overflow-y-auto flex-1 pr-1 custom-scrollbar"
+              className="space-y-2.5 overflow-y-auto flex-1 pr-1 no-scrollbar"
+              style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
             >
               {col.loading && col.leads.length === 0 ? (
                 <div className="p-8 text-center flex flex-col items-center justify-center text-xs text-slate-400">
@@ -183,7 +187,7 @@ export function LeadsKanbanView({
                                 <div className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-400 border-b border-slate-100">
                                   Move Stage
                                 </div>
-                                {[...pipelineConfig.customStatuses, 'Follow-up Due'].map((stage) => (
+                                {pipelineConfig.customStatuses.map((stage) => (
                                   <button
                                     key={stage}
                                     type="button"

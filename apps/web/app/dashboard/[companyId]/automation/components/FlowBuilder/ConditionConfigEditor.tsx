@@ -576,7 +576,6 @@ export function ConditionConfigEditor({
                                   <option value="New">New</option>
                                   <option value="Engaged">Engaged</option>
                                   <option value="Qualified">Qualified</option>
-                                  <option value="Follow-up Due">Follow-up Due</option>
                                 </select>
                               )}
                               <p className="text-[11px] text-slate-500">

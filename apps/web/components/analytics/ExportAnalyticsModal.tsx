@@ -227,15 +227,13 @@ export default function ExportAnalyticsModal({
       lines.push("============================================================");
       lines.push("Metric,Value,Period Change (%)");
       lines.push(`Total Leads,${overview.totalLeads},${overview.leadsChange ?? 0}%`);
-      lines.push(`Qualified Leads,${overview.qualifiedLeads},${overview.qualifiedChange ?? 0}%`);
-      lines.push(`Qualification Yield,${overview.qualificationRate ?? 0}%,-`);
+      lines.push(`Active Automations,${overview.activeAutomations ?? 0},${overview.activeAutomationsChange ?? 0}%`);
+      lines.push(`Total Workflow Executions,${overview.totalExecutions ?? 0},${overview.executionsChange ?? 0}%`);
+      lines.push(`Pipeline Leads In Flight,${overview.pipelineLeads ?? 0},${overview.pipelineLeadsChange ?? 0}%`);
       lines.push(`Total Outbound DMs Sent,${overview.dmsSent},-`);
       lines.push(`Total Inbound Messages,${(overview as any).inboundMessages ?? 0},-`);
       lines.push(`Prospect Reply Rate,${overview.replyRate}%,-`);
       lines.push(`Followers Gained,${overview.followersGained},-`);
-      lines.push(`Closed Won Deals,${overview.dealsClosedCount},${overview.dealsChange ?? 0}%`);
-      lines.push(`Total Closed Revenue,$${(overview.totalRevenue ?? 0).toLocaleString()},${overview.revenueChange ?? 0}%`);
-      lines.push(`Average Deal Size,$${(overview.averageDealSize ?? 0).toLocaleString()},-`);
       lines.push("");
     }
 
@@ -359,15 +357,15 @@ export default function ExportAnalyticsModal({
       lines.push("");
     }
 
-    // 16. Origin Revenue Attribution Matrix
+    // 16. Origin Lead Generation Matrix
     if (selectedIds.includes("origin_attribution") && originAttribution && originAttribution.length > 0) {
       lines.push("============================================================");
-      lines.push("SECTION 16: ORIGIN AUTOMATION REVENUE ATTRIBUTION MATRIX");
+      lines.push("SECTION 16: ORIGIN AUTOMATION LEAD GENERATION MATRIX");
       lines.push("============================================================");
-      lines.push("Source Automation Flow,Folder,Leads Captured,Qualified Leads,Qualification Rate (%),Attributed Closed Revenue ($)");
+      lines.push("Source Automation Flow,Folder,Leads Captured,Total Executions");
       originAttribution.forEach((item) => {
         lines.push(
-          `${escapeCell(item.name)},${escapeCell(item.folderName || "General")},${item.leadsCount},${item.qualifiedCount},${item.qualificationRate}%,$${item.revenue.toLocaleString()}`
+          `${escapeCell(item.name)},${escapeCell(item.folderName || "General")},${item.leadsCount},${item.executionsCount || item.leadsCount}`
         );
       });
       lines.push("");

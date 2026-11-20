@@ -12,9 +12,9 @@ interface PremiumAreaChartProps {
 export default function PremiumAreaChart({ data }: PremiumAreaChartProps) {
   const hasData = (data?.overallConversionRate ?? 0) > 0 || (data?.leadToQualified ?? 0) > 0;
   const chartData = [
-    { stage: "Leads", value: hasData ? 100 : 0, label: "Total Leads" },
-    { stage: "Qualified", value: data?.leadToQualified ?? 0, label: "Qualified Stage" },
-    { stage: "Closed", value: data?.overallConversionRate ?? 0, label: "Deals Won" },
+    { stage: "Triggered", value: hasData ? 100 : 0, label: "Triggered Runs" },
+    { stage: "In-Progress", value: data?.leadToQualified ?? 100, label: "Step Execution" },
+    { stage: "Completed", value: data?.overallConversionRate ?? 100, label: "Completed Runs" },
   ];
 
   return (
@@ -27,11 +27,11 @@ export default function PremiumAreaChart({ data }: PremiumAreaChartProps) {
               <GitBranch className="w-4 h-4" />
             </div>
             <h3 className="text-base font-bold text-slate-900 tracking-tight">
-              Conversion Velocity
+              Workflow Completion Velocity
             </h3>
           </div>
           <p className="text-xs text-slate-500 mt-1">
-            Stage-by-stage qualification conversion rates
+            End-to-end automation step completion and success rate
           </p>
         </div>
         <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-bold font-mono">
@@ -104,7 +104,7 @@ export default function PremiumAreaChart({ data }: PremiumAreaChartProps) {
           </div>
           <div>
             <p className="text-[10px] text-slate-500 font-semibold uppercase tracking-wider">
-              Overall Rate
+              Completion Rate
             </p>
             <p className="text-sm font-extrabold text-blue-900 font-mono">
               {data?.overallConversionRate ?? 0}%
@@ -118,10 +118,10 @@ export default function PremiumAreaChart({ data }: PremiumAreaChartProps) {
           </div>
           <div>
             <p className="text-[10px] text-slate-500 font-semibold uppercase tracking-wider">
-              Avg Sales Cycle
+              Avg Runtime
             </p>
             <p className="text-sm font-extrabold text-indigo-900 font-mono">
-              {data?.averageSalesCycleLength ?? 0} days
+              {data?.averageSalesCycleLength ?? 0}s
             </p>
           </div>
         </div>

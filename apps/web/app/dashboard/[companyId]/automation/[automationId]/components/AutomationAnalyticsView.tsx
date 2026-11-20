@@ -6,7 +6,6 @@ import {
   Zap,
   CheckCircle2,
   Users,
-  Trophy,
   RefreshCw,
   TrendingDown,
   ArrowRight,
@@ -106,7 +105,7 @@ export default function AutomationAnalyticsView({
             </span>
           </div>
           <p className="text-xs text-slate-500 mt-1">
-            Real-time execution retention, drop-off rates, and closed deal attribution for "{automation.name}".
+            Real-time execution retention, drop-off rates, and audience engagement for "{automation.name}".
           </p>
         </div>
 
@@ -155,7 +154,7 @@ export default function AutomationAnalyticsView({
                 {summary.totalTriggers.toLocaleString()}
               </div>
               <p className="text-[11px] text-slate-400">
-                100% Entry baseline from Instagram
+                Total workflow activations from Instagram
               </p>
             </div>
 
@@ -176,14 +175,42 @@ export default function AutomationAnalyticsView({
                 </span>
               </div>
               <p className="text-[11px] text-slate-400">
-                {summary.failedRuns} dropped or failed executions
+                Completed all workflow steps successfully
               </p>
             </div>
 
-            {/* Card 3: CRM Leads In Funnel */}
+            {/* Card 3: Drop-Off & Incomplete */}
             <div className="p-4 bg-white border border-slate-200/80 rounded-2xl shadow-xs space-y-2">
               <div className="flex items-center justify-between text-slate-500 text-xs font-medium">
-                <span>CRM Leads Captured</span>
+                <span>Drop-Off & Incomplete</span>
+                <div className="p-1.5 rounded-lg bg-rose-50 text-rose-600">
+                  <TrendingDown className="w-4 h-4" />
+                </div>
+              </div>
+              <div className="flex items-baseline gap-2">
+                <span className="text-2xl font-bold text-slate-900 tracking-tight">
+                  {Math.max(summary.failedRuns, summary.totalTriggers - summary.completedRuns).toLocaleString()}
+                </span>
+                <span className="text-xs font-bold text-rose-600">
+                  {summary.totalTriggers > 0
+                    ? Math.round(
+                        (Math.max(summary.failedRuns, summary.totalTriggers - summary.completedRuns) /
+                          summary.totalTriggers) *
+                          100
+                      )
+                    : 0}
+                  % drop
+                </span>
+              </div>
+              <p className="text-[11px] text-slate-400">
+                Stopped at an intermediate step or condition
+              </p>
+            </div>
+
+            {/* Card 4: Unique Audience Reached */}
+            <div className="p-4 bg-white border border-slate-200/80 rounded-2xl shadow-xs space-y-2">
+              <div className="flex items-center justify-between text-slate-500 text-xs font-medium">
+                <span>Audience Engaged</span>
                 <div className="p-1.5 rounded-lg bg-blue-50 text-blue-600">
                   <Users className="w-4 h-4" />
                 </div>
@@ -193,32 +220,11 @@ export default function AutomationAnalyticsView({
                   {summary.leadsInFunnel.toLocaleString()}
                 </span>
                 <span className="text-xs font-bold text-blue-600">
-                  {summary.leadsInFunnel > 0 ? Math.round((summary.qualifiedLeads / summary.leadsInFunnel) * 100) : 0}% Qualified
+                  Unique Leads
                 </span>
               </div>
               <p className="text-[11px] text-slate-400">
-                {summary.qualifiedLeads} qualified prospects tracked
-              </p>
-            </div>
-
-            {/* Card 4: Tracked Closed Revenue */}
-            <div className="p-4 bg-white border border-slate-200/80 rounded-2xl shadow-xs space-y-2">
-              <div className="flex items-center justify-between text-slate-500 text-xs font-medium">
-                <span>Tracked Closed Revenue</span>
-                <div className="p-1.5 rounded-lg bg-amber-50 text-amber-600">
-                  <Trophy className="w-4 h-4" />
-                </div>
-              </div>
-              <div className="flex items-baseline gap-2">
-                <span className="text-2xl font-bold text-slate-900 tracking-tight">
-                  ${summary.totalRevenue.toLocaleString()}
-                </span>
-                <span className="text-xs font-bold text-amber-600">
-                  {summary.dealsClosedCount} Deals Won
-                </span>
-              </div>
-              <p className="text-[11px] text-slate-400">
-                Direct revenue from leads in this automation
+                Distinct Instagram profiles captured in CRM
               </p>
             </div>
           </div>

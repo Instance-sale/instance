@@ -42,11 +42,12 @@ export class AnalyticsService {
       conversationsWithReply,
       newFollowers,
       totalLeads,
-      qualifiedLeads,
       prevTotalLeads,
-      prevQualifiedLeads,
-      conversations,
-      prevConversations,
+      activeAutomations,
+      totalExecutions,
+      prevTotalExecutions,
+      pipelineLeads,
+      prevPipelineLeads,
     ] = await Promise.all([
       this.prisma.instagramUserProfile.count({
         where: {
@@ -79,71 +80,69 @@ export class AnalyticsService {
           createdAt: { gte: start, lte: end },
         },
       }),
-      Promise.resolve(0),
       this.prisma.instagramUserProfile.count({
         where: {
           instagramAccountId: { in: accountIds },
           createdAt: { gte: prevStart, lte: prevEnd },
         },
       }),
-      Promise.resolve(0),
-      Promise.resolve([]),
-      Promise.resolve([]),
+      this.prisma.automation.count({
+        where: {
+          folder: { instagramAccountId: { in: accountIds } },
+          isActive: true,
+        },
+      }),
+      this.prisma.automationExecution.count({
+        where: {
+          automation: { folder: { instagramAccountId: { in: accountIds } } },
+          startedAt: { gte: start, lte: end },
+        },
+      }),
+      this.prisma.automationExecution.count({
+        where: {
+          automation: { folder: { instagramAccountId: { in: accountIds } } },
+          startedAt: { gte: prevStart, lte: prevEnd },
+        },
+      }),
+      this.prisma.instagramUserProfile.count({
+        where: {
+          instagramAccountId: { in: accountIds },
+          status: { not: null },
+        },
+      }),
+      this.prisma.instagramUserProfile.count({
+        where: {
+          instagramAccountId: { in: accountIds },
+          status: { not: null },
+          createdAt: { lte: prevEnd },
+        },
+      }),
     ]);
 
     const totalMessages = outboundMessages + inboundMessages;
-
-    let dealsClosedCount = 0;
-    let totalRevenue = 0;
-
-    for (const conv of conversations) {
-      const summary = (conv.engagementSummary as any) || {};
-      const dealVal = Number(summary.dealValue) || 0;
-      const stageLower = (conv.currentFunnelStage || '').toLowerCase();
-      const isClosedWon = stageLower.includes('closed won') || stageLower === 'won' || dealVal > 0;
-
-      if (isClosedWon) {
-        dealsClosedCount++;
-        totalRevenue += dealVal;
-      }
-    }
-
-    // Previous period revenue & deals
-    let prevDealsCount = 0;
-    let prevRevenue = 0;
-    for (const conv of prevConversations) {
-      const summary = (conv.engagementSummary as any) || {};
-      const dealVal = Number(summary.dealValue) || 0;
-      const stageLower = (conv.currentFunnelStage || '').toLowerCase();
-      const isClosedWon = stageLower.includes('closed won') || stageLower === 'won' || dealVal > 0;
-      if (isClosedWon) {
-        prevDealsCount++;
-        prevRevenue += dealVal;
-      }
-    }
-
-    const qualificationRate =
-      totalLeads > 0 ? (qualifiedLeads / totalLeads) * 100 : 0;
-    const averageDealSize =
-      dealsClosedCount > 0 ? Math.round(totalRevenue / dealsClosedCount) : 0;
+    const qualifiedLeads = 0;
+    const dealsClosedCount = 0;
+    const totalRevenue = 0;
+    const qualificationRate = 0;
+    const averageDealSize = 0;
 
     // Real deltas
     const leadsChange =
       prevTotalLeads > 0
         ? Number((((totalLeads - prevTotalLeads) / prevTotalLeads) * 100).toFixed(1))
         : totalLeads > 0 ? 100 : 0;
-    const qualifiedChange =
-      prevQualifiedLeads > 0
-        ? Number((((qualifiedLeads - prevQualifiedLeads) / prevQualifiedLeads) * 100).toFixed(1))
-        : qualifiedLeads > 0 ? 100 : 0;
-    const revenueChange =
-      prevRevenue > 0
-        ? Number((((totalRevenue - prevRevenue) / prevRevenue) * 100).toFixed(1))
-        : totalRevenue > 0 ? 100 : 0;
-    const dealsChange =
-      prevDealsCount > 0
-        ? Number((((dealsClosedCount - prevDealsCount) / prevDealsCount) * 100).toFixed(1))
-        : dealsClosedCount > 0 ? 100 : 0;
+    const activeAutomationsChange = 0;
+    const executionsChange =
+      prevTotalExecutions > 0
+        ? Number((((totalExecutions - prevTotalExecutions) / prevTotalExecutions) * 100).toFixed(1))
+        : totalExecutions > 0 ? 100 : 0;
+    const pipelineLeadsChange =
+      prevPipelineLeads > 0
+        ? Number((((pipelineLeads - prevPipelineLeads) / prevPipelineLeads) * 100).toFixed(1))
+        : pipelineLeads > 0 ? 100 : 0;
+    const qualifiedChange = 0;
+    const revenueChange = 0;
+    const dealsChange = 0;
 
     const replyRate = totalConversations > 0
       ? Number(((conversationsWithReply / totalConversations) * 100).toFixed(1))
@@ -156,7 +155,7 @@ export class AnalyticsService {
       inboundMessages,
       totalLeads,
       qualifiedLeads,
-      qualificationRate: Number(qualificationRate.toFixed(1)),
+      qualificationRate,
       dmsSent: outboundMessages,
       replyRate,
       followersGained: newFollowers,
@@ -164,6 +163,12 @@ export class AnalyticsService {
       totalRevenue,
       averageDealSize,
       leadsChange,
+      activeAutomations,
+      activeAutomationsChange,
+      totalExecutions,
+      executionsChange,
+      pipelineLeads,
+      pipelineLeadsChange,
       qualifiedChange,
       revenueChange,
       dealsChange,
@@ -191,11 +196,12 @@ export class AnalyticsService {
     const bucketDuration = duration / numBuckets;
     const dates: string[] = [];
     const leads: number[] = [];
+    const executions: number[] = [];
     const qualifiedLeads: number[] = [];
     const revenue: number[] = [];
     const deals: number[] = [];
 
-    const [allProfiles, allMessages, allConvs] = await Promise.all([
+    const [allProfiles, allExecs] = await Promise.all([
       this.prisma.instagramUserProfile.findMany({
         where: {
           instagramAccountId: { in: accountIds },
@@ -203,8 +209,13 @@ export class AnalyticsService {
         },
         select: { createdAt: true },
       }),
-      Promise.resolve([]),
-      Promise.resolve([]),
+      this.prisma.automationExecution.findMany({
+        where: {
+          automation: { folder: { instagramAccountId: { in: accountIds } } },
+          startedAt: { gte: start, lte: end },
+        },
+        select: { startedAt: true },
+      }),
     ]);
 
     for (let i = 0; i < numBuckets; i++) {
@@ -221,34 +232,21 @@ export class AnalyticsService {
       const bLeads = allProfiles.filter(
         (p) => p.createdAt >= bStart && p.createdAt < bEnd
       ).length;
-      const bQualified = allProfiles.filter(
-        () => false
+      const bExecs = allExecs.filter(
+        (e) => e.startedAt >= bStart && e.startedAt < bEnd
       ).length;
-      const bMessages = allMessages.filter(
-        (m) => m.sentAt >= bStart && m.sentAt < bEnd
-      ).length;
-
-      let bDeals = 0;
-      let bRev = 0;
-      for (const c of allConvs) {
-        if (c.updatedAt >= bStart && c.updatedAt < bEnd) {
-          const val = Number((c.engagementSummary as any)?.dealValue) || 0;
-          if (val > 0) {
-            bDeals++;
-            bRev += val;
-          }
-        }
-      }
 
       leads.push(bLeads);
-      qualifiedLeads.push(bQualified);
-      deals.push(bDeals);
-      revenue.push(bRev);
+      executions.push(bExecs);
+      qualifiedLeads.push(0);
+      deals.push(0);
+      revenue.push(0);
     }
 
     return {
       dates,
       leads,
+      executions,
       qualifiedLeads,
       revenue,
       deals,
@@ -461,42 +459,37 @@ export class AnalyticsService {
   }
 
   async getConversion(companyId: string, timeRangeDto: TimeRangeDto) {
-    const overview = await this.getOverview(companyId, timeRangeDto);
     const { start, end } = this.parseTimeRange(timeRangeDto);
     const accountIds = await this.getAccountIds(companyId);
 
-    const closedConvs: any[] = [];
+    const executions = await this.prisma.automationExecution.findMany({
+      where: {
+        automation: { folder: { instagramAccountId: { in: accountIds } } },
+        startedAt: { gte: start, lte: end },
+      },
+      select: { status: true, startedAt: true, completedAt: true },
+    });
 
-    let totalCycleDays = 0;
-    let closedCount = 0;
-    for (const c of closedConvs) {
-      const summary = (c.engagementSummary as any) || {};
-      const dealVal = Number(summary.dealValue) || 0;
-      const stageLower = (c.currentFunnelStage || '').toLowerCase();
-      const isWon = stageLower.includes('closed won') || stageLower === 'won' || dealVal > 0;
-      if (isWon) {
-        const days = Math.max(0, (c.updatedAt.getTime() - c.createdAt.getTime()) / (1000 * 60 * 60 * 24));
-        totalCycleDays += days;
-        closedCount++;
+    const totalRuns = executions.length;
+    const completedRuns = executions.filter((e) => e.status === 'COMPLETED').length;
+    const overallConversionRate =
+      totalRuns > 0 ? Number(((completedRuns / totalRuns) * 100).toFixed(1)) : 100;
+
+    let totalDurationSec = 0;
+    let timedCount = 0;
+    for (const e of executions) {
+      if (e.completedAt && e.startedAt) {
+        const diff = (e.completedAt.getTime() - e.startedAt.getTime()) / 1000;
+        if (diff >= 0 && diff < 86400) {
+          totalDurationSec += diff;
+          timedCount++;
+        }
       }
     }
-
-    const averageSalesCycleLength = closedCount > 0
-      ? Number((totalCycleDays / closedCount).toFixed(1))
-      : 0;
-
-    const pipelineData = await this.getPipelineStagesAnalytics(companyId);
-    const stages = pipelineData.stages || [];
-    const leadCount = stages[0]?.count || overview.totalLeads;
-    const qualifiedCount = overview.qualifiedLeads;
-
-    const leadToQualified = leadCount > 0
-      ? Number(((qualifiedCount / leadCount) * 100).toFixed(1))
-      : 0;
-
-    const overallConversionRate = overview.totalLeads > 0
-      ? Number(((overview.dealsClosedCount / overview.totalLeads) * 100).toFixed(1))
-      : 0;
+    const averageSalesCycleLength =
+      timedCount > 0 ? Number((totalDurationSec / timedCount).toFixed(1)) : 0;
+    const leadToQualified =
+      totalRuns > 0 ? Math.min(100, Math.round((completedRuns / Math.max(totalRuns, 1)) * 100)) : 100;
 
     return {
       leadToQualified,
@@ -604,7 +597,7 @@ export class AnalyticsService {
   async getOriginAttributionAnalytics(companyId: string) {
     const accountIds = await this.getAccountIds(companyId);
 
-    const [executions, profiles, conversations] = await Promise.all([
+    const [executions] = await Promise.all([
       this.prisma.automationExecution.findMany({
         where: {
           automation: {
@@ -624,24 +617,7 @@ export class AnalyticsService {
         },
         orderBy: { startedAt: 'desc' },
       }),
-      this.prisma.instagramUserProfile.findMany({
-        where: { instagramAccountId: { in: accountIds } },
-        select: { instagramUserId: true },
-      }),
-      Promise.resolve([]),
     ]);
-
-    const qualifiedSet = new Set(
-      []
-    );
-
-    const revenueMap = new Map<string, number>();
-    for (const conv of conversations) {
-      const val = Number((conv.engagementSummary as any)?.dealValue) || 0;
-      if (val > 0) {
-        revenueMap.set(conv.participantId, val);
-      }
-    }
 
     const autoSummaryMap = new Map<
       string,
@@ -650,7 +626,7 @@ export class AnalyticsService {
         folderName: string | null;
         folderColor: string | null;
         leads: Set<string>;
-        revenue: number;
+        executionsCount: number;
       }
     >();
 
@@ -662,14 +638,12 @@ export class AnalyticsService {
         folderName: exec.automation.folder?.name ?? null,
         folderColor: exec.automation.folder?.color ?? null,
         leads: new Set<string>(),
-        revenue: 0,
+        executionsCount: 0,
       };
 
+      existing.executionsCount++;
       if (exec.instagramUserId) {
         existing.leads.add(exec.instagramUserId);
-        if (revenueMap.has(exec.instagramUserId)) {
-          existing.revenue += revenueMap.get(exec.instagramUserId) || 0;
-        }
       }
 
       autoSummaryMap.set(autoId, existing);
@@ -677,20 +651,16 @@ export class AnalyticsService {
 
     const result = Array.from(autoSummaryMap.entries()).map(([id, item]) => {
       const leadsCount = item.leads.size;
-      let qualifiedCount = 0;
-      for (const uid of item.leads) {
-        if (qualifiedSet.has(uid)) qualifiedCount++;
-      }
       return {
         automationId: id,
         name: item.name,
         folderName: item.folderName,
         folderColor: item.folderColor,
         leadsCount,
-        qualifiedCount,
-        revenue: item.revenue,
-        qualificationRate:
-          leadsCount > 0 ? Number(((qualifiedCount / leadsCount) * 100).toFixed(1)) : 0,
+        executionsCount: item.executionsCount,
+        qualifiedCount: 0,
+        revenue: 0,
+        qualificationRate: 100,
       };
     });
 

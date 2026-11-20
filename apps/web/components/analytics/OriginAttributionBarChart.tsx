@@ -35,7 +35,7 @@ export default function OriginAttributionBarChart({
     if (!ctx) return;
 
     const labels = items.map((it) => (it.name.length > 18 ? `${it.name.slice(0, 18)}...` : it.name));
-    const revenueData = items.map((it) => it.revenue);
+    const dataValues = items.map((it) => it.leadsCount);
     const backgroundColors = items.map((it) => it.folderColor || "#2563eb");
 
     chartRef.current = new ChartJS(ctx, {
@@ -44,8 +44,8 @@ export default function OriginAttributionBarChart({
         labels,
         datasets: [
           {
-            label: "Attributed Revenue ($)",
-            data: revenueData,
+            label: "Leads Captured",
+            data: dataValues,
             backgroundColor: backgroundColors,
             borderRadius: 6,
             barThickness: 16,
@@ -75,8 +75,8 @@ export default function OriginAttributionBarChart({
                 const val = context.raw as number;
                 const item = items[context.dataIndex];
                 return [
-                  `Revenue: $${val.toLocaleString()}`,
-                  `Leads Captured: ${item.leadsCount} (${item.qualificationRate}% qual)`,
+                  `Leads Captured: ${val.toLocaleString()}`,
+                  `Total Executions: ${(item.executionsCount || item.leadsCount).toLocaleString()}`,
                 ];
               },
             },
@@ -88,7 +88,7 @@ export default function OriginAttributionBarChart({
             ticks: {
               color: "#94a3b8",
               font: { family: "monospace", size: 10 },
-              callback: (v) => `$${v}`,
+              callback: (v) => `${v} leads`,
             },
           },
           y: {
@@ -125,11 +125,11 @@ export default function OriginAttributionBarChart({
                 <Folder className="w-4 h-4" />
               </div>
               <h3 className="text-base font-bold text-slate-900 tracking-tight">
-                Origin Automation Revenue Attribution
+                Origin Automation Lead Generation
               </h3>
             </div>
             <p className="text-xs text-slate-500 mt-1">
-              Attribution matrix linking captured leads and closed revenue to source flow
+              Top automation workflows by leads captured and workflow engagement
             </p>
           </div>
           <span className="text-[11px] font-bold text-blue-700 bg-blue-50 border border-blue-200/80 px-2.5 py-1 rounded-full font-mono">
@@ -144,7 +144,7 @@ export default function OriginAttributionBarChart({
           </div>
         ) : (
           <div className="py-12 text-center text-xs text-slate-400">
-            No automation flow revenue tracked yet.
+            No automation flow leads tracked yet.
           </div>
         )}
       </div>
@@ -170,7 +170,7 @@ export default function OriginAttributionBarChart({
                 {item.leadsCount} leads
               </span>
               <span className="font-extrabold text-blue-700 font-mono text-[11px]">
-                ${item.revenue.toLocaleString()}
+                {item.executionsCount ? `${item.executionsCount} runs` : `${item.leadsCount} leads`}
               </span>
             </div>
           </div>

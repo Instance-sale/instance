@@ -273,7 +273,7 @@ export default function AnalyticsDashboard({
             </h1>
           </div>
           <p className="text-slate-500 text-xs sm:text-sm mt-1">
-            Real-time pipeline flow and conversion metrics
+            Real-time workflow execution, pipeline flow, and audience engagement metrics
           </p>
         </div>
 
@@ -351,37 +351,37 @@ export default function AnalyticsDashboard({
               sparklineData: dailyTrends?.leads || [],
             },
             {
-              label: "Qualified Leads",
-              value: overview.qualifiedLeads,
-              change: overview.qualifiedChange ?? 0,
+              label: "Active Workflows",
+              value: overview.activeAutomations ?? 0,
+              change: overview.activeAutomationsChange ?? 0,
               unit: "",
-              subValue: `${overview.qualificationRate ?? 0}% Qualification Yield`,
+              subValue: `${overview.activeAutomations ?? 0} Live Workflows`,
               subBadges: [
-                { icon: "target", label: `${overview.qualificationRate ?? 0}% Yield` },
+                { icon: "zap", label: `${overview.activeAutomations ?? 0} Published` },
               ],
-              sparklineData: dailyTrends?.qualifiedLeads || (dailyTrends?.leads ? dailyTrends.leads.map(() => 0) : []),
+              sparklineData: (dailyTrends as any)?.executions || dailyTrends?.leads || [],
             },
             {
-              label: "Revenue",
-              value: overview.totalRevenue,
-              change: overview.revenueChange ?? 0,
-              unit: "$",
-              subValue: `Avg Deal: $${(overview.averageDealSize ?? 0).toLocaleString()}`,
+              label: "Workflow Executions",
+              value: overview.totalExecutions ?? automation?.totalExecutions ?? 0,
+              change: overview.executionsChange ?? 0,
+              unit: "",
+              subValue: `${overview.totalExecutions ?? automation?.totalExecutions ?? 0} Total Runs`,
               subBadges: [
-                { icon: "briefcase", label: `Avg: $${(overview.averageDealSize ?? 0).toLocaleString()}` },
+                { icon: "activity", label: `${overview.totalExecutions ?? automation?.totalExecutions ?? 0} Runs` },
               ],
-              sparklineData: dailyTrends?.revenue || [],
+              sparklineData: (dailyTrends as any)?.executions || dailyTrends?.leads || [],
             },
             {
-              label: "Deals Closed",
-              value: overview.dealsClosedCount,
-              change: overview.dealsChange ?? 0,
+              label: "Pipeline in Flight",
+              value: overview.pipelineLeads ?? pipelineStages?.totalLeads ?? 0,
+              change: overview.pipelineLeadsChange ?? 0,
               unit: "",
-              subValue: `${overview.dealsClosedCount} Closed Deals`,
+              subValue: `${overview.pipelineLeads ?? pipelineStages?.totalLeads ?? 0} In Funnel`,
               subBadges: [
-                { icon: "briefcase", label: `${overview.dealsClosedCount} Won` },
+                { icon: "kanban", label: `${overview.pipelineLeads ?? pipelineStages?.totalLeads ?? 0} Active` },
               ],
-              sparklineData: dailyTrends?.deals || [],
+              sparklineData: dailyTrends?.leads || [],
             },
           ]}
         />

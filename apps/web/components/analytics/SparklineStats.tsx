@@ -16,6 +16,8 @@ import {
   Bot,
   UserCheck,
   Briefcase,
+  Zap,
+  Kanban,
 } from "lucide-react";
 
 function generateSparklineData(value: number, trend: number) {
@@ -52,6 +54,27 @@ const METRIC_CONFIG: Record<
     iconBg: "bg-blue-50 text-blue-600 border-blue-100",
     strokeColor: "#2563eb",
     fillColor: "rgba(37, 99, 235, 0.12)",
+  },
+  "Active Workflows": {
+    icon: Zap,
+    accentClass: "text-amber-600",
+    iconBg: "bg-amber-50 text-amber-600 border-amber-100",
+    strokeColor: "#d97706",
+    fillColor: "rgba(217, 119, 6, 0.12)",
+  },
+  "Workflow Executions": {
+    icon: Activity,
+    accentClass: "text-indigo-600",
+    iconBg: "bg-indigo-50 text-indigo-600 border-indigo-100",
+    strokeColor: "#4f46e5",
+    fillColor: "rgba(79, 70, 229, 0.12)",
+  },
+  "Pipeline in Flight": {
+    icon: Kanban,
+    accentClass: "text-emerald-600",
+    iconBg: "bg-emerald-50 text-emerald-600 border-emerald-100",
+    strokeColor: "#059669",
+    fillColor: "rgba(5, 150, 105, 0.12)",
   },
   "Qualified Leads": {
     icon: CheckCircle2,
@@ -209,6 +232,12 @@ function SparkCard({
                   ? Briefcase
                   : badge.icon === "dollar"
                   ? DollarSign
+                  : badge.icon === "zap"
+                  ? Zap
+                  : badge.icon === "activity"
+                  ? Activity
+                  : badge.icon === "kanban"
+                  ? Kanban
                   : null;
 
               return (

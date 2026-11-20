@@ -8,6 +8,12 @@ export interface OverviewMetrics {
   totalRevenue: number;
   averageDealSize: number;
   // Extended dynamic metrics
+  activeAutomations?: number;
+  activeAutomationsChange?: number;
+  totalExecutions?: number;
+  executionsChange?: number;
+  pipelineLeads?: number;
+  pipelineLeadsChange?: number;
   qualificationRate?: number;
   leadsChange?: number;
   qualifiedChange?: number;
@@ -18,12 +24,13 @@ export interface OverviewMetrics {
     qualified?: number[];
     revenue?: number[];
     deals?: number[];
+    executions?: number[];
     qualifiedLeads?: number[];
   };
 }
 
 export interface MetricSubBadge {
-  icon?: "bot" | "user" | "target" | "briefcase" | "dollar";
+  icon?: "bot" | "user" | "target" | "briefcase" | "dollar" | "zap" | "activity" | "kanban";
   label: string;
 }
 
@@ -116,6 +123,7 @@ export interface OriginAttributionItem {
   qualifiedCount: number;
   revenue: number;
   qualificationRate: number;
+  executionsCount?: number;
 }
 
 

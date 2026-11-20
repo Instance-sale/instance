@@ -356,7 +356,6 @@ export default function AutomationList({
                         className="items-center px-2.5 py-1 rounded-lg bg-slate-50 hover:bg-blue-50 text-slate-600 hover:text-blue-700 border border-slate-200/80 hover:border-blue-200 transition-all font-medium text-xs cursor-pointer shadow-xs"
                         title="Click to view execution logs and run history"
                       >
-                        <Play className="w-3 h-3 text-blue-500 fill-blue-500/20" />
                         <span>{automation.stats?.executions24h ?? 0} runs today</span>
                       </Link>
                     </div>

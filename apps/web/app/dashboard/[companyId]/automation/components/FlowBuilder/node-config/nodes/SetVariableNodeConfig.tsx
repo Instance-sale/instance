@@ -6,41 +6,73 @@ interface SetVariableNodeConfigProps {
   config: Record<string, any>;
   setConfig: (config: any) => void;
   availableCompanyTags: string[];
+  availableCompanyStatuses?: string[];
 }
 
 export function SetVariableNodeConfig({
   config,
   setConfig,
-  availableCompanyTags,
+  availableCompanyTags = [],
+  availableCompanyStatuses = [],
 }: SetVariableNodeConfigProps) {
   const currentSelectedTags: string[] = Array.isArray(config.tags)
-          ? config.tags
-          : (config.addTag ? [config.addTag] : []);
+    ? config.tags
+    : (config.addTag ? [config.addTag] : []);
 
-        const toggleTagSelection = (tag: string) => {
-          let updated: string[];
-          if (currentSelectedTags.includes(tag)) {
-            updated = currentSelectedTags.filter((t) => t !== tag);
-          } else {
-            updated = [...currentSelectedTags, tag];
-          }
-          setConfig({
-            ...config,
-            tags: updated,
-            addTag: updated[0] || "",
-          });
-        };
+  const currentSelectedStage: string =
+    typeof config.pipelineStage === "string"
+      ? config.pipelineStage
+      : (typeof config.status === "string"
+        ? config.status
+        : (typeof config.stage === "string" ? config.stage : ""));
 
-        return (
-          <div className="space-y-4">
-            <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg mb-4">
-              <p className="text-xs font-semibold text-blue-800 mb-1">
-                Set Variable & Tagging
-              </p>
-              <p className="text-xs text-blue-700">
-                Store user attributes for conditions or apply tags from Settings directly to the lead in your CRM.
-              </p>
-            </div>
+  const toggleTagSelection = (tag: string) => {
+    let updated: string[];
+    if (currentSelectedTags.includes(tag)) {
+      updated = currentSelectedTags.filter((t) => t !== tag);
+    } else {
+      updated = [...currentSelectedTags, tag];
+    }
+    setConfig({
+      ...config,
+      tags: updated,
+      addTag: updated[0] || "",
+    });
+  };
+
+  const handleStageSelect = (stage: string) => {
+    if (currentSelectedStage.toLowerCase() === stage.toLowerCase()) {
+      setConfig({
+        ...config,
+        pipelineStage: "",
+        status: "",
+        stage: "",
+      });
+    } else {
+      setConfig({
+        ...config,
+        pipelineStage: stage,
+        status: stage,
+        stage: stage,
+      });
+    }
+  };
+
+  const stagesToDisplay =
+    availableCompanyStatuses.length > 0
+      ? availableCompanyStatuses
+      : ["New", "Engaged", "Qualified", "Follow-up Due"];
+
+  return (
+    <div className="space-y-4">
+      <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg mb-4">
+        <p className="text-xs font-semibold text-blue-800 mb-1">
+          Set Variable, Tags & Pipeline Stage
+        </p>
+        <p className="text-xs text-blue-700">
+          Store user attributes for conditions, attach CRM tags, or move the lead into a specific pipeline stage.
+        </p>
+      </div>
 
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">
@@ -152,6 +184,81 @@ export function SetVariableNodeConfig({
                   }
                   className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm cursor-pointer"
                   placeholder="e.g., vip_customer"
+                />
+              </div>
+            </div>
+
+            <div className="border-t border-slate-100 pt-4 space-y-2">
+              <div className="flex items-center justify-between">
+                <label className="block text-sm font-medium text-slate-700">
+                  Update Pipeline / Funnel Stage
+                </label>
+                {currentSelectedStage && (
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setConfig({
+                        ...config,
+                        pipelineStage: "",
+                        status: "",
+                        stage: "",
+                      })
+                    }
+                    className="text-[11px] text-slate-400 hover:text-slate-600 underline cursor-pointer"
+                  >
+                    Clear stage
+                  </button>
+                )}
+              </div>
+              <p className="text-xs text-slate-500">
+                Move the lead into a CRM funnel stage (a lead can belong to one stage at a time):
+              </p>
+
+              <div className="flex flex-wrap gap-1.5 p-3 bg-slate-50 border border-slate-200 rounded-lg max-h-48 overflow-y-auto">
+                {stagesToDisplay.map((stage) => {
+                  const isSelected =
+                    currentSelectedStage.toLowerCase() === stage.toLowerCase();
+                  return (
+                    <button
+                      key={stage}
+                      type="button"
+                      onClick={() => handleStageSelect(stage)}
+                      className={`px-3 py-1 rounded-md text-xs font-semibold border transition-all cursor-pointer ${
+                        isSelected
+                          ? "bg-purple-600 text-white border-purple-600 shadow-sm"
+                          : "bg-white text-slate-700 border-slate-200 hover:border-slate-300 hover:bg-slate-50"
+                      }`}
+                    >
+                      {isSelected ? (
+                        <span className="inline-flex items-center gap-1">
+                          <Check className="w-3 h-3" />
+                          <span>{stage}</span>
+                        </span>
+                      ) : (
+                        `→ ${stage}`
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div>
+                <label className="block text-xs font-medium text-slate-600 mt-2 mb-1">
+                  Or enter custom stage manually:
+                </label>
+                <input
+                  type="text"
+                  value={currentSelectedStage}
+                  onChange={(e) =>
+                    setConfig({
+                      ...config,
+                      pipelineStage: e.target.value,
+                      status: e.target.value,
+                      stage: e.target.value,
+                    })
+                  }
+                  className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm cursor-pointer"
+                  placeholder="e.g., Qualified, Closed Won, Follow-up Due"
                 />
               </div>
             </div>

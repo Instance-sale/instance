@@ -81,7 +81,7 @@ export const NODE_TYPES = {
     {
       type: AutomationNodeType.ACTION_SET_VARIABLE,
       label: 'Set Variable',
-      description: 'Store a value or add tag',
+      description: 'Store a value, tag, or pipeline stage',
       icon: 'database',
     },
   ],

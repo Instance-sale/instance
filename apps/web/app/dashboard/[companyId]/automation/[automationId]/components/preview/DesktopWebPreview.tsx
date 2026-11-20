@@ -60,12 +60,12 @@ export function DesktopWebPreview({
   return (
           <div className="w-[min(94vw,1100px)] h-[min(82vh,780px)] bg-white rounded-2xl border border-slate-200 shadow-2xl flex flex-col overflow-hidden">
             {/* Top Browser Bar */}
-            <div className="bg-[#262626] px-4 py-2 flex items-center justify-between text-xs text-neutral-300 border-b border-black/40 shrink-0">
-              <div className="flex items-center gap-2 font-mono text-[11px]">
-                <Lock className="w-3 h-3 text-emerald-400" />
-                <span>instagram.com/direct/t/{userName.replace(/\s+/g, "").toLowerCase()}</span>
+            <div className="bg-slate-50 px-4 py-2 flex items-center justify-between text-xs text-slate-600 border-b border-slate-200 shrink-0">
+              <div className="flex items-center gap-2 font-mono text-[11px] bg-white px-3 py-1 rounded-lg border border-slate-200 text-slate-700 shadow-2xs">
+                <Lock className="w-3 h-3 text-emerald-600 shrink-0" />
+                <span className="truncate">instagram.com/direct/t/{userName.replace(/\s+/g, "").toLowerCase()}</span>
               </div>
-              <span className="text-neutral-400 text-[10px]">Desktop Web DM</span>
+              <span className="text-slate-400 font-medium text-[10px]">Desktop Web DM</span>
             </div>
 
             {/* Desktop Direct Layout: Narrow rail + Chat */}
@@ -87,18 +87,21 @@ export function DesktopWebPreview({
                 {/* Header */}
                 <div className="px-6 py-3.5 border-b border-slate-200 flex items-center justify-between bg-white shrink-0">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full p-[1.5px] bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888]">
-                      {userProfilePicture ? (
-                        <img
-                          src={userProfilePicture}
-                          alt={userName}
-                          className="w-full h-full rounded-full object-cover border-2 border-white"
-                        />
-                      ) : (
-                        <div className="w-full h-full rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-xs border-2 border-white">
-                          {userName.slice(0, 2).toUpperCase()}
-                        </div>
-                      )}
+                    <div className="relative shrink-0">
+                      <div className="w-10 h-10 rounded-full p-[1.5px] bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888]">
+                        {userProfilePicture ? (
+                          <img
+                            src={userProfilePicture}
+                            alt={userName}
+                            className="w-full h-full rounded-full object-cover border-2 border-white"
+                          />
+                        ) : (
+                          <div className="w-full h-full rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 text-white flex items-center justify-center font-bold text-xs border-2 border-white">
+                            {userName.slice(0, 2).toUpperCase()}
+                          </div>
+                        )}
+                      </div>
+                      <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 border-2 border-white rounded-full" />
                     </div>
                     <div>
                       <div className="flex items-center gap-1.5">
@@ -137,15 +140,25 @@ export function DesktopWebPreview({
                         {(msg.text || msg.mediaUrl) && (
                           <div className="flex items-end gap-2.5 max-w-[70%]">
                             {isBusiness && (
-                              <div className="w-7 h-7 rounded-full bg-slate-800 text-white flex items-center justify-center text-xs font-bold shrink-0 mb-1">
-                                {userName.slice(0, 1).toUpperCase()}
+                              <div className="w-7 h-7 rounded-full bg-slate-200 shrink-0 overflow-hidden mb-1">
+                                {userProfilePicture ? (
+                                  <img
+                                    src={userProfilePicture}
+                                    alt="Bot"
+                                    className="w-full h-full object-cover"
+                                  />
+                                ) : (
+                                  <div className="w-full h-full bg-gradient-to-br from-indigo-500 to-purple-600 text-white flex items-center justify-center text-[11px] font-bold">
+                                    {userName.slice(0, 1).toUpperCase()}
+                                  </div>
+                                )}
                               </div>
                             )}
 
                             <div
-                              className={`px-4 py-3 text-sm leading-relaxed rounded-2xl shadow-xs select-text ${isBusiness
-                                ? "bg-[#efefef] text-black rounded-bl-sm"
-                                : "bg-[#3797f0] text-white rounded-br-sm"
+                              className={`px-4 py-3 text-sm leading-relaxed rounded-[20px] shadow-xs select-text ${isBusiness
+                                ? "bg-[#efefef] text-[#000000] rounded-bl-sm"
+                                : "bg-gradient-to-r from-[#5956e9] to-[#3797f0] text-white rounded-br-sm"
                                 }`}
                             >
                               <p className="whitespace-pre-wrap">{msg.text}</p>
@@ -233,7 +246,20 @@ export function DesktopWebPreview({
 
                   {isTyping && (
                     <div className="flex items-center gap-2 pl-9">
-                      <div className="px-4 py-3 bg-[#efefef] rounded-2xl rounded-bl-sm flex items-center gap-1.5">
+                      <div className="w-7 h-7 rounded-full bg-slate-200 shrink-0 overflow-hidden">
+                        {userProfilePicture ? (
+                          <img
+                            src={userProfilePicture}
+                            alt="Bot"
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-gradient-to-br from-indigo-500 to-purple-600 text-white flex items-center justify-center text-[11px] font-bold">
+                            {userName.slice(0, 1).toUpperCase()}
+                          </div>
+                        )}
+                      </div>
+                      <div className="px-4 py-3 bg-[#efefef] rounded-[20px] rounded-bl-sm flex items-center gap-1.5 shadow-xs">
                         <span className="w-2 h-2 rounded-full bg-slate-400 animate-bounce" />
                         <span className="w-2 h-2 rounded-full bg-slate-400 animate-bounce [animation-delay:0.2s]" />
                         <span className="w-2 h-2 rounded-full bg-slate-400 animate-bounce [animation-delay:0.4s]" />

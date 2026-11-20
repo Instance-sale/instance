@@ -56,36 +56,36 @@ export function MobilePhonePreview({
   return (
           <div className="relative shrink-0 select-none">
             {/* iPhone Chassis Outer Ring */}
-            <div className="relative w-[360px] sm:w-[385px] h-[740px] sm:h-[780px] bg-[#1c1c1e] rounded-[52px] p-[10px] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.7)] ring-1 ring-white/20 ring-inset">
+            <div className="relative w-[305px] sm:w-[325px] h-[min(615px,78vh)] bg-[#1c1c1e] rounded-[44px] p-[8px] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.7)] ring-1 ring-white/20 ring-inset">
               {/* Screen Bezel */}
-              <div className="w-full h-full bg-white rounded-[44px] overflow-hidden flex flex-col relative border border-black/40">
+              <div className="w-full h-full bg-white rounded-[36px] overflow-hidden flex flex-col relative border border-black/40">
                 {/* Dynamic Island Pill */}
-                <div className="absolute top-2.5 left-1/2 -translate-x-1/2 z-30 w-[108px] h-[26px] bg-black rounded-full flex items-center justify-between px-2.5 shadow-md">
+                <div className="absolute top-2 left-1/2 -translate-x-1/2 z-30 w-[92px] h-[22px] bg-black rounded-full flex items-center justify-between px-2 shadow-md">
                   <div className="w-2.5 h-2.5 rounded-full bg-[#0a0a0a] ring-1 ring-white/10" />
                   <div className="w-2.5 h-2.5 rounded-full bg-[#111] ring-1 ring-white/10" />
                 </div>
 
                 {/* iOS Status Bar */}
-                <div className="h-10 pt-2 px-7 flex items-center justify-between text-[13px] font-semibold text-black shrink-0 bg-white z-20">
+                <div className="h-8 pt-1 px-5 flex items-center justify-between text-[11px] font-semibold text-black shrink-0 bg-white z-20">
                   <span className="tracking-tight">9:41</span>
                   <div className="flex items-center gap-1.5 text-black">
-                    <span className="text-[10px] tracking-tighter font-mono">5G</span>
+                    <span className="text-[9px] tracking-tighter font-mono">5G</span>
                     {/* Signal bars */}
-                    <div className="flex items-end gap-[1.5px] h-3">
-                      <div className="w-[3px] h-1.5 bg-black rounded-xs" />
-                      <div className="w-[3px] h-2 bg-black rounded-xs" />
-                      <div className="w-[3px] h-2.5 bg-black rounded-xs" />
-                      <div className="w-[3px] h-3 bg-black rounded-xs" />
+                    <div className="flex items-end gap-[1.5px] h-2.5">
+                      <div className="w-[2.5px] h-1 bg-black rounded-xs" />
+                      <div className="w-[2.5px] h-1.5 bg-black rounded-xs" />
+                      <div className="w-[2.5px] h-2 bg-black rounded-xs" />
+                      <div className="w-[2.5px] h-2.5 bg-black rounded-xs" />
                     </div>
                     {/* Battery icon */}
-                    <div className="w-5 h-2.5 rounded-[4px] border border-black p-[1px] flex items-center">
-                      <div className="w-full h-full bg-black rounded-[2px]" />
+                    <div className="w-4 h-2 rounded-[3px] border border-black p-[1px] flex items-center">
+                      <div className="w-full h-full bg-black rounded-[1px]" />
                     </div>
                   </div>
                 </div>
 
                 {/* Instagram Direct Header */}
-                <div className="px-3.5 py-2.5 border-b border-slate-100 flex items-center justify-between bg-white shrink-0 z-10 shadow-xs">
+                <div className="px-3 py-2 border-b border-slate-100 flex items-center justify-between bg-white shrink-0 z-10 shadow-xs">
                   <div className="flex items-center gap-2 min-w-0">
                     <button
                       type="button"
@@ -134,8 +134,8 @@ export function MobilePhonePreview({
                 </div>
 
                 {/* Chat Body */}
-                <div className="flex-1 overflow-y-auto px-3.5 py-4 space-y-3 bg-[#ffffff] min-h-0">
-                  <div className="text-center my-1">
+                <div className="flex-1 overflow-y-auto no-scrollbar scrollbar-none px-3 py-3 space-y-2.5 bg-[#ffffff] min-h-0">
+                  <div className="text-center my-0.5">
                     <span className="text-[10px] text-slate-400 font-medium">
                       Today 9:41 AM
                     </span>
@@ -168,7 +168,7 @@ export function MobilePhonePreview({
                                   className="w-full h-full object-cover"
                                 />
                               ) : (
-                                <div className="w-full h-full bg-slate-800 text-white flex items-center justify-center text-[10px] font-bold">
+                                <div className="w-full h-full bg-gradient-to-br from-indigo-500 to-purple-600 text-white flex items-center justify-center text-[10px] font-bold">
                                   {userName.slice(0, 1).toUpperCase()}
                                 </div>
                               )}
@@ -298,9 +298,17 @@ export function MobilePhonePreview({
                   {isTyping && (
                     <div className="flex items-end gap-2">
                       <div className="w-6 h-6 rounded-full bg-slate-200 shrink-0 mb-0.5 overflow-hidden">
-                        <div className="w-full h-full bg-slate-800 text-white flex items-center justify-center text-[10px] font-bold">
-                          {userName.slice(0, 1).toUpperCase()}
-                        </div>
+                        {userProfilePicture ? (
+                          <img
+                            src={userProfilePicture}
+                            alt="Bot"
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-gradient-to-br from-indigo-500 to-purple-600 text-white flex items-center justify-center text-[10px] font-bold">
+                            {userName.slice(0, 1).toUpperCase()}
+                          </div>
+                        )}
                       </div>
                       <div className="px-3.5 py-2.5 bg-[#efefef] rounded-[20px] rounded-bl-sm flex items-center gap-1 shadow-xs">
                         <span className="w-1.5 h-1.5 rounded-full bg-slate-400 animate-bounce" />
@@ -362,7 +370,7 @@ export function MobilePhonePreview({
                     )}
                   </form>
                   {/* iOS Home Indicator Bar */}
-                  <div className="w-32 h-1 bg-black/80 rounded-full mx-auto mt-2" />
+                  <div className="w-24 h-1 bg-black/70 rounded-full mx-auto mt-1.5" />
                 </div>
               </div>
             </div>

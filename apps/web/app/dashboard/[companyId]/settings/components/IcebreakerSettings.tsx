@@ -511,27 +511,27 @@ export default function IcebreakerSettings() {
 
         {/* Right: Live Instagram Mobile Simulator */}
         <div className="lg:col-span-5 sticky top-6">
-          <div className="p-4 sm:p-5 rounded-3xl border border-slate-100 shadow-2xl max-w-sm mx-auto">
+          <div className="p-4 sm:p-5 rounded-3xl bg-white border border-slate-200 shadow-xl max-w-sm mx-auto text-slate-900">
             {/* Phone Speaker & Camera notch */}
-            <div className="w-24 h-4 rounded-full mx-auto mb-4" />
+            <div className="w-24 h-3.5 bg-slate-200/80 rounded-full mx-auto mb-4" />
 
             {/* Instagram DM Header */}
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800 px-1">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-200 px-1">
               <div className="flex items-center gap-2.5">
-                <svg className="w-4 h-4 text-slate-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                 </svg>
                 <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 p-[1.5px]">
-                  <div className="w-full h-full rounded-full flex items-center justify-center text-[10px] font-bold">
+                  <div className="w-full h-full rounded-full bg-white flex items-center justify-center text-[10px] font-bold text-slate-800">
                     {account?.username ? account.username.charAt(0).toUpperCase() : "I"}
                   </div>
                 </div>
                 <div>
-                  <p className="text-xs font-bold leading-none">{account?.username || "your_brand"}</p>
-                  <p className="text-[10px] text-slate-400 leading-tight mt-0.5">Instagram Business</p>
+                  <p className="text-xs font-bold text-slate-900 leading-none">{account?.username || "your_brand"}</p>
+                  <p className="text-[10px] text-slate-500 leading-tight mt-0.5">Instagram Business</p>
                 </div>
               </div>
-              <div className="flex items-center gap-2 text-slate-400">
+              <div className="flex items-center gap-2 text-slate-500">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                 </svg>
@@ -543,13 +543,13 @@ export default function IcebreakerSettings() {
               {/* Account Profile Card */}
               <div className="text-center space-y-2 py-4">
                 <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 p-[2px] mx-auto">
-                  <div className="w-full h-full rounded-full bg-slate-800 flex items-center justify-center text-lg font-bold">
+                  <div className="w-full h-full rounded-full bg-slate-100 flex items-center justify-center text-lg font-bold text-slate-800">
                     {account?.username ? account.username.charAt(0).toUpperCase() : "I"}
                   </div>
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold">{account?.username || "Your Instagram Brand"}</h4>
-                  <p className="text-[11px] text-slate-400">Instagram • 24h average reply time</p>
+                  <h4 className="text-sm font-bold text-slate-900">{account?.username || "Your Instagram Brand"}</h4>
+                  <p className="text-[11px] text-slate-500">Instagram • 24h average reply time</p>
                 </div>
               </div>
 
@@ -564,7 +564,7 @@ export default function IcebreakerSettings() {
                       <div
                         className={`max-w-[80%] px-3 py-2 rounded-2xl text-xs ${msg.sender === "user"
                           ? "bg-blue-600 text-white rounded-br-xs"
-                          : "bg-slate-800 text-slate-200 border border-slate-700/80 rounded-bl-xs"
+                          : "bg-slate-100 text-slate-800 border border-slate-200 rounded-bl-xs"
                           }`}
                       >
                         {msg.text}
@@ -576,12 +576,12 @@ export default function IcebreakerSettings() {
 
               {/* Icebreaker interactive buttons */}
               <div className="space-y-2 pt-4">
-                <p className="text-[10px] text-slate-400 text-center uppercase tracking-wider font-semibold">
+                <p className="text-[10px] text-slate-500 text-center uppercase tracking-wider font-semibold">
                   Frequently Asked Questions
                 </p>
 
                 {icebreakers.length === 0 ? (
-                  <p className="text-center text-[11px] text-slate-500 py-4 italic">
+                  <p className="text-center text-[11px] text-slate-400 py-4 italic">
                     Add icebreaker questions on the left to preview them here.
                   </p>
                 ) : (
@@ -591,10 +591,10 @@ export default function IcebreakerSettings() {
                         key={i}
                         type="button"
                         onClick={() => handleSimulateClick(ib)}
-                        className="w-full px-3.5 py-2 text-left rounded-xl bg-slate-200/90 hover:bg-slate-300/90 border border-slate-200/60 text-xs font-medium text-slate-800 transition-all flex items-center justify-between group cursor-pointer"
+                        className="w-full px-3.5 py-2 text-left rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-xs font-medium text-slate-800 transition-all flex items-center justify-between group cursor-pointer"
                       >
                         <span className="truncate">{ib.question || `Icebreaker Question #${i + 1}`}</span>
-                        <svg className="w-3.5 h-3.5 text-slate-400 group-hover:text-white shrink-0 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-3.5 h-3.5 text-slate-400 group-hover:text-slate-600 shrink-0 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                         </svg>
                       </button>
@@ -605,11 +605,11 @@ export default function IcebreakerSettings() {
             </div>
 
             {/* Simulated DM Input Footer */}
-            <div className="pt-3 border-t border-slate-800 px-1">
-              <div className="px-3 py-2 rounded-full bg-slate-100 border border-slate-300/60 flex items-center justify-between text-xs text-slate-400">
+            <div className="pt-3 border-t border-slate-200 px-1">
+              <div className="px-3 py-2 rounded-full bg-slate-50 border border-slate-200 flex items-center justify-between text-xs text-slate-400">
                 <span>Message...</span>
                 <div className="flex items-center gap-2">
-                  <svg className="w-4 h-4 text-slate-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>

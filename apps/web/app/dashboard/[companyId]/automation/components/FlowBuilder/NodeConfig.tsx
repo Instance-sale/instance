@@ -194,6 +194,7 @@ export default function NodeConfig({
             config={config}
             setConfig={setConfig}
             availableCompanyTags={availableCompanyTags}
+            availableCompanyStatuses={availableCompanyStatuses}
           />
         );
 

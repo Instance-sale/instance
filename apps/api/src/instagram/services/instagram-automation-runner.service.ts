@@ -863,7 +863,16 @@ export class InstagramAutomationRunnerService {
           ? config.tags
           : (config.addTag ? [config.addTag] : []);
 
-        if (tagsToAdd.length > 0) {
+        const stageToSet = typeof (config.pipelineStage || config.status || config.stage) === 'string'
+          ? (config.pipelineStage || config.status || config.stage).trim()
+          : '';
+
+        if (stageToSet) {
+          context.variables['pipelineStage'] = stageToSet;
+          context.variables['lead_status'] = stageToSet;
+        }
+
+        if (tagsToAdd.length > 0 || stageToSet) {
           try {
             const profile = await this.prisma.instagramUserProfile.findUnique({
               where: {
@@ -874,15 +883,21 @@ export class InstagramAutomationRunnerService {
               },
             });
             if (profile) {
-              const currentTags = Array.isArray(profile.tags) ? (profile.tags as string[]) : [];
-              const merged = Array.from(new Set([...currentTags, ...tagsToAdd]));
+              const dataToUpdate: any = { updatedAt: new Date() };
+              if (tagsToAdd.length > 0) {
+                const currentTags = Array.isArray(profile.tags) ? (profile.tags as string[]) : [];
+                dataToUpdate.tags = Array.from(new Set([...currentTags, ...tagsToAdd]));
+              }
+              if (stageToSet) {
+                dataToUpdate.status = stageToSet;
+              }
               await this.prisma.instagramUserProfile.update({
                 where: { id: profile.id },
-                data: { tags: merged },
+                data: dataToUpdate,
               });
             }
           } catch (err: any) {
-            this.logger.warn(`Failed to apply tags in ACTION_SET_VARIABLE: ${err.message}`);
+            this.logger.warn(`Failed to apply tags or pipeline stage in ACTION_SET_VARIABLE: ${err.message}`);
           }
         }
 

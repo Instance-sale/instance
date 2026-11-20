@@ -62,7 +62,7 @@ export default function FolderTree({
 
   return (
     <>
-      <div className="w-72 h-full bg-slate-50 border-r border-slate-200 overflow-y-auto hidden md:block">
+      <div className="w-72 h-full border-r border-slate-200 overflow-y-auto hidden md:block">
         <div className="p-4 space-y-4">
           {/* Header */}
           <div className="flex items-center justify-between">
@@ -96,14 +96,14 @@ export default function FolderTree({
                   <div
                     onClick={() => onSelectFolder(folder.id)}
                     className={`w-full text-left px-3 py-2.5 rounded-xl transition-all duration-200 flex items-center gap-3 cursor-pointer select-none ${isSelected
-                        ? "bg-white text-blue-700 shadow-sm ring-1 ring-slate-200"
-                        : "hover:bg-white/60 text-slate-600 hover:text-slate-900"
+                      ? "bg-white text-blue-700 shadow-sm ring-1 ring-slate-200"
+                      : "hover:bg-white/60 text-slate-600 hover:text-slate-900"
                       }`}
                   >
                     <Folder
                       className={`w-4 h-4 shrink-0 transition-colors ${isSelected
-                          ? "text-blue-500 fill-blue-500/20"
-                          : "text-slate-400 group-hover:text-slate-500"
+                        ? "text-blue-500 fill-blue-500/20"
+                        : "text-slate-400 group-hover:text-slate-500"
                         }`}
                     />
                     <div className="flex-1 min-w-0 pr-1">
@@ -116,8 +116,8 @@ export default function FolderTree({
                       {folder._count && folder._count.automations > 0 && (
                         <span
                           className={`text-xs px-2 py-0.5 rounded-full ${isSelected
-                              ? "bg-blue-50 text-blue-600"
-                              : "bg-slate-100 text-slate-500 group-hover:bg-slate-200"
+                            ? "bg-blue-50 text-blue-600"
+                            : "bg-slate-100 text-slate-500 group-hover:bg-slate-200"
                             }`}
                         >
                           {folder._count.automations}

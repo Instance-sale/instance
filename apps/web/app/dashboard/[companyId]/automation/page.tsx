@@ -59,7 +59,7 @@ export default async function AutomationPage({
           </a>
         </div>
       ) : (
-        <div className="h-full overflow-hidden px-4 sm:px-6 lg:px-8 py-3 sm:py-4 lg:py-6">
+        <div className="h-full overflow-hidden sm:px-6 sm:py-4">
           {!instagramAccounts[0].isActive && (
             <div className="mb-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
               <strong>Reconnect Instagram.</strong> This account was disconnected or deactivated in

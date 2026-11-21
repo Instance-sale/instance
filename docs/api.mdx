@@ -128,20 +128,22 @@ Trigger request payload:
 
 ---
 
-## 4. Query Parameters and Filters
+## 4. Rate Limiting
 
-The `GET /api/v1/contacts` endpoint supports fine-grained search and qualification filters:
+To prevent accidental loops and protect self-hosted databases from overload, all public endpoints enforce request rate limits:
 
-| Parameter | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `page` | `number` | `1` | Pagination page number |
-| `limit` | `number` | `25` | Results per page (maximum: `100`) |
-| `search` | `string` | Optional | Search query matching username, full name, or email |
-| `status` | `string` | Optional | Filter by pipeline stage (e.g. `New`, `Qualified`, `Closed Won`) |
-| `tag` | `string` | Optional | Filter by specific tag |
-| `qualified` | `string` | Optional | Filter by qualification boolean (`true` or `false`) |
-| `minScore` | `number` | Optional | Filter by minimum AI qualification score (`0` to `100`) |
-| `maxScore` | `number` | Optional | Filter by maximum AI qualification score (`0` to `100`) |
+* **Limit**: 60 requests per rolling 60-second window per API key.
+* **HTTP 429 Response**: When the limit is exceeded, the server returns status code `429 Too Many Requests` with a `Retry-After: 60` header:
+
+```json
+{
+  "status": "error",
+  "statusCode": 429,
+  "message": "Too Many Requests. Rate limit exceeded: 60 requests per minute.",
+  "code": 429,
+  "ttl": 60000
+}
+```
 
 ---
 
@@ -207,13 +209,6 @@ Add the `instance` server to your MCP configuration using `npx`:
   }
 }
 ```
-
-### Client Locations
-- **Claude Desktop (macOS)**: `~/Library/Application Support/Claude/claude_desktop_config.json`
-- **Claude Desktop (Windows)**: `%APPDATA%\Claude\claude_desktop_config.json`
-- **Cursor**: **Settings -> Features -> MCP Servers -> Add New MCP Server**
-- **Windsurf**: `mcp_config.json`
-- **Claude Code CLI**: Run `claude mcp add instance -e INSTANCE_API_URL=http://localhost:4000 -e INSTANCE_API_KEY=inst_live_your_key -- npx -y instance-mcp`
 
 ---
 

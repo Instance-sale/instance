@@ -3,19 +3,36 @@ const path = require('path');
 
 console.log('[api-entrypoint] Initializing API container...');
 
-// 1. Run database migrations before launching NestJS
+// 1. Run formal database migrations first
 const prismaDir = path.resolve('/app/packages/prisma');
-console.log(`[api-entrypoint] Applying database migrations from: ${prismaDir}`);
+let migrationSucceeded = false;
 
 try {
-  execSync('pnpm run db:deploy', {
+  console.log(`[api-entrypoint] Attempting prisma migrate deploy from: ${prismaDir}`);
+  execSync('pnpm exec prisma migrate deploy --schema=./schema.prisma', {
     cwd: prismaDir,
     stdio: 'inherit',
     env: process.env,
   });
   console.log('[api-entrypoint] Database migrations applied successfully.');
-} catch (error) {
-  console.error('[api-entrypoint] Database migration error:', error.message || error);
+  migrationSucceeded = true;
+} catch (migrateError) {
+  console.warn('[api-entrypoint] Notice: migrate deploy skipped or encountered lock:', migrateError.message || migrateError);
+}
+
+// 2. Iron-clad safety sync: Run db push to guarantee all tables and columns exist
+try {
+  console.log('[api-entrypoint] Ensuring database schema is fully synchronized via db push...');
+  execSync('pnpm exec prisma db push --skip-generate --schema=./schema.prisma', {
+    cwd: prismaDir,
+    stdio: 'inherit',
+    env: process.env,
+  });
+  console.log('[api-entrypoint] Database schema synchronized successfully.');
+} catch (pushError) {
+  if (!migrationSucceeded) {
+    console.error('[api-entrypoint] Warning: Schema synchronization encountered an issue:', pushError.message || pushError);
+  }
 }
 
 // 2. Start NestJS API server

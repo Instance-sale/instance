@@ -56,6 +56,7 @@ model Company {
   users              User[]             @relation("CompanyMembers")
   notifications      Notification[]
   audienceLists      AudienceList[]
+  apiKeys            ApiKey[]
 
   @@index([companyId])
   @@index([ownerId])
@@ -575,4 +576,21 @@ enum ApiErrorType {
   RESTRICTION // Account restricted
   NETWORK // Connection issues
   UNKNOWN // Other errors
+}
+
+model ApiKey {
+  id          String    @id @default(cuid())
+  companyId   String
+  name        String
+  keyPrefix   String    @default("inst_live_")
+  keyHash     String    @unique
+  displayKey  String
+  lastUsedAt  DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  company     Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@index([companyId])
+  @@index([keyHash])
 }

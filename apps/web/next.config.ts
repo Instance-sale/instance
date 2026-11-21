@@ -62,7 +62,7 @@ const nextConfig: NextConfig = {
           },
           {
             key: "Access-Control-Allow-Headers",
-            value: "Content-Type, Authorization, x-session-token, Cookie, RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Url",
+            value: "Content-Type, Authorization, x-session-token, Cookie, RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Url, X-API-Key, x-api-key",
           },
           {
             key: "X-Frame-Options",

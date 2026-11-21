@@ -5,8 +5,9 @@ import { useTranslations } from "next-intl";
 import BasicInformation from "./components/BasicInformation";
 import PipelineSettings from "./components/PipelineSettings";
 import IcebreakerSettings from "./components/IcebreakerSettings";
+import ApiKeysSettings from "./components/ApiKeysSettings";
 
-type SettingsTab = "basic" | "pipeline" | "icebreakers";
+type SettingsTab = "basic" | "pipeline" | "icebreakers" | "apiKeys";
 
 interface SettingsContentProps {
   userEmail?: string;
@@ -81,6 +82,20 @@ export default function SettingsContent({
           </svg>
           {t("tabs.icebreakers")}
         </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab("apiKeys")}
+          className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all cursor-pointer ${activeTab === "apiKeys"
+            ? "seg-pill-active"
+            : "text-slate-600 hover:text-slate-900"
+            }`}
+        >
+          <svg className={`w-4 h-4 ${activeTab === "apiKeys" ? "text-blue-600" : "text-slate-400"}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+          </svg>
+          {t("tabs.apiKeys")}
+        </button>
       </div>
 
       {/* Main Settings Panel */}
@@ -88,6 +103,7 @@ export default function SettingsContent({
         {activeTab === "basic" && <BasicInformation />}
         {activeTab === "pipeline" && <PipelineSettings />}
         {activeTab === "icebreakers" && <IcebreakerSettings />}
+        {activeTab === "apiKeys" && <ApiKeysSettings />}
       </section>
     </div>
   );

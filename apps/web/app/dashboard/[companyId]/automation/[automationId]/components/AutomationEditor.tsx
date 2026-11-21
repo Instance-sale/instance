@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { AnimatePresence } from "framer-motion";
 import FlowCanvas from "../../components/FlowBuilder/FlowCanvas";
 import { StickyNoteProvider } from "../../components/FlowBuilder/StickyNoteContext";
 import { getExecutionNodes } from "../../components/FlowBuilder/stickyNoteTypes";
@@ -465,15 +466,18 @@ export default function AutomationEditor({
           </div>
         </div>
       )}
-      {selectedNode && (
-        <NodeConfig
-          node={selectedNode}
-          onUpdate={updateNodeConfig}
-          onClose={() => setSelectedNode(null)}
-          instagramAccountId={automation.folder?.instagramAccount?.id}
-          automationId={automation.id}
-        />
-      )}
+      <AnimatePresence>
+        {selectedNode && (
+          <NodeConfig
+            key={selectedNode.id}
+            node={selectedNode}
+            onUpdate={updateNodeConfig}
+            onClose={() => setSelectedNode(null)}
+            instagramAccountId={automation.folder?.instagramAccount?.id}
+            automationId={automation.id}
+          />
+        )}
+      </AnimatePresence>
       <AutomationPreview
         isOpen={showPreview}
         onClose={() => setShowPreview(false)}

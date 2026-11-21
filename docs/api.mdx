@@ -68,7 +68,27 @@ All API endpoints return a standard JSON envelope with either a `success` or `er
 
 ---
 
-## 3. Endpoints Reference
+## 3. Rate limits
+
+Every `/api/v1` endpoint is limited to 60 requests per minute for each API key. Instance tracks usage per key whether you send it in the `X-API-Key` header or as an `Authorization` Bearer token, so separate keys in the same workspace each get their own limit. Requests without an API key are tracked by client IP address.
+
+When you exceed the limit, the API responds with HTTP `429 Too Many Requests`:
+
+```json
+{
+  "status": "error",
+  "statusCode": 429,
+  "message": "Too Many Requests. Rate limit exceeded: 60 requests per minute.",
+  "code": 429,
+  "ttl": 60000
+}
+```
+
+`ttl` is the length of the rate limit window in milliseconds. Back off and retry after the window resets.
+
+---
+
+## 4. Endpoints Reference
 
 ### Workspace and Pipelines
 
@@ -124,7 +144,7 @@ Trigger request payload:
 
 ---
 
-## 4. Query Parameters and Filters
+## 5. Query Parameters and Filters
 
 The `GET /api/v1/contacts` endpoint supports fine-grained search and qualification filters:
 
@@ -141,7 +161,7 @@ The `GET /api/v1/contacts` endpoint supports fine-grained search and qualificati
 
 ---
 
-## 5. Code Examples
+## 6. Code Examples
 
 ### cURL
 ```bash

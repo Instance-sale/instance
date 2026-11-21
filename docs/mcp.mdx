@@ -1,53 +1,40 @@
 ---
-title: "Model Context Protocol (MCP) Server"
-sidebarTitle: "MCP Server"
-description: "Connect Claude Desktop, Cursor, Windsurf, and custom AI agents natively to your Instance OSS CRM."
+title: "MCP Server"
+description: "Connect Claude Desktop, Cursor, Claude Code CLI, and custom AI agents directly to your Instance workspace using the Model Context Protocol."
 ---
 
-# Model Context Protocol (MCP) Server
+The Instance Model Context Protocol (MCP) server enables any MCP-compatible AI client to interact directly with your self-hosted CRM as native tools.
 
-The Instance Model Context Protocol (MCP) server allows AI assistants such as Claude Desktop, Cursor, and custom agentic workflows to interact with your self-hosted workspace as a native tool provider.
+Because MCP is an open standard, you can connect Instance across four primary environments:
+- **Desktop Chat Applications**: Claude Desktop (macOS and Windows desktop GUI).
+- **AI Code Editors and IDEs**: Cursor, Windsurf, and VS Code (via Roo Code or Cline extensions).
+- **Terminal and CLI Agents**: Claude Code CLI and Goose CLI.
+- **Autonomous Agents and Workflows**: Custom multi-agent frameworks (LangChain, LlamaIndex, CrewAI, OpenManus), Slack bots, and automated backend agents.
 
-Using standard JSON-RPC 2.0 communication over standard input and output (stdio), your AI can look up contacts, check qualification scores, tag leads, progress pipeline stages, and trigger Instagram automation funnels on demand.
-
----
-
-## Architectural Flow
-
-```mermaid
-sequenceDiagram
-    autonumber
-    actor User as Human Operator
-    participant Claude as Claude Desktop / Cursor
-    participant MCP as Instance MCP Server (@instance/mcp)
-    participant API as Instance Public API Gateway (/api/v1)
-    participant DB as PostgreSQL Database
-
-    User->>Claude: "Find lead @sarah and trigger our VIP discount flow"
-    Claude->>MCP: Call tool instance_find_contact(username: "sarah")
-    MCP->>API: GET /api/v1/contacts/find?username=sarah (X-API-Key: inst_live_...)
-    API->>DB: Query InstagramUserProfile
-    DB-->>API: Return contact details & score
-    API-->>MCP: { status: "success", data: { id: "cuid_123", is_qualified: true } }
-    MCP-->>Claude: JSON tool result
-    Claude->>MCP: Call tool instance_trigger_automation(contactId: "cuid_123", automationId: "flow_vip")
-    MCP->>API: POST /api/v1/automations/flow_vip/trigger
-    API-->>MCP: { status: "success", data: { status: "dispatched" } }
-    MCP-->>Claude: JSON tool result
-    Claude-->>User: "Sarah is a qualified lead. I triggered the VIP discount flow for her."
-```
+Connected AI agents can inspect leads, check AI qualification scores, update pipeline stages, manage tags, and trigger Instagram automation funnels over stdio in real time.
 
 ---
 
-## Setup in Claude Desktop
+## 1. Prerequisites
 
-1. Generate an API Key in your workspace under **Dashboard -> Settings -> API Keys**.
-2. Open your Claude Desktop configuration file:
-   * **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
-   * **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
-3. Add the Instance server entry:
+Before connecting any AI client:
+1. Ensure your Instance API server is running (default: `http://localhost:4000`).
+2. Navigate to **Dashboard -> Settings -> API Keys**.
+3. Click **Create New Key** and copy your generated key (`inst_live_...`).
 
-### Option A: Using npx (Standard)
+---
+
+## 2. Desktop Applications (Claude Desktop GUI)
+
+For desktop chat interfaces like Claude Desktop:
+
+1. Open your Claude Desktop configuration file:
+   - **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+   - **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+
+2. Add the `instance` server configuration:
+
+### Option A: Using npx (Recommended)
 
 ```json
 {
@@ -57,16 +44,16 @@ sequenceDiagram
       "args": ["-y", "instance-mcp"],
       "env": {
         "INSTANCE_API_URL": "http://localhost:4000",
-        "INSTANCE_API_KEY": "inst_live_your_secret_key_here"
+        "INSTANCE_API_KEY": "inst_live_your_api_key_here"
       }
     }
   }
 }
 ```
 
-### Option B: Using Local Node (From Source)
+### Option B: Using Local Source (Development)
 
-If you cloned the repository or are developing locally:
+If running from the cloned monorepo:
 
 ```json
 {
@@ -76,43 +63,88 @@ If you cloned the repository or are developing locally:
       "args": ["/absolute/path/to/instance-oss/packages/mcp/dist/index.js"],
       "env": {
         "INSTANCE_API_URL": "http://localhost:4000",
-        "INSTANCE_API_KEY": "inst_live_your_secret_key_here"
+        "INSTANCE_API_KEY": "inst_live_your_api_key_here"
       }
     }
   }
 }
 ```
 
-*(Note: Replace `http://localhost:4000` with your self-hosted domain if hosting on a remote server).*
-
-4. Restart Claude Desktop. You will see the hammer icon indicating Instance tools are active.
+3. Restart Claude Desktop. The hammer icon in the chat composer confirms that Instance tools are active.
 
 ---
 
-## Setup in Cursor & Windsurf
+## 3. AI Code Editors and IDEs (Cursor & Windsurf)
 
-In Cursor settings under **Features -> MCP Servers**:
-* **Name**: `instance`
-* **Type**: `command`
-* **Command**: `npx -y instance-mcp`
-* **Environment Variables**:
-  * `INSTANCE_API_URL`: `http://localhost:4000` (or your domain)
-  * `INSTANCE_API_KEY`: `inst_live_your_secret_key_here`
+In AI code editors and IDEs, the MCP server gives your assistant the ability to inspect CRM data, test automation payloads, and verify database state while you develop.
+
+### Cursor Setup
+1. Open **Cursor Settings -> Features -> MCP Servers**.
+2. Click **Add New MCP Server**.
+3. Configure the server:
+   - **Name**: `instance`
+   - **Type**: `command`
+   - **Command**: `npx -y instance-mcp`
+   - **Environment Variables**:
+     - `INSTANCE_API_URL`: `http://localhost:4000`
+     - `INSTANCE_API_KEY`: `inst_live_your_api_key_here`
+
+### Windsurf Setup
+Add the configuration to your Windsurf `mcp_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "instance": {
+      "command": "npx",
+      "args": ["-y", "instance-mcp"],
+      "env": {
+        "INSTANCE_API_URL": "http://localhost:4000",
+        "INSTANCE_API_KEY": "inst_live_your_api_key_here"
+      }
+    }
+  }
+}
+```
+
+### VS Code (Roo Code / Cline)
+In your Cline or Roo Code MCP settings, add `instance` with `command: "npx"`, `args: ["-y", "instance-mcp"]`, and the environment variables above.
 
 ---
 
-## Tools Exposed to AI Models
+## 4. Terminal and CLI Agents (Claude Code & Goose)
+
+For developers working directly in the terminal with AI CLI tools:
+
+### Claude Code CLI
+Add Instance to Claude Code with a single CLI command:
+
+```bash
+claude mcp add instance -e INSTANCE_API_URL=http://localhost:4000 -e INSTANCE_API_KEY=inst_live_your_api_key_here -- npx -y instance-mcp
+```
+
+Verify connected tools:
+
+```bash
+claude mcp list
+```
+
+---
+
+## 5. Available AI Tools Reference
+
+The MCP server exposes 11 native tools to connected AI models:
 
 | Tool Name | Parameters | Description |
 | :--- | :--- | :--- |
-| `instance_workspace_info` | None | Inspect connected Instagram account details, username, and workspace health. |
-| `instance_list_contacts` | `page`, `limit`, `search`, `status`, `minScore`, `maxScore` | Query and filter leads with AI qualification score thresholds. |
-| `instance_find_contact` | `username`, `email`, or `phone` | Instant lookup for a specific prospect. |
-| `instance_create_contact` | `username`, `name`, `email`, `phone`, `status`, `tags` | Create or sync a unified contact into the CRM. |
-| `instance_update_contact_status` | `contactId`, `status` | Move a deal through pipeline stages. |
-| `instance_add_tags` | `contactId`, `tags` | Apply tags like VIP or High Intent. |
-| `instance_trigger_automation` | `automationId`, `contactId`, `variables` | Launch a visual automation funnel on Instagram. |
-| `instance_get_audience_lists` | None | Retrieve all audience lists and segmentation groups. |
-| `instance_create_audience_list` | `name`, `description`, `color` | Create a new audience segmentation list. |
-| `instance_query_audience_contacts` | `listId`, `channelFilter`, `search`, `page`, `limit` | Query leads in an audience list with channel and score filters. |
-| `instance_assign_to_audience_list` | `listId`, `contactIds` | Assign contacts into a targeted audience list. |
+| `instance_workspace_info` | None | Get connected Instagram accounts, handle, and workspace metadata |
+| `instance_list_contacts` | `page`, `limit`, `search`, `status`, `tag`, `qualified`, `minScore`, `maxScore` | Search and filter CRM leads with qualification scores |
+| `instance_find_contact` | `username`, `email`, or `phone` | Instant lookup for a specific contact by handle or contact info |
+| `instance_create_contact` | `username`, `name`, `email`, `phone`, `status`, `tags` | Create or sync a new contact into the CRM |
+| `instance_update_contact_status` | `contactId`, `status` | Move a deal through pipeline stages (e.g. Qualified, Closed Won) |
+| `instance_add_tags` | `contactId`, `tags` | Apply tags to a lead (e.g. `VIP`, `Hot Lead`) |
+| `instance_trigger_automation` | `automationId`, `contactId`, `username`, `variables` | Launch an Instagram automation funnel for a contact |
+| `instance_get_audience_lists` | None | List all audience lists and segmentation groups |
+| `instance_create_audience_list` | `name`, `description`, `color` | Create a new audience segmentation list |
+| `instance_query_audience_contacts` | `listId`, `channelFilter`, `search`, `page`, `limit` | Filter contacts inside a specific audience list |
+| `instance_assign_to_audience_list` | `listId`, `contactIds` | Assign contacts into a targeted audience list |

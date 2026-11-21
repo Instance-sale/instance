@@ -66,6 +66,22 @@ All API endpoints return a standard JSON envelope with either a `success` or `er
 }
 ```
 
+### Rate limits
+
+Each API key can make up to 60 requests per minute to the `/api/v1` endpoints. Instance counts requests per key, so separate keys have separate limits.
+
+When you exceed the limit, the API returns HTTP `429 Too Many Requests`. The `ttl` field is the rate limit window in milliseconds:
+
+```json
+{
+  "status": "error",
+  "statusCode": 429,
+  "message": "Too Many Requests. Rate limit exceeded: 60 requests per minute.",
+  "code": 429,
+  "ttl": 60000
+}
+```
+
 ---
 
 ## 3. Endpoints Reference

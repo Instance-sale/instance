@@ -98,5 +98,11 @@
   },
   "thumbnails": {
     "background": "/images/web-app-manifest-192x192.webp"
-  }
+  },
+  "redirects": [
+    {
+      "source": "/developer-api",
+      "destination": "/api"
+    }
+  ]
 }

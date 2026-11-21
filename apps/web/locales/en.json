@@ -190,7 +190,15 @@
       },
       "quickstart": {
         "title": "Quickstart Examples",
-        "subtitle": "Test your API key against our live endpoints using cURL, JavaScript, or Python."
+        "subtitle": "Test your API key against our live endpoints using cURL, JavaScript, Python, or connect AI agents via MCP.",
+        "mcpNotice": "Model Context Protocol (MCP) connects Claude Desktop, Cursor, and AI agents directly to your CRM tools.",
+        "mcpDocsBtn": "View MCP Documentation",
+        "mcpConfigTip": "Paste this configuration into your Claude Desktop config (claude_desktop_config.json) or Cursor Settings -> Features -> MCP Servers.",
+        "apiDocsTitle": "Developer REST API Reference",
+        "apiDocsDesc": "Explore endpoints, response envelopes, rate limiting, and automation triggers.",
+        "apiDocsBtn": "View API Docs",
+        "mcpDocsTitle": "Model Context Protocol (MCP) Guide",
+        "mcpDocsDesc": "Equip Claude Desktop, Cursor, and terminal agents with 11 native CRM tools."
       },
       "modal": {
         "title": "Generate New API Key",

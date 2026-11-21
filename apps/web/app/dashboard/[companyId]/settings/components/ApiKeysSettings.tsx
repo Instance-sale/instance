@@ -375,6 +375,28 @@ print(response.json())`,
           </div>
         </div>
 
+        {activeSnippetTab === "mcp" && (
+          <div className="px-5 py-3 bg-blue-50/70 border-t border-blue-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-blue-800">
+            <div className="flex items-center gap-2">
+              <svg className="w-4 h-4 text-blue-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span>{t("quickstart.mcpConfigTip")}</span>
+            </div>
+            <a
+              href="https://docs.instance.sale/oss/mcp"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 font-semibold text-blue-600 hover:text-blue-800 shrink-0 hover:underline cursor-pointer"
+            >
+              {t("quickstart.mcpDocsBtn")}
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+            </a>
+          </div>
+        )}
+
         <div className="relative p-5 font-mono text-xs leading-relaxed overflow-x-auto bg-slate-50/80 text-slate-800 border-t border-slate-100">
           <pre className="text-slate-800">{codeSnippets[activeSnippetTab]}</pre>
           <button
@@ -385,6 +407,61 @@ print(response.json())`,
             {copiedKeyId === "snippet" ? t("actions.copied") : t("actions.copy")}
           </button>
         </div>
+      </div>
+
+      {/* Developer Documentation Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <a
+          href="https://docs.instance.sale/oss/api"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group block p-5 bg-white border border-slate-200/80 hover:border-blue-400 rounded-xl shadow-xs hover:shadow-md transition-all cursor-pointer"
+        >
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-2.5">
+              <span className="p-2 bg-blue-50 text-blue-600 rounded-lg group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                </svg>
+              </span>
+              <h4 className="text-sm font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">
+                {t("quickstart.apiDocsTitle")}
+              </h4>
+            </div>
+            <svg className="w-4 h-4 text-slate-400 group-hover:text-blue-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
+          </div>
+          <p className="text-xs text-slate-500 leading-relaxed">
+            {t("quickstart.apiDocsDesc")}
+          </p>
+        </a>
+
+        <a
+          href="https://docs.instance.sale/oss/mcp"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group block p-5 bg-white border border-slate-200/80 hover:border-blue-400 rounded-xl shadow-xs hover:shadow-md transition-all cursor-pointer"
+        >
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-2.5">
+              <span className="p-2 bg-emerald-50 text-emerald-600 rounded-lg group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </span>
+              <h4 className="text-sm font-semibold text-slate-900 group-hover:text-emerald-600 transition-colors">
+                {t("quickstart.mcpDocsTitle")}
+              </h4>
+            </div>
+            <svg className="w-4 h-4 text-slate-400 group-hover:text-emerald-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
+          </div>
+          <p className="text-xs text-slate-500 leading-relaxed">
+            {t("quickstart.mcpDocsDesc")}
+          </p>
+        </a>
       </div>
 
       {/* Create Key Modal */}

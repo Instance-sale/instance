@@ -14,6 +14,7 @@ import {
 } from '@nestjs/common';
 import { PublicApiKeyGuard } from '../guards/public-api-key.guard';
 import { Public } from '../../common/decorators/public.decorator';
+import { Throttle } from '@nestjs/throttler';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CrmService } from '../../crm/crm.service';
 import { V1QueryContactsDto } from '../dto/v1-query-contacts.dto';
@@ -27,6 +28,7 @@ import {
 @Controller('v1/contacts')
 @Public()
 @UseGuards(PublicApiKeyGuard)
+@Throttle({ default: { limit: 60, ttl: 60000 } })
 export class V1ContactsController {
   constructor(
     private readonly prisma: PrismaService,

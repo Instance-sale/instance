@@ -30,7 +30,8 @@
       "roles": "Team Roles",
       "pipeline": "Pipeline",
       "aiConnectors": "AI Connectors",
-      "icebreakers": "Icebreakers"
+      "icebreakers": "Icebreakers",
+      "apiKeys": "API Keys"
     },
     "basic": {
       "title": "Account Profile & Company Details",
@@ -158,6 +159,56 @@
       "noAutomations": "No active automations found",
       "charLimit": "characters",
       "delete": "Delete"
+    },
+    "apiKeys": {
+      "title": "Developer API Keys",
+      "subtitle": "Manage secret API keys to authenticate external integrations like HubSpot, Zapier, custom scripts, and cURL requests with your Instance workspace.",
+      "loading": "Loading API keys...",
+      "copied": "Copied to clipboard",
+      "actions": {
+        "createNew": "Create New Key",
+        "copy": "Copy",
+        "copied": "Copied",
+        "revoke": "Revoke key",
+        "confirmRevoke": "Revoke this key?",
+        "yes": "Revoke",
+        "cancel": "Cancel"
+      },
+      "newKeyAlert": {
+        "title": "API Key Created: {name}",
+        "warning": "Please copy your new API key now. For your security, this key will not be shown again once you dismiss this alert or leave the page.",
+        "dismiss": "I have stored it"
+      },
+      "table": {
+        "header": "Active API Keys",
+        "count": "{count} keys active",
+        "created": "Created",
+        "lastUsed": "Last used",
+        "neverUsed": "Never used",
+        "empty": "No API keys created yet",
+        "emptySub": "Generate your first API key to connect third-party platforms, automation workflows, or cURL requests."
+      },
+      "quickstart": {
+        "title": "Quickstart Examples",
+        "subtitle": "Test your API key against our live endpoints using cURL, JavaScript, or Python."
+      },
+      "modal": {
+        "title": "Generate New API Key",
+        "nameLabel": "Key Name / Integration Label",
+        "namePlaceholder": "e.g. HubSpot CRM Sync",
+        "nameHelp": "Give this key a descriptive name to remember what tool uses it.",
+        "submit": "Generate Key",
+        "creating": "Generating..."
+      },
+      "success": {
+        "created": "API key generated successfully",
+        "revoked": "API key revoked successfully"
+      },
+      "errors": {
+        "fetchFailed": "Failed to load API keys",
+        "createFailed": "Failed to generate API key",
+        "revokeFailed": "Failed to revoke API key"
+      }
     }
   },
   "common": {

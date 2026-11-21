@@ -45,6 +45,7 @@ export class PrismaService implements OnModuleInit, OnModuleDestroy {
   get notification() { return this.client.notification; }
   get audienceList() { return (this.client as any).audienceList; }
   get audienceListMember() { return (this.client as any).audienceListMember; }
+  get apiKey() { return (this.client as any).apiKey; }
 }
 
 

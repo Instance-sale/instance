@@ -18,6 +18,7 @@ import { CronModule } from './cron/cron.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { DebugModule } from './debug/debug.module';
 import { RedisModule } from './redis/redis.module';
+import { PublicApiModule } from './public-api/public-api.module';
 import { NextAuthSessionGuard } from './common/guards/next-auth-session.guard';
 import { RolesGuard } from './common/guards/roles.guard';
 
@@ -50,6 +51,7 @@ import { RolesGuard } from './common/guards/roles.guard';
     CronModule,
     NotificationsModule,
     DebugModule,
+    PublicApiModule,
   ],
   providers: [
     {

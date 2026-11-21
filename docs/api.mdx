@@ -1,0 +1,181 @@
+---
+title: "Public Developer API"
+sidebarTitle: "Developer API"
+description: "Programmatic REST API to query leads, trigger automations, and manage tags using Instance API keys."
+---
+
+# Public Developer API
+
+Instance OSS provides programmatic REST access to your workspace data, subscribers, tags, and automation triggers. Modeled after industry-standard messaging specifications, all responses use standard envelopes with multi-tenant company isolation.
+
+---
+
+## Architecture & Authentication Flow
+
+API keys are created in the workspace settings and hashed via SHA-256 before storage in the database. When external tools call the API, the key is verified and bound to the company workspace.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Dev as Developer / External CRM
+    participant GW as Instance API Gateway (/api/v1)
+    participant Guard as PublicApiKeyGuard
+    participant DB as PostgreSQL Database
+
+    Dev->>GW: GET /api/v1/contacts (X-API-Key: inst_live_...)
+    GW->>Guard: Verify API Key Header
+    Guard->>DB: Lookup SHA-256(KeyHash)
+    DB-->>Guard: Return Company Context
+    Guard-->>GW: Inject companyId
+    GW->>DB: Query InstagramUserProfile (scoped by companyId)
+    DB-->>GW: Return subscriber records
+    GW-->>Dev: { status: "success", data: [...] }
+```
+
+---
+
+## Managing API Keys in the Dashboard
+
+API keys are managed through the application interface:
+1. Navigate to **Dashboard -> Settings -> API Keys** in the navigation tabs.
+2. Click **Create New Key**.
+3. Provide a descriptive label (such as "HubSpot CRM Integration" or "Make.com Automation").
+4. Copy the raw secret key immediately. For security reasons, the full raw key (`inst_live_...`) is displayed only once upon generation.
+5. In the settings table, active keys are displayed in masked format (`inst_live_••••••••4a9b`).
+6. To revoke a credential, click the delete icon and confirm the revocation prompt.
+
+---
+
+## Authentication Headers
+
+Include your API key in either of the following HTTP request headers:
+
+```http
+X-API-Key: inst_live_9f83a02bd8174c838a650123456789ab
+```
+
+or via standard Bearer authorization:
+
+```http
+Authorization: Bearer inst_live_9f83a02bd8174c838a650123456789ab
+```
+
+---
+
+## Standard Response Envelopes
+
+### Success Envelope
+```json
+{
+  "status": "success",
+  "data": {
+    "id": "cuid_123",
+    "name": "Acme Brand"
+  }
+}
+```
+
+### Error Envelope
+```json
+{
+  "status": "error",
+  "message": "Contact not found",
+  "code": 404,
+  "details": null
+}
+```
+
+---
+
+## Core Endpoints Reference
+
+### 1. Workspace & Account Domain
+
+* `GET /api/v1/workspace/info`: Returns workspace company details and connected Instagram account metadata.
+* `GET /api/v1/tags`: Returns all custom tags defined in the workspace taxonomy.
+* `POST /api/v1/tags`: Create a new tag (`{ "name": "VIP_Customer" }`).
+* `DELETE /api/v1/tags/:name`: Delete a tag.
+* `GET /api/v1/automations`: Returns all published automation flows available to be triggered.
+* `GET /api/v1/pipelines`: Returns configured CRM deal statuses and stages.
+
+---
+
+### 2. Subscribers & Contacts Domain
+
+* `GET /api/v1/contacts`: Paginated list of subscribers with score, status, and tag filters.
+* `GET /api/v1/contacts/find?username=@...`: Instant lookup by Instagram handle, email, or phone.
+* `GET /api/v1/contacts/:id`: Retrieve single subscriber profile and tags.
+* `POST /api/v1/contacts`: Unified subscriber creation for external CRM or e-commerce sync.
+* `PATCH /api/v1/contacts/:id`: Update contact phone, email, name, notes.
+* `POST /api/v1/contacts/:id/tags`: Add tag(s) to a contact.
+* `DELETE /api/v1/contacts/:id/tags/:name`: Remove tag from a contact.
+* `POST /api/v1/contacts/:id/status`: Update contact deal stage.
+
+---
+
+### 3. Execution & Automations Domain
+
+* `POST /api/v1/automations/:id/trigger`:
+  ```json
+  {
+    "contactId": "cuid_contact_123",
+    "variables": {
+      "discountCode": "PROMO50"
+    }
+  }
+  ```
+  Triggers the target automation flow for the contact.
+
+---
+
+### Audience Lists
+
+* `GET /api/v1/audience-lists`
+  Returns all audience lists in the workspace.
+* `POST /api/v1/audience-lists`
+  Create a new audience group (`name`, `description`, `color`).
+* `GET /api/v1/audience-lists/:id/contacts`
+  Query leads in an audience list with `channelFilter` (`all`, `email`, `phone`, `both`), `search`, and pagination.
+* `POST /api/v1/audience-lists/:id/assign`
+  Assign contacts to an audience list (`contactIds`).
+* `DELETE /api/v1/audience-lists/:id`
+  Delete an audience list.
+
+---
+
+## Code Examples
+
+### cURL
+```bash
+curl -X GET "http://localhost:4000/api/v1/contacts?limit=25" \
+  -H "X-API-Key: inst_live_your_key_here" \
+  -H "Content-Type: application/json"
+```
+
+### Node.js (Fetch)
+```javascript
+const response = await fetch("http://localhost:4000/api/v1/contacts?limit=25", {
+  method: "GET",
+  headers: {
+    "X-API-Key": "inst_live_your_key_here",
+    "Content-Type": "application/json"
+  }
+});
+const result = await response.json();
+console.log(result.data);
+```
+
+### Python
+```python
+import requests
+
+url = "http://localhost:4000/api/v1/contacts"
+headers = {
+    "X-API-Key": "inst_live_your_key_here",
+    "Content-Type": "application/json"
+}
+params = {"limit": 25}
+
+response = requests.get(url, headers=headers, params=params)
+print(response.json())
+```

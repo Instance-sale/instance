@@ -30,7 +30,8 @@
       "roles": "Teamrollen",
       "pipeline": "Pipeline",
       "aiConnectors": "KI-Konnektoren",
-      "icebreakers": "Eisbrecher (FAQs)"
+      "icebreakers": "Eisbrecher (FAQs)",
+      "apiKeys": "API-Schlüssel"
     },
     "basic": {
       "title": "Kontoprofil & Unternehmensdaten",
@@ -158,6 +159,56 @@
       "noAutomations": "Keine aktiven Automatisierungen gefunden",
       "charLimit": "Zeichen",
       "delete": "Löschen"
+    },
+    "apiKeys": {
+      "title": "Entwickler-API-Schlüssel",
+      "subtitle": "Verwalten Sie geheime API-Schlüssel, um externe Integrationen wie HubSpot, Zapier, benutzerdefinierte Skripte und cURL-Anfragen mit Ihrem Instance-Arbeitsbereich zu authentifizieren.",
+      "loading": "Lade API-Schlüssel...",
+      "copied": "In die Zwischenablage kopiert",
+      "actions": {
+        "createNew": "Neuen Schlüssel erstellen",
+        "copy": "Kopieren",
+        "copied": "Kopiert",
+        "revoke": "Schlüssel widerrufen",
+        "confirmRevoke": "Diesen Schlüssel widerrufen?",
+        "yes": "Widerrufen",
+        "cancel": "Abbrechen"
+      },
+      "newKeyAlert": {
+        "title": "API-Schlüssel erstellt: {name}",
+        "warning": "Bitte kopieren Sie jetzt Ihren neuen API-Schlüssel. Zu Ihrer Sicherheit wird dieser Schlüssel nicht erneut angezeigt, sobald Sie diese Meldung schließen oder die Seite verlassen.",
+        "dismiss": "Ich habe ihn gespeichert"
+      },
+      "table": {
+        "header": "Aktive API-Schlüssel",
+        "count": "{count} Schlüssel aktiv",
+        "created": "Erstellt",
+        "lastUsed": "Zuletzt verwendet",
+        "neverUsed": "Nie verwendet",
+        "empty": "Noch keine API-Schlüssel erstellt",
+        "emptySub": "Erzeugen Sie Ihren ersten API-Schlüssel, um Drittanbieter-Plattformen, Automatisierungs-Workflows oder cURL-Anfragen zu verbinden."
+      },
+      "quickstart": {
+        "title": "Schnellstart-Beispiele",
+        "subtitle": "Testen Sie Ihren API-Schlüssel an unseren Live-Endpunkten mit cURL, JavaScript oder Python."
+      },
+      "modal": {
+        "title": "Neuen API-Schlüssel generieren",
+        "nameLabel": "Schlüsselname / Integrationsbezeichnung",
+        "namePlaceholder": "z.B. HubSpot CRM Sync",
+        "nameHelp": "Geben Sie diesem Schlüssel einen beschreibenden Namen, um zu erinnern, welches Tool ihn verwendet.",
+        "submit": "Schlüssel generieren",
+        "creating": "Erstelle..."
+      },
+      "success": {
+        "created": "API-Schlüssel erfolgreich erstellt",
+        "revoked": "API-Schlüssel erfolgreich widerrufen"
+      },
+      "errors": {
+        "fetchFailed": "API-Schlüssel konnten nicht geladen werden",
+        "createFailed": "API-Schlüssel konnte nicht erstellt werden",
+        "revokeFailed": "API-Schlüssel konnte nicht widerrufen werden"
+      }
     }
   },
   "common": {

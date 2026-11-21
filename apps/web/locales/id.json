@@ -30,7 +30,8 @@
       "roles": "Peran Tim",
       "pipeline": "Pipeline",
       "aiConnectors": "Konektor AI",
-      "icebreakers": "Pemicu Percakapan (Icebreakers)"
+      "icebreakers": "Pemicu Percakapan (Icebreakers)",
+      "apiKeys": "Kunci API"
     },
     "basic": {
       "title": "Profil Akun & Rincian Perusahaan",
@@ -158,6 +159,56 @@
       "noAutomations": "Tidak ada otomatisasi aktif yang ditemukan",
       "charLimit": "karakter",
       "delete": "Hapus"
+    },
+    "apiKeys": {
+      "title": "Kunci API Pengembang",
+      "subtitle": "Kelola kunci API rahasia untuk mengautentikasi integrasi eksternal seperti HubSpot, Zapier, skrip khusus, dan permintaan cURL dengan ruang kerja Instance Anda.",
+      "loading": "Memuat kunci API...",
+      "copied": "Disalin ke papan klip",
+      "actions": {
+        "createNew": "Buat Kunci Baru",
+        "copy": "Salin",
+        "copied": "Disalin",
+        "revoke": "Cabut kunci",
+        "confirmRevoke": "Cabut kunci ini?",
+        "yes": "Cabut",
+        "cancel": "Batal"
+      },
+      "newKeyAlert": {
+        "title": "Kunci API Dibuat: {name}",
+        "warning": "Silakan salin kunci API baru Anda sekarang. demi keamanan Anda, kunci ini tidak akan ditampilkan lagi setelah Anda menutup peringatan ini atau meninggalkan halaman.",
+        "dismiss": "Saya sudah menyimpannya"
+      },
+      "table": {
+        "header": "Kunci API Aktif",
+        "count": "{count} kunci aktif",
+        "created": "Dibuat",
+        "lastUsed": "Terakhir digunakan",
+        "neverUsed": "Tidak pernah digunakan",
+        "empty": "Belum ada kunci API yang dibuat",
+        "emptySub": "Buat kunci API pertama Anda untuk menghubungkan platform pihak ketiga, alur kerja otomatis, atau permintaan cURL."
+      },
+      "quickstart": {
+        "title": "Contoh Cepat",
+        "subtitle": "Uji kunci API Anda terhadap endpoint live kami menggunakan cURL, JavaScript, atau Python."
+      },
+      "modal": {
+        "title": "Buat Kunci API Baru",
+        "nameLabel": "Nama Kunci / Label Integrasi",
+        "namePlaceholder": "mis. Sinkronisasi CRM HubSpot",
+        "nameHelp": "Berikan nama yang deskriptif pada kunci ini agar Anda ingat alat apa yang menggunakannya.",
+        "submit": "Buat Kunci",
+        "creating": "Membuat..."
+      },
+      "success": {
+        "created": "Kunci API berhasil dibuat",
+        "revoked": "Kunci API berhasil dicabut"
+      },
+      "errors": {
+        "fetchFailed": "Gagal memuat kunci API",
+        "createFailed": "Gagal membuat kunci API",
+        "revokeFailed": "Gagal mencabut kunci API"
+      }
     }
   },
   "common": {

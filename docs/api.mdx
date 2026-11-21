@@ -1,160 +1,158 @@
 ---
-title: "Public Developer API"
-sidebarTitle: "Developer API"
-description: "Programmatic REST API to query leads, trigger automations, and manage tags using Instance API keys."
+title: "Developer API"
+description: "Programmatic REST API to query leads, manage tags, and trigger automations in Instance."
 ---
 
-# Public Developer API
+Instance provides a programmatic REST API to query contacts, update pipeline statuses, manage tags, organize audience lists, and trigger Instagram automation funnels from external services.
 
-Instance OSS provides programmatic REST access to your workspace data, subscribers, tags, and automation triggers. Modeled after industry-standard messaging specifications, all responses use standard envelopes with multi-tenant company isolation.
-
----
-
-## Architecture & Authentication Flow
-
-API keys are created in the workspace settings and hashed via SHA-256 before storage in the database. When external tools call the API, the key is verified and bound to the company workspace.
-
-```mermaid
-sequenceDiagram
-    autonumber
-    actor Dev as Developer / External CRM
-    participant GW as Instance API Gateway (/api/v1)
-    participant Guard as PublicApiKeyGuard
-    participant DB as PostgreSQL Database
-
-    Dev->>GW: GET /api/v1/contacts (X-API-Key: inst_live_...)
-    GW->>Guard: Verify API Key Header
-    Guard->>DB: Lookup SHA-256(KeyHash)
-    DB-->>Guard: Return Company Context
-    Guard-->>GW: Inject companyId
-    GW->>DB: Query InstagramUserProfile (scoped by companyId)
-    DB-->>GW: Return subscriber records
-    GW-->>Dev: { status: "success", data: [...] }
-```
+All endpoints use standard JSON response envelopes and authenticate using workspace API keys.
 
 ---
 
-## Managing API Keys in the Dashboard
+## 1. Authentication
 
-API keys are managed through the application interface:
-1. Navigate to **Dashboard -> Settings -> API Keys** in the navigation tabs.
-2. Click **Create New Key**.
-3. Provide a descriptive label (such as "HubSpot CRM Integration" or "Make.com Automation").
-4. Copy the raw secret key immediately. For security reasons, the full raw key (`inst_live_...`) is displayed only once upon generation.
-5. In the settings table, active keys are displayed in masked format (`inst_live_••••••••4a9b`).
-6. To revoke a credential, click the delete icon and confirm the revocation prompt.
+Generate an API key in the dashboard:
+1. Navigate to **Dashboard -> Settings -> API Keys**.
+2. Click **Create New Key** and enter a descriptive label.
+3. Copy the generated key (`inst_live_...`).
 
----
-
-## Authentication Headers
-
-Include your API key in either of the following HTTP request headers:
+Pass the key in your requests using either the `X-API-Key` header or the standard `Authorization` Bearer header:
 
 ```http
-X-API-Key: inst_live_9f83a02bd8174c838a650123456789ab
+X-API-Key: inst_live_your_api_key_here
 ```
 
-or via standard Bearer authorization:
+Or:
 
 ```http
-Authorization: Bearer inst_live_9f83a02bd8174c838a650123456789ab
+Authorization: Bearer inst_live_your_api_key_here
 ```
 
 ---
 
-## Standard Response Envelopes
+## 2. Response Envelopes
 
-### Success Envelope
+All API endpoints return a standard JSON envelope with either a `success` or `error` status.
+
+### Success Response Envelope
 ```json
 {
   "status": "success",
   "data": {
     "id": "cuid_123",
-    "name": "Acme Brand"
+    "ig_username": "sarah_coach",
+    "name": "Sarah Jenkins",
+    "email": "sarah@example.com",
+    "phone": "+14155552671",
+    "followers_count": 14200,
+    "following_count": 890,
+    "qualification_score": 88,
+    "qualification_summary": "High budget coaching prospect with 10k+ followers",
+    "is_qualified": true,
+    "status": "Qualified",
+    "tags": ["VIP", "High Budget"],
+    "last_interaction": "2026-11-21T18:30:00.000Z",
+    "created_at": "2026-11-20T12:00:00.000Z"
   }
 }
 ```
 
-### Error Envelope
+### Error Response Envelope
 ```json
 {
   "status": "error",
-  "message": "Contact not found",
-  "code": 404,
-  "details": null
+  "message": "Contact not found in this workspace",
+  "code": 404
 }
 ```
 
 ---
 
-## Core Endpoints Reference
+## 3. Endpoints Reference
 
-### 1. Workspace & Account Domain
+### Workspace and Pipelines
 
-* `GET /api/v1/workspace/info`: Returns workspace company details and connected Instagram account metadata.
-* `GET /api/v1/tags`: Returns all custom tags defined in the workspace taxonomy.
-* `POST /api/v1/tags`: Create a new tag (`{ "name": "VIP_Customer" }`).
-* `DELETE /api/v1/tags/:name`: Delete a tag.
-* `GET /api/v1/automations`: Returns all published automation flows available to be triggered.
-* `GET /api/v1/pipelines`: Returns configured CRM deal statuses and stages.
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `GET` | `/api/v1/workspace/info` | Workspace metadata and connected Instagram account details |
+| `GET` | `/api/v1/tags` | List all custom company tags in the workspace |
+| `POST` | `/api/v1/tags` | Create a new company tag (`{"name": "VIP"}`) |
+| `DELETE` | `/api/v1/tags/:name` | Delete a company tag from the workspace |
+| `GET` | `/api/v1/pipelines` | List configured CRM deal statuses and pipeline stages |
+| `GET` | `/api/v1/automations` | List published automation funnels available to trigger |
 
----
+### Contacts and CRM Leads
 
-### 2. Subscribers & Contacts Domain
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `GET` | `/api/v1/contacts` | Paginated list of contacts with score, tag, and status filters |
+| `GET` | `/api/v1/contacts/find` | Find a single contact by query (`?username=`, `?email=`, or `?phone=`) |
+| `GET` | `/api/v1/contacts/:id` | Retrieve full contact profile by ID |
+| `POST` | `/api/v1/contacts` | Create or sync a unified contact record |
+| `PATCH` | `/api/v1/contacts/:id` | Update contact profile fields (`name`, `email`, `phone`, `notes`) |
+| `POST` | `/api/v1/contacts/:id/tags` | Add tags to a contact (`{"tags": ["VIP", "Hot Lead"]}`) |
+| `DELETE` | `/api/v1/contacts/:id/tags/:name` | Remove a specific tag from a contact |
+| `POST` | `/api/v1/contacts/:id/status` | Update contact pipeline deal stage (`{"status": "Qualified"}`) |
 
-* `GET /api/v1/contacts`: Paginated list of subscribers with score, status, and tag filters.
-* `GET /api/v1/contacts/find?username=@...`: Instant lookup by Instagram handle, email, or phone.
-* `GET /api/v1/contacts/:id`: Retrieve single subscriber profile and tags.
-* `POST /api/v1/contacts`: Unified subscriber creation for external CRM or e-commerce sync.
-* `PATCH /api/v1/contacts/:id`: Update contact phone, email, name, notes.
-* `POST /api/v1/contacts/:id/tags`: Add tag(s) to a contact.
-* `DELETE /api/v1/contacts/:id/tags/:name`: Remove tag from a contact.
-* `POST /api/v1/contacts/:id/status`: Update contact deal stage.
+### Audience Lists and Segmentation
 
----
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `GET` | `/api/v1/audience-lists` | List all audience lists in the workspace with contact counts |
+| `POST` | `/api/v1/audience-lists` | Create a new audience segmentation list (`name`, `description`, `color`) |
+| `GET` | `/api/v1/audience-lists/:id/contacts` | Query contacts in a list (`channelFilter`, `search`, `page`, `limit`) |
+| `POST` | `/api/v1/audience-lists/:id/assign` | Bulk assign contacts into an audience list (`{"contactIds": ["..."]}`) |
+| `DELETE` | `/api/v1/audience-lists/:id` | Delete an audience list |
 
-### 3. Execution & Automations Domain
+### Automation Funnel Execution
 
-* `POST /api/v1/automations/:id/trigger`:
-  ```json
-  {
-    "contactId": "cuid_contact_123",
-    "variables": {
-      "discountCode": "PROMO50"
-    }
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `POST` | `/api/v1/automations/:id/trigger` | Trigger an automated Instagram sales funnel for a contact |
+
+Trigger request payload:
+```json
+{
+  "contactId": "cuid_contact_123",
+  "variables": {
+    "discountCode": "PROMO50",
+    "offerUrl": "https://example.com/checkout"
   }
-  ```
-  Triggers the target automation flow for the contact.
+}
+```
+*(Alternatively, supply `"username": "target_handle"` instead of `contactId`)*.
 
 ---
 
-### Audience Lists
+## 4. Query Parameters and Filters
 
-* `GET /api/v1/audience-lists`
-  Returns all audience lists in the workspace.
-* `POST /api/v1/audience-lists`
-  Create a new audience group (`name`, `description`, `color`).
-* `GET /api/v1/audience-lists/:id/contacts`
-  Query leads in an audience list with `channelFilter` (`all`, `email`, `phone`, `both`), `search`, and pagination.
-* `POST /api/v1/audience-lists/:id/assign`
-  Assign contacts to an audience list (`contactIds`).
-* `DELETE /api/v1/audience-lists/:id`
-  Delete an audience list.
+The `GET /api/v1/contacts` endpoint supports fine-grained search and qualification filters:
+
+| Parameter | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `page` | `number` | `1` | Pagination page number |
+| `limit` | `number` | `25` | Results per page (maximum: `100`) |
+| `search` | `string` | Optional | Search query matching username, full name, or email |
+| `status` | `string` | Optional | Filter by pipeline stage (e.g. `New`, `Qualified`, `Closed Won`) |
+| `tag` | `string` | Optional | Filter by specific tag |
+| `qualified` | `string` | Optional | Filter by qualification boolean (`true` or `false`) |
+| `minScore` | `number` | Optional | Filter by minimum AI qualification score (`0` to `100`) |
+| `maxScore` | `number` | Optional | Filter by maximum AI qualification score (`0` to `100`) |
 
 ---
 
-## Code Examples
+## 5. Code Examples
 
 ### cURL
 ```bash
-curl -X GET "http://localhost:4000/api/v1/contacts?limit=25" \
+curl -X GET "http://localhost:4000/api/v1/contacts?status=Qualified&limit=25" \
   -H "X-API-Key: inst_live_your_key_here" \
   -H "Content-Type: application/json"
 ```
 
 ### Node.js (Fetch)
 ```javascript
-const response = await fetch("http://localhost:4000/api/v1/contacts?limit=25", {
+const response = await fetch("http://localhost:4000/api/v1/contacts?status=Qualified&limit=25", {
   method: "GET",
   headers: {
     "X-API-Key": "inst_live_your_key_here",
@@ -174,7 +172,10 @@ headers = {
     "X-API-Key": "inst_live_your_key_here",
     "Content-Type": "application/json"
 }
-params = {"limit": 25}
+params = {
+    "status": "Qualified",
+    "limit": 25
+}
 
 response = requests.get(url, headers=headers, params=params)
 print(response.json())

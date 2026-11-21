@@ -20,10 +20,10 @@ try {
   console.warn('[api-entrypoint] Notice: migrate deploy skipped or encountered lock:', migrateError.message || migrateError);
 }
 
-// 2. Iron-clad safety sync: Run db push to guarantee all tables and columns exist
+// 2. Safe schema sync: Run db push to guarantee all new tables and columns exist without data loss risk
 try {
   console.log('[api-entrypoint] Ensuring database schema is fully synchronized via db push...');
-  execSync('pnpm exec prisma db push --skip-generate --schema=./schema.prisma', {
+  execSync('pnpm exec prisma db push --schema=./schema.prisma', {
     cwd: prismaDir,
     stdio: 'inherit',
     env: process.env,

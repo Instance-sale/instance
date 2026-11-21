@@ -1,11 +1,15 @@
 ---
-title: "Developer API"
-description: "Programmatic REST API to query leads, manage tags, and trigger automations in Instance."
+title: "Developer API & MCP"
+sidebarTitle: "API & MCP"
+description: "Programmatic REST API and Model Context Protocol (MCP) server to query leads, manage tags, and trigger automations in Instance."
 ---
 
-Instance provides a programmatic REST API to query contacts, update pipeline statuses, manage tags, organize audience lists, and trigger Instagram automation funnels from external services.
+Instance provides two programmatic interfaces to access your CRM data, manage tags, update deal stages, and trigger Instagram automations:
 
-All endpoints use standard JSON response envelopes and authenticate using workspace API keys.
+1. **REST API**: Standard HTTP endpoints for webhooks, external tools (Make, Zapier, n8n), and backend services.
+2. **MCP Server**: Native Model Context Protocol server connecting AI assistants (Claude Desktop, Cursor, Windsurf, Claude Code) over stdio.
+
+Both interfaces authenticate using workspace API keys.
 
 ---
 
@@ -16,7 +20,7 @@ Generate an API key in the dashboard:
 2. Click **Create New Key** and enter a descriptive label.
 3. Copy the generated key (`inst_live_...`).
 
-Pass the key in your requests using either the `X-API-Key` header or the standard `Authorization` Bearer header:
+For REST API calls, pass the key in your HTTP request headers:
 
 ```http
 X-API-Key: inst_live_your_api_key_here
@@ -32,7 +36,7 @@ Authorization: Bearer inst_live_your_api_key_here
 
 ## 2. Response Envelopes
 
-All API endpoints return a standard JSON envelope with either a `success` or `error` status.
+All REST API endpoints return a standard JSON envelope with either a `success` or `error` status.
 
 ### Success Response Envelope
 ```json
@@ -68,7 +72,7 @@ All API endpoints return a standard JSON envelope with either a `success` or `er
 
 ---
 
-## 3. Endpoints Reference
+## 3. REST Endpoints Reference
 
 ### Workspace and Pipelines
 
@@ -89,7 +93,7 @@ All API endpoints return a standard JSON envelope with either a `success` or `er
 | `GET` | `/api/v1/contacts/find` | Find a single contact by query (`?username=`, `?email=`, or `?phone=`) |
 | `GET` | `/api/v1/contacts/:id` | Retrieve full contact profile by ID |
 | `POST` | `/api/v1/contacts` | Create or sync a unified contact record |
-| `PATCH` | `/api/v1/contacts/:id` | Update contact profile fields (`name`, `email`, `phone`, `notes`) |
+| `PATCH` | `/api/v1/contacts/:id` | Update contact profile fields (`name`, `email`, `phone`) |
 | `POST` | `/api/v1/contacts/:id/tags` | Add tags to a contact (`{"tags": ["VIP", "Hot Lead"]}`) |
 | `DELETE` | `/api/v1/contacts/:id/tags/:name` | Remove a specific tag from a contact |
 | `POST` | `/api/v1/contacts/:id/status` | Update contact pipeline deal stage (`{"status": "Qualified"}`) |
@@ -99,7 +103,7 @@ All API endpoints return a standard JSON envelope with either a `success` or `er
 | Method | Endpoint | Description |
 | :--- | :--- | :--- |
 | `GET` | `/api/v1/audience-lists` | List all audience lists in the workspace with contact counts |
-| `POST` | `/api/v1/audience-lists` | Create a new audience segmentation list (`name`, `description`, `color`) |
+| `POST` | `/api/v1/audience-lists` | Create an audience segmentation list (`name`, `description`, `color`) |
 | `GET` | `/api/v1/audience-lists/:id/contacts` | Query contacts in a list (`channelFilter`, `search`, `page`, `limit`) |
 | `POST` | `/api/v1/audience-lists/:id/assign` | Bulk assign contacts into an audience list (`{"contactIds": ["..."]}`) |
 | `DELETE` | `/api/v1/audience-lists/:id` | Delete an audience list |
@@ -180,3 +184,53 @@ params = {
 response = requests.get(url, headers=headers, params=params)
 print(response.json())
 ```
+
+---
+
+## 6. Model Context Protocol (MCP) Server
+
+The Instance MCP server allows AI assistants (such as Claude Desktop, Cursor, Windsurf, and Claude Code) to interact with your CRM as native tools.
+
+Add the `instance` server to your MCP configuration using `npx`:
+
+```json
+{
+  "mcpServers": {
+    "instance": {
+      "command": "npx",
+      "args": ["-y", "instance-mcp"],
+      "env": {
+        "INSTANCE_API_URL": "http://localhost:4000",
+        "INSTANCE_API_KEY": "inst_live_your_api_key_here"
+      }
+    }
+  }
+}
+```
+
+### Client Locations
+- **Claude Desktop (macOS)**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+- **Claude Desktop (Windows)**: `%APPDATA%\Claude\claude_desktop_config.json`
+- **Cursor**: **Settings -> Features -> MCP Servers -> Add New MCP Server**
+- **Windsurf**: `mcp_config.json`
+- **Claude Code CLI**: Run `claude mcp add instance -e INSTANCE_API_URL=http://localhost:4000 -e INSTANCE_API_KEY=inst_live_your_key -- npx -y instance-mcp`
+
+---
+
+## 7. Available AI Tools Reference
+
+Connected AI agents have access to 11 native CRM tools over stdio:
+
+| Tool Name | Parameters | Description |
+| :--- | :--- | :--- |
+| `instance_workspace_info` | None | Get connected Instagram accounts, handle, and workspace metadata |
+| `instance_list_contacts` | `page`, `limit`, `search`, `status`, `tag`, `qualified`, `minScore`, `maxScore` | Search and filter CRM leads with qualification scores |
+| `instance_find_contact` | `username`, `email`, or `phone` | Instant lookup for a specific contact by handle or contact info |
+| `instance_create_contact` | `username`, `name`, `email`, `phone`, `status`, `tags` | Create or sync a new contact into the CRM |
+| `instance_update_contact_status` | `contactId`, `status` | Move a deal through pipeline stages (e.g. Qualified, Closed Won) |
+| `instance_add_tags` | `contactId`, `tags` | Apply tags to a lead (e.g. `VIP`, `Hot Lead`) |
+| `instance_trigger_automation` | `automationId`, `contactId`, `username`, `variables` | Launch an Instagram automation funnel for a contact |
+| `instance_get_audience_lists` | None | List all audience lists and segmentation groups |
+| `instance_create_audience_list` | `name`, `description`, `color` | Create a new audience segmentation list |
+| `instance_query_audience_contacts` | `listId`, `channelFilter`, `search`, `page`, `limit` | Filter contacts inside a specific audience list |
+| `instance_assign_to_audience_list` | `listId`, `contactIds` | Assign contacts into a targeted audience list |

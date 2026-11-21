@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Node } from "@xyflow/react";
+import { motion } from "framer-motion";
 import { logger } from "@/lib/logger";
 import { X } from "lucide-react";
 import {
@@ -83,6 +84,16 @@ export default function NodeConfig({
     const keywords = (configData as any).keywords || [];
     setKeywordsInput(Array.isArray(keywords) ? keywords.join(", ") : "");
   }, [node.id, node.data.config]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [onClose]);
 
   const handleSave = async () => {
     // Process keywords from input before saving (if applicable)
@@ -257,40 +268,61 @@ export default function NodeConfig({
   };
 
   return (
-    <div className="w-96 h-full bg-white border-l border-slate-200 overflow-y-auto shadow-xl z-20">
-      <div className="p-6">
-        <div className="flex items-center justify-between mb-6">
-          <h3 className="font-bold text-slate-900 text-lg">Configuration</h3>
-          <button
-            type="button"
-            onClick={onClose}
-            className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
+    <>
+      {/* Backdrop: translucent dark overlay over canvas, click to dismiss */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.15 }}
+        onClick={onClose}
+        className="fixed inset-0 z-50 bg-slate-900/30 backdrop-blur-xs cursor-pointer"
+        aria-label="Close configuration overlay"
+      />
 
-        <div className="mb-6 p-4 bg-slate-50 rounded-xl border border-slate-100">
-          <div className="text-sm font-semibold text-slate-900 mb-1">
-            {String(node.data.label)}
+      {/* Slide-over Drawer: increased width to 480px, smooth spring slide */}
+      <motion.aside
+        initial={{ x: "100%" }}
+        animate={{ x: 0 }}
+        exit={{ x: "100%" }}
+        transition={{ type: "spring", stiffness: 320, damping: 32 }}
+        className="fixed inset-y-0 right-0 z-50 w-full sm:w-[480px] bg-white border-l border-slate-200 shadow-2xl overflow-y-auto flex flex-col justify-between"
+      >
+        <div className="p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="font-bold text-slate-900 text-lg">Configuration</h3>
+            <button
+              type="button"
+              onClick={onClose}
+              className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
+              title="Close (Esc)"
+            >
+              <X className="w-5 h-5" />
+            </button>
           </div>
-          <div className="text-xs text-slate-500 font-mono bg-white px-2 py-1 rounded inline-block border border-slate-200">
-            {String(node.data.type)}
+
+          <div className="mb-6 p-4 bg-slate-50 rounded-xl border border-slate-100">
+            <div className="text-sm font-semibold text-slate-900 mb-1">
+              {String(node.data.label)}
+            </div>
+            <div className="text-xs text-slate-500 font-mono bg-white px-2 py-1 rounded inline-block border border-slate-200">
+              {String(node.data.type)}
+            </div>
+          </div>
+
+          <div className="space-y-6">{renderConfigFields()}</div>
+
+          <div className="mt-8 pt-6 border-t border-slate-100">
+            <button
+              type="button"
+              onClick={handleSave}
+              className="w-full rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 shadow-lg shadow-blue-200 transition-all transform hover:-translate-y-0.5 cursor-pointer"
+            >
+              Save Configuration
+            </button>
           </div>
         </div>
-
-        <div className="space-y-6">{renderConfigFields()}</div>
-
-        <div className="mt-8 pt-6 border-t border-slate-100">
-          <button
-            type="button"
-            onClick={handleSave}
-            className="w-full rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 shadow-lg shadow-blue-200 transition-all transform hover:-translate-y-0.5 cursor-pointer"
-          >
-            Save Configuration
-          </button>
-        </div>
-      </div>
-    </div>
+      </motion.aside>
+    </>
   );
 }

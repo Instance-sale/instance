@@ -30,7 +30,8 @@
       "roles": "Rôles d'Équipe",
       "pipeline": "Pipeline",
       "aiConnectors": "Connecteurs IA",
-      "icebreakers": "Questions Fréquentes (Icebreakers)"
+      "icebreakers": "Questions Fréquentes (Icebreakers)",
+      "apiKeys": "Clés API"
     },
     "basic": {
       "title": "Profil du Compte & Détails de l'Entreprise",
@@ -158,6 +159,56 @@
       "noAutomations": "Aucune automatisation active trouvée",
       "charLimit": "caractères",
       "delete": "Supprimer"
+    },
+    "apiKeys": {
+      "title": "Clés API développeur",
+      "subtitle": "Gérez les clés API secrètes pour authentifier les intégrations externes telles que HubSpot, Zapier, les scripts personnalisés et les requêtes cURL avec votre espace de travail Instance.",
+      "loading": "Chargement des clés API...",
+      "copied": "Copié dans le presse-papiers",
+      "actions": {
+        "createNew": "Créer une nouvelle clé",
+        "copy": "Copier",
+        "copied": "Copié",
+        "revoke": "Révoquer la clé",
+        "confirmRevoke": "Révoquer cette clé ?",
+        "yes": "Révoquer",
+        "cancel": "Annuler"
+      },
+      "newKeyAlert": {
+        "title": "Clé API créée : {name}",
+        "warning": "Veuillez copier votre nouvelle clé API maintenant. Pour votre sécurité, cette clé ne sera plus affichée une fois que vous aurez fermé cette alerte ou quitté la page.",
+        "dismiss": "Je l'ai enregistrée"
+      },
+      "table": {
+        "header": "Clés API actives",
+        "count": "{count} clés actives",
+        "created": "Créée",
+        "lastUsed": "Dernière utilisation",
+        "neverUsed": "Jamais utilisée",
+        "empty": "Aucune clé API n’a encore été créée",
+        "emptySub": "Générez votre première clé API pour connecter des plateformes tierces, des flux d’automatisation ou des requêtes cURL."
+      },
+      "quickstart": {
+        "title": "Exemples de démarrage rapide",
+        "subtitle": "Testez votre clé API sur nos points de terminaison en direct avec cURL, JavaScript ou Python."
+      },
+      "modal": {
+        "title": "Générer une nouvelle clé API",
+        "nameLabel": "Nom de la clé / Libellé d’intégration",
+        "namePlaceholder": "ex. Synchronisation CRM HubSpot",
+        "nameHelp": "Donnez à cette clé un nom descriptif pour vous souvenir de l'outil qui l’utilise.",
+        "submit": "Générer la clé",
+        "creating": "Génération..."
+      },
+      "success": {
+        "created": "Clé API générée avec succès",
+        "revoked": "Clé API révoquée avec succès"
+      },
+      "errors": {
+        "fetchFailed": "Échec du chargement des clés API",
+        "createFailed": "Échec de la génération de la clé API",
+        "revokeFailed": "Échec de la révocation de la clé API"
+      }
     }
   },
   "common": {

@@ -30,7 +30,8 @@
       "roles": "Ekip Rolleri",
       "pipeline": "Boru Hattı (Pipeline)",
       "aiConnectors": "Yapay Zeka Bağlayıcıları",
-      "icebreakers": "Buz Kırıcılar (Sık Sorulan Sorular)"
+      "icebreakers": "Buz Kırıcılar (Sık Sorulan Sorular)",
+      "apiKeys": "API Anahtarları"
     },
     "basic": {
       "title": "Hesap Profili ve Şirket Bilgileri",
@@ -158,6 +159,56 @@
       "noAutomations": "Aktif otomasyon bulunamadı",
       "charLimit": "karakter",
       "delete": "Sil"
+    },
+    "apiKeys": {
+      "title": "Geliştirici API Anahtarları",
+      "subtitle": "HubSpot, Zapier, özel betikler ve cURL istekleri gibi harici entegrasyonları Instance çalışma alanınızda kimlik doğrulamak için gizli API anahtarlarını yönetin.",
+      "loading": "API anahtarları yükleniyor...",
+      "copied": "Panoya kopyalandı",
+      "actions": {
+        "createNew": "Yeni Anahtar Oluştur",
+        "copy": "Kopyala",
+        "copied": "Kopyalandı",
+        "revoke": "Anahtarı iptal et",
+        "confirmRevoke": "Bu anahtarı iptal etmek istiyor musunuz?",
+        "yes": "İptal Et",
+        "cancel": "İptal"
+      },
+      "newKeyAlert": {
+        "title": "API Anahtarı Oluşturuldu: {name}",
+        "warning": "Lütfen yeni API anahtarınızı hemen kopyalayın. Güvenliğiniz için bu uyarıyı kapattığınızda veya sayfadan ayrıldığınızda anahtar bir daha gösterilmeyecek.",
+        "dismiss": "Kaydettim"
+      },
+      "table": {
+        "header": "Aktif API Anahtarları",
+        "count": "{count} anahtar aktif",
+        "created": "Oluşturulma",
+        "lastUsed": "Son Kullanım",
+        "neverUsed": "Hiç Kullanılmadı",
+        "empty": "Henüz API anahtarı oluşturulmadı",
+        "emptySub": "Üçüncü taraf platformları, otomasyon iş akışlarını veya cURL isteklerini bağlamak için ilk API anahtarınızı oluşturun."
+      },
+      "quickstart": {
+        "title": "Hızlı Başlangıç Örnekleri",
+        "subtitle": "API anahtarınızı cURL, JavaScript veya Python kullanarak canlı uç noktalarımızda test edin."
+      },
+      "modal": {
+        "title": "Yeni API Anahtarı Oluştur",
+        "nameLabel": "Anahtar Adı / Entegrasyon Etiketi",
+        "namePlaceholder": "örn. HubSpot CRM Senkronizasyonu",
+        "nameHelp": "Bu anahtara, hangi aracın kullandığını hatırlamanız için açıklayıcı bir ad verin.",
+        "submit": "Anahtar Oluştur",
+        "creating": "Oluşturuluyor..."
+      },
+      "success": {
+        "created": "API anahtarı başarıyla oluşturuldu",
+        "revoked": "API anahtarı başarıyla iptal edildi"
+      },
+      "errors": {
+        "fetchFailed": "API anahtarları yüklenemedi",
+        "createFailed": "API anahtarı oluşturulamadı",
+        "revokeFailed": "API anahtarı iptal edilemedi"
+      }
     }
   },
   "common": {

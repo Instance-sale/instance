@@ -30,7 +30,8 @@
       "roles": "Funções da Equipe",
       "pipeline": "Pipeline",
       "aiConnectors": "Conectores de IA",
-      "icebreakers": "Perguntas Frequentes (Icebreakers)"
+      "icebreakers": "Perguntas Frequentes (Icebreakers)",
+      "apiKeys": "Chaves de API"
     },
     "basic": {
       "title": "Perfil da Conta e Detalhes da Empresa",
@@ -158,6 +159,56 @@
       "noAutomations": "Nenhuma automação ativa encontrada",
       "charLimit": "caracteres",
       "delete": "Excluir"
+    },
+    "apiKeys": {
+      "title": "Chaves de API de Desenvolvedor",
+      "subtitle": "Gerencie chaves secretas de API para autenticar integrações externas como HubSpot, Zapier, scripts personalizados e solicitações cURL com seu workspace Instance.",
+      "loading": "Carregando chaves de API...",
+      "copied": "Copiado para a área de transferência",
+      "actions": {
+        "createNew": "Criar Nova Chave",
+        "copy": "Copiar",
+        "copied": "Copiado",
+        "revoke": "Revogar chave",
+        "confirmRevoke": "Revogar esta chave?",
+        "yes": "Revogar",
+        "cancel": "Cancelar"
+      },
+      "newKeyAlert": {
+        "title": "Chave de API criada: {name}",
+        "warning": "Copie sua nova chave de API agora. Por segurança, esta chave não será exibida novamente após fechar este alerta ou sair da página.",
+        "dismiss": "Eu a armazenei"
+      },
+      "table": {
+        "header": "Chaves de API Ativas",
+        "count": "{count} chaves ativas",
+        "created": "Criada",
+        "lastUsed": "Último uso",
+        "neverUsed": "Nunca usada",
+        "empty": "Nenhuma chave de API criada ainda",
+        "emptySub": "Gere sua primeira chave de API para conectar plataformas de terceiros, fluxos de automação ou solicitações cURL."
+      },
+      "quickstart": {
+        "title": "Exemplos de Início Rápido",
+        "subtitle": "Teste sua chave de API contra nossos endpoints ao vivo usando cURL, JavaScript ou Python."
+      },
+      "modal": {
+        "title": "Gerar Nova Chave de API",
+        "nameLabel": "Nome da Chave / Rótulo da Integração",
+        "namePlaceholder": "ex.: HubSpot CRM Sync",
+        "nameHelp": "Dê à chave um nome descritivo para lembrar qual ferramenta a utiliza.",
+        "submit": "Gerar Chave",
+        "creating": "Gerando..."
+      },
+      "success": {
+        "created": "Chave de API gerada com sucesso",
+        "revoked": "Chave de API revogada com sucesso"
+      },
+      "errors": {
+        "fetchFailed": "Falha ao carregar chaves de API",
+        "createFailed": "Falha ao gerar chave de API",
+        "revokeFailed": "Falha ao revogar chave de API"
+      }
     }
   },
   "common": {

@@ -316,25 +316,25 @@ print(response.json())`,
       </div>
 
       {/* Interactive Quickstart Sandbox */}
-      <div className="bg-slate-900 rounded-xl overflow-hidden border border-slate-800 shadow-lg text-slate-200">
-        <div className="p-4 border-b border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-950/40">
+      <div className="bg-white rounded-xl overflow-hidden border border-slate-200/80 shadow-sm">
+        <div className="px-5 py-4 border-b border-slate-100 bg-slate-50/70 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <h3 className="text-sm font-semibold text-white font-display">
+            <h3 className="text-sm font-semibold text-slate-900 font-display">
               {t("quickstart.title")}
             </h3>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-slate-500">
               {t("quickstart.subtitle")}
             </p>
           </div>
 
-          <div className="flex items-center gap-1 bg-slate-800/80 p-0.5 rounded-lg text-xs">
+          <div className="flex items-center gap-1 bg-slate-200/70 p-1 rounded-lg text-xs">
             <button
               type="button"
               onClick={() => setActiveSnippetTab("curl")}
-              className={`px-3 py-1 rounded font-medium transition-all cursor-pointer ${
+              className={`px-3 py-1 rounded-md font-medium transition-all cursor-pointer ${
                 activeSnippetTab === "curl"
-                  ? "bg-blue-600 text-white shadow-sm"
-                  : "text-slate-400 hover:text-white"
+                  ? "bg-white text-slate-900 shadow-sm font-semibold"
+                  : "text-slate-600 hover:text-slate-900"
               }`}
             >
               cURL
@@ -342,10 +342,10 @@ print(response.json())`,
             <button
               type="button"
               onClick={() => setActiveSnippetTab("fetch")}
-              className={`px-3 py-1 rounded font-medium transition-all cursor-pointer ${
+              className={`px-3 py-1 rounded-md font-medium transition-all cursor-pointer ${
                 activeSnippetTab === "fetch"
-                  ? "bg-blue-600 text-white shadow-sm"
-                  : "text-slate-400 hover:text-white"
+                  ? "bg-white text-slate-900 shadow-sm font-semibold"
+                  : "text-slate-600 hover:text-slate-900"
               }`}
             >
               JavaScript
@@ -353,10 +353,10 @@ print(response.json())`,
             <button
               type="button"
               onClick={() => setActiveSnippetTab("python")}
-              className={`px-3 py-1 rounded font-medium transition-all cursor-pointer ${
+              className={`px-3 py-1 rounded-md font-medium transition-all cursor-pointer ${
                 activeSnippetTab === "python"
-                  ? "bg-blue-600 text-white shadow-sm"
-                  : "text-slate-400 hover:text-white"
+                  ? "bg-white text-slate-900 shadow-sm font-semibold"
+                  : "text-slate-600 hover:text-slate-900"
               }`}
             >
               Python
@@ -364,10 +364,10 @@ print(response.json())`,
             <button
               type="button"
               onClick={() => setActiveSnippetTab("mcp")}
-              className={`px-3 py-1 rounded font-medium transition-all cursor-pointer ${
+              className={`px-3 py-1 rounded-md font-medium transition-all cursor-pointer ${
                 activeSnippetTab === "mcp"
-                  ? "bg-blue-600 text-white shadow-sm"
-                  : "text-slate-400 hover:text-white"
+                  ? "bg-white text-slate-900 shadow-sm font-semibold"
+                  : "text-slate-600 hover:text-slate-900"
               }`}
             >
               MCP (Claude / Cursor)
@@ -375,12 +375,12 @@ print(response.json())`,
           </div>
         </div>
 
-        <div className="relative p-5 font-mono text-xs leading-relaxed overflow-x-auto bg-slate-950/60 text-slate-300">
-          <pre>{codeSnippets[activeSnippetTab]}</pre>
+        <div className="relative p-5 font-mono text-xs leading-relaxed overflow-x-auto bg-slate-50/80 text-slate-800 border-t border-slate-100">
+          <pre className="text-slate-800">{codeSnippets[activeSnippetTab]}</pre>
           <button
             type="button"
             onClick={() => copyToClipboard(codeSnippets[activeSnippetTab], "snippet")}
-            className="absolute top-4 right-4 px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-[11px] font-sans font-medium text-slate-300 transition-colors cursor-pointer"
+            className="absolute top-4 right-4 px-2.5 py-1 rounded-md bg-white hover:bg-slate-100 text-[11px] font-sans font-medium text-slate-600 border border-slate-200/80 shadow-xs transition-colors cursor-pointer"
           >
             {copiedKeyId === "snippet" ? t("actions.copied") : t("actions.copy")}
           </button>
@@ -417,7 +417,7 @@ print(response.json())`,
                   placeholder={t("modal.namePlaceholder")}
                   value={newKeyName}
                   onChange={(e) => setNewKeyName(e.target.value)}
-                  className="w-full px-3.5 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                  className="w-full px-3.5 py-2 text-sm bg-white text-slate-900 placeholder:text-slate-400 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
                 />
                 <p className="text-[11px] text-slate-400 mt-1">
                   {t("modal.nameHelp")}

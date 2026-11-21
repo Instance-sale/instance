@@ -62,8 +62,7 @@
       "features",
       "safety",
       "deployment",
-      "api",
-      "mcp"
+      "api"
     ]
   },
   "description": "Instance is an AI sales CRM that turns your Instagram into a 24/7 sales pipeline. Let AI handle your DMs, qualify leads, and close deals on autopilot",

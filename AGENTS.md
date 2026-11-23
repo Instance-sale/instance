@@ -8,6 +8,7 @@ When working in specific workspace apps, consult their specialized instructions:
 - Backend REST API: [apps/api/AGENTS.md](/apps/api/AGENTS.md)
 - Frontend Web App: [apps/web/AGENTS.md](/apps/web/AGENTS.md)
 - Background Workers: [apps/workers/AGENTS.md](/apps/workers/AGENTS.md)
+- Model Context Protocol (MCP): [packages/mcp/README.md](/packages/mcp/README.md)
 
 ---
 

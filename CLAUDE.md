@@ -11,5 +11,6 @@ Please follow all instructions in the master rules file:
 - **Workers Dev Only**: `pnpm dev:workers`
 - **Prisma Client Generation**: `pnpm db:generate`
 - **Prisma Schema Sync**: `pnpm db:push`
+- **MCP Server Build**: `pnpm --filter instance-mcp build`
 - **Run Tests**: `pnpm test`
 - **Documentation**: Refer to [docs/](/docs/) and [docs.json](/docs/docs.json)

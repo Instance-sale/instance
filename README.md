@@ -136,4 +136,4 @@ For vulnerability disclosures and security policies, please consult [SECURITY.md
 
 ## License
 
-Instance is open-source software licensed under the [MIT License](LICENSE).
+Instance is open-source software licensed under the [AGPL-3.0 LICENSE](LICENSE).

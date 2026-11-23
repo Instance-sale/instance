@@ -78,6 +78,10 @@ Instance gives you a complete Instagram sales automation suite and social CRM:
 
 16. **Built-in Internationalization (i18n)**: Run global campaigns without language barriers. Instance provides 8 localized interface languages out of the box: English (`en`), Portuguese (Brazil) (`pt`), Spanish (`es`), Hindi (`hi`), German (`de`), French (`fr`), Indonesian (`id`), and Turkish (`tr`), with cookie-based locale preferences that keep your URLs clean.
 
+## Developer REST API and MCP Server
+
+Connect any AI agent (Claude Desktop, Cursor, Windsurf, Claude Code, or custom agents) directly to your Instance CRM using the official Model Context Protocol (MCP) server. Automate workflows, query contacts, update deal stages, or trigger funnels externally using clean REST endpoints authenticated with workspace API keys.
+
 
 ## Instagram Anti-Ban & Safety Architecture
 
@@ -99,6 +103,7 @@ Complete step-by-step documentation with screenshots, configuration guides, and 
 | **Instagram Setup** | Meta Developer App creation, webhook verification, and tester onboarding. | [Read Instagram Setup](https://docs.instance.sale/oss/instagram-setup) |
 | **Meta App Review** | Production live mode, Business Verification, Allow Usage, and screencast guide. | [Read App Review Guide](https://docs.instance.sale/oss/meta-app-review) |
 | **Feature Deep Dive** | In-depth tour of builder canvas, comment engine, story triggers, and CRM. | [Read Features](https://docs.instance.sale/oss/features) |
+| **Developer API & MCP** | Programmatic REST API and native Model Context Protocol (MCP) server for AI agents. | [Read API & MCP Guide](https://docs.instance.sale/oss/api) |
 | **Safety & Anti-Ban** | Jitter pacing, sliding-window rate limits, and circuit breakers. | [Read Safety Guide](https://docs.instance.sale/oss/safety) |
 | **Production Deployment** | Production VPS deployment with Caddy SSL, Docker, and Railway. | [Read Deployment](https://docs.instance.sale/oss/deployment) |
 
@@ -115,6 +120,7 @@ Looking for a managed deployment, custom scaling, or dedicated support for your 
 - **Database**: PostgreSQL 16
 - **Queue & Cache**: Redis 7, BullMQ, IoRedis
 - **Media Storage**: Cloudflare R2 (S3-compatible, zero egress fees)
+- **AI & Integrations**: Model Context Protocol (MCP), native `instance-mcp` server
 - **Monorepo Engine**: Turborepo, pnpm workspaces
 
 

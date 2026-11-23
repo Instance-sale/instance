@@ -4,7 +4,9 @@ import { useState, useEffect } from "react";
 import { Node } from "@xyflow/react";
 import { motion } from "framer-motion";
 import { logger } from "@/lib/logger";
-import { X } from "lucide-react";
+import { X, Loader2, Check } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { toast } from "@/lib/toast";
 import {
   SendDmNodeConfig,
   ReplyDmNodeConfig,
@@ -36,6 +38,7 @@ export default function NodeConfig({
   automationId,
 }: NodeConfigProps) {
   const [config, setConfig] = useState<any>(node.data.config || {});
+  const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved">("idle");
   const [showMediaSelector, setShowMediaSelector] = useState(false);
   const [showManualStoryInput, setShowManualStoryInput] = useState(false);
   const [keywordsInput, setKeywordsInput] = useState<string>("");
@@ -96,28 +99,28 @@ export default function NodeConfig({
   }, [onClose]);
 
   const handleSave = async () => {
-    // Process keywords from input before saving (if applicable)
-    const keywords = keywordsInput.split(",").map((k: string) => k.trim()).filter(Boolean);
+    if (saveStatus === "saving") return;
+    setSaveStatus("saving");
 
-    // Build updated config with ALL fields from current config
-    // Only update keywords/matchType if this node uses keywords
-    const nodeType = typeof node.data.type === 'string' ? node.data.type : '';
-    const updatedConfig = {
-      ...config, // Include all existing config fields (message, duration, condition, selectedMediaId, etc.)
-      // Only update keywords-related fields if this is a trigger node that uses keywords
-      ...(nodeType.startsWith("TRIGGER_") && (nodeType === "TRIGGER_COMMENT" || nodeType === "TRIGGER_DM" || nodeType === "TRIGGER_STORY") ? {
-        keywords,
-        matchType: config.fuzzyMatch ? "FUZZY" : (config.matchType || "CONTAINS"),
-      } : {}),
-    };
+    try {
+      // Process keywords from input before saving (if applicable)
+      const keywords = keywordsInput.split(",").map((k: string) => k.trim()).filter(Boolean);
 
-    // Save to database immediately via onUpdate
-    await onUpdate(updatedConfig);
+      // Build updated config with ALL fields from current config
+      // Only update keywords/matchType if this node uses keywords
+      const nodeType = typeof node.data.type === 'string' ? node.data.type : '';
+      const updatedConfig = {
+        ...config, // Include all existing config fields (message, duration, condition, selectedMediaId, etc.)
+        // Only update keywords-related fields if this is a trigger node that uses keywords
+        ...(nodeType.startsWith("TRIGGER_") && (nodeType === "TRIGGER_COMMENT" || nodeType === "TRIGGER_DM" || nodeType === "TRIGGER_STORY") ? {
+          keywords,
+          matchType: config.fuzzyMatch ? "FUZZY" : (config.matchType || "CONTAINS"),
+        } : {}),
+      };
 
-    // If this is a trigger node, immediately sync config to Automation table
-    // This ensures webhooks can find matching automations
-    if (nodeType.startsWith("TRIGGER_") && automationId) {
-      try {
+      // Helper to sync trigger config to Automation table if applicable
+      const syncTriggerPromise = async () => {
+        if (!nodeType.startsWith("TRIGGER_") || !automationId) return;
         const automationUpdate: any = {};
 
         if (nodeType === "TRIGGER_COMMENT") {
@@ -129,11 +132,8 @@ export default function NodeConfig({
             automationUpdate.mediaType = updatedConfig.selectedMediaType || null;
           }
 
-          // Set triggerType based on selectedMediaType (REEL -> COMMENT_REEL, otherwise COMMENT_POST)
           const selectedMediaType = updatedConfig.selectedMediaType || '';
           automationUpdate.triggerType = (selectedMediaType === 'REEL' || selectedMediaType === 'REELS') ? 'COMMENT_REEL' : 'COMMENT_POST';
-
-          logger.log(`[NodeConfig] Setting triggerType to ${automationUpdate.triggerType} based on selectedMediaType: ${selectedMediaType}`);
         } else if (nodeType === "TRIGGER_DM") {
           automationUpdate.triggerKeywords = keywords;
           automationUpdate.triggerMatchType = updatedConfig.fuzzyMatch ? "FUZZY" : (updatedConfig.matchType || "CONTAINS");
@@ -141,12 +141,10 @@ export default function NodeConfig({
         } else if (nodeType === "TRIGGER_STORY") {
           automationUpdate.triggerKeywords = keywords;
           automationUpdate.triggerMatchType = updatedConfig.fuzzyMatch ? "FUZZY" : (updatedConfig.matchType || "CONTAINS");
-          // TRIGGER_STORY could be STORY_MENTION or STORY_REPLY (including reaction)
           const storyType = String(updatedConfig.storyType || '').toLowerCase();
           const isReplyOrReaction = storyType === 'reply' || storyType === 'reaction';
           automationUpdate.triggerType = isReplyOrReaction ? 'STORY_REPLY' : 'STORY_MENTION';
 
-          // Sync story ID if selected
           if (updatedConfig.selectedMediaId) {
             automationUpdate.mediaId = updatedConfig.selectedMediaId;
             automationUpdate.mediaType = updatedConfig.selectedMediaType || "STORY";
@@ -166,9 +164,19 @@ export default function NodeConfig({
             body: JSON.stringify(automationUpdate),
           });
         }
-      } catch (error) {
-        logger.error("[NodeConfig] Failed to sync trigger config:", error);
-      }
+      };
+
+      // Save to database via onUpdate and sync trigger config concurrently
+      await Promise.all([onUpdate(updatedConfig), syncTriggerPromise()]);
+
+      setSaveStatus("saved");
+      toast.success("Saved", "Node configuration updated successfully");
+      setTimeout(() => {
+        setSaveStatus("idle");
+      }, 1500);
+    } catch (error: any) {
+      logger.error("[NodeConfig] ❌ Failed to save configuration:", error);
+      setSaveStatus("idle");
     }
   };
 
@@ -315,10 +323,29 @@ export default function NodeConfig({
           <div className="mt-8 pt-6 border-t border-slate-100">
             <button
               type="button"
+              disabled={saveStatus === "saving"}
               onClick={handleSave}
-              className="w-full rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 shadow-lg shadow-blue-200 transition-all transform hover:-translate-y-0.5 cursor-pointer"
+              className={cn(
+                "w-full rounded-xl px-4 py-2.5 text-sm font-semibold transition-all transform flex items-center justify-center gap-2 shadow-lg",
+                saveStatus === "saved"
+                  ? "bg-emerald-600 text-white shadow-emerald-200"
+                  : "bg-blue-600 hover:bg-blue-700 text-white shadow-blue-200 hover:-translate-y-0.5",
+                saveStatus === "saving" ? "opacity-75 cursor-not-allowed" : "cursor-pointer"
+              )}
             >
-              Save Configuration
+              {saveStatus === "saving" && (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <span>Saving...</span>
+                </>
+              )}
+              {saveStatus === "saved" && (
+                <>
+                  <Check className="w-4 h-4" />
+                  <span>Configuration Saved!</span>
+                </>
+              )}
+              {saveStatus === "idle" && <span>Save Configuration</span>}
             </button>
           </div>
         </div>

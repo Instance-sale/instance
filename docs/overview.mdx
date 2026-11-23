@@ -32,6 +32,7 @@ Instance is engineered as a modular TypeScript monorepo where each component is 
 - **Web Dashboard (`apps/web`)**: Built with Next.js, Tailwind CSS, and React Flow. Provides the visual automation canvas, CRM, audience list management, analytics dashboard and Settings.
 - **API Server (`apps/api`)**: Built with NestJS. Handles authentication, workspace settings, REST endpoints, and incoming Meta webhook ingestion.
 - **Worker Service (`apps/workers`)**: Background worker service running BullMQ queues to handle outbound message delivery, Instagram profile enrichment, and scheduled jobs without blocking web requests.
+- **Model Context Protocol Server (`packages/mcp`)**: Native MCP server package (`instance-mcp`) enabling AI assistants (Claude Desktop, Cursor, Windsurf, Claude Code) to interact with CRM contacts and automations.
 - **Cache and Queues (Redis)**: Manages BullMQ job queues and provides atomic distributed locks for webhook deduplication.
 - **Primary Database (PostgreSQL)**: Relational data store managed through Prisma ORM with strict type safety across all apps.
 
@@ -39,3 +40,4 @@ Instance is engineered as a modular TypeScript monorepo where each component is 
 
 - Ready to install locally? Follow the [Installation](/installation) guide.
 - Prefer one-command containerization? Jump straight to the [Docker](/docker) setup.
+- Connecting AI agents or external tools? Explore the [Developer API & MCP](/api) guide.

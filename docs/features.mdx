@@ -1,6 +1,6 @@
 ---
 title: "Features"
-description: "Comprehensive overview of Instance features: icebreakers, pre-made templates, visual flow builder, comment-to-DM, story triggers, messaging, follower gate, logic routing, CRM, pipeline, audience segmentation, analytics, and internationalization."
+description: "Comprehensive overview of Instance features: icebreakers, pre-made templates, visual flow builder, comment-to-DM, story triggers, messaging, follower gate, logic routing, CRM, pipeline, audience segmentation, analytics, internationalization, and developer API & MCP."
 ---
 
 Instance is a complete open-source Instagram automation platform and social sales CRM designed to capture, nurture, and close leads directly through Instagram direct messages and public engagement.
@@ -219,3 +219,21 @@ Instance is engineered from the ground up for international sales teams and glob
   - Turkish 🇹🇷 (`tr`)
 - **Clean Cookie-Based Locale Persistence**: Locale preference is stored cleanly via cookies without adding disruptive language subpaths (such as `/en/` or `/es/`) to dashboard URLs.
 - **Single Source of Truth**: All UI strings are managed through centralized English catalogs with automated AI translations, ensuring consistent terminology across every screen.
+
+---
+
+## 13. Developer REST API & Native MCP Server
+
+Instance provides two programmatic interfaces to access CRM records, manage audience segments, and trigger Instagram automations:
+
+### Model Context Protocol (MCP) Server
+- **Native AI Agent Integration**: Connect assistants such as Claude Desktop, Cursor, Windsurf, Claude Code, and custom AI agents over standard I/O via `instance-mcp`.
+- **CRM Tool Execution**: Query leads, inspect qualification scores, update pipeline stages, apply tags, and trigger Instagram funnels directly from your AI conversation.
+- **Quick-Copy Snippets**: Pre-configured JSON configuration snippets are ready to copy under **Dashboard -> Settings -> API Keys**.
+
+### Public Developer REST API
+- **Standard HTTP Endpoints**: Predictable `/api/v1/` endpoints for webhooks, custom backends, and no-code tools (Zapier, Make, n8n).
+- **Workspace API Keys**: Secure authentication using `X-API-Key` headers or Bearer tokens.
+- **Built-in Rate Limiting**: Automatic request throttling (60 requests per minute) protecting database health.
+
+For complete endpoint documentation and MCP configuration examples, consult the [Developer API & MCP](/api) guide.

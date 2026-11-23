@@ -121,7 +121,14 @@ export function useNodeConfig({
           if (!nodesResponse.ok) {
             const errorText = await nodesResponse.text();
             logger.error("[useNodeConfig] ❌ Failed to save:", errorText);
-            throw new Error(`Failed to save node configuration: ${errorText}`);
+            let parsedMessage = errorText;
+            try {
+              const parsed = JSON.parse(errorText);
+              parsedMessage = parsed.message || parsed.error || errorText;
+            } catch {
+              // Not JSON formatted
+            }
+            throw new Error(`Failed to save node configuration: ${parsedMessage}`);
           }
 
           return await nodesResponse.json();

@@ -36,7 +36,7 @@ export function useAutoSave({
   const edgesRef = useRef<Edge[]>(edges);
   const flowDataRef = useRef<unknown>(initialFlowData ?? null);
   const retryCountRef = useRef(0);
-  const { queueSave, cancelPending, isSaving } = useSaveQueue();
+  const { queueSave, cancelPending: cancelQueuePending, isSaving } = useSaveQueue();
 
   useEffect(() => {
     if (initialFlowData !== undefined) {
@@ -288,14 +288,22 @@ export function useAutoSave({
   }, [nodes, edges, debounceMs, saveNodes]);
 
   /**
+   * Cancel pending auto-save (both debounce timeout and queued operations)
+   */
+  const cancelPending = useCallback(() => {
+    if (saveTimeoutRef.current) {
+      clearTimeout(saveTimeoutRef.current);
+      saveTimeoutRef.current = null;
+    }
+    cancelQueuePending();
+  }, [cancelQueuePending]);
+
+  /**
    * Manual save (immediate)
    */
   const manualSave = useCallback(async () => {
     // Clear any pending auto-save
-    if (saveTimeoutRef.current) {
-      clearTimeout(saveTimeoutRef.current);
-      cancelPending();
-    }
+    cancelPending();
     // Use refs to get latest state
     return await saveNodes(nodesRef.current, edgesRef.current);
   }, [saveNodes, cancelPending]);

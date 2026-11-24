@@ -139,4 +139,4 @@ For vulnerability disclosures and security policies, please consult [SECURITY.md
 Instance is open-source software licensed under the [AGPL-3.0 LICENSE](LICENSE).
 
 ## Listing
-<a href="https://www.opensourcealternatives.to"><img src="https://www.opensourcealternatives.to/badge-osa.svg" alt="As seen on Open Source Alternatives"></a>
+<a href="https://nicklaunches.com/products/instance/" target="_blank" rel="noopener"><img src="https://nicklaunches.com/badges/featured-dark.png" alt="Instance on Nick Launches" width="244" height="56" /></a> <a href="https://www.opensourcealternatives.to"><img src="https://www.opensourcealternatives.to/badge-osa.svg" alt="As seen on Open Source Alternatives"></a> 

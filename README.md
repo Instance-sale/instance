@@ -139,6 +139,6 @@ For vulnerability disclosures and security policies, please consult [SECURITY.md
 Instance is open-source software licensed under the [AGPL-3.0 LICENSE](LICENSE).
 
 ## Listing
-<a href="https://startupbase.io/products/instance-2?utm_source=startupbase&utm_medium=badge&utm_campaign=featured-badge-light" target="_blank" rel="noopener noreferrer">
-  <img src="https://statics.startupbase.io/site/badges/featured-on-sb.svg" alt="Featured on StartupBase" height="55" style="height:55px;width:auto;" />
+<a href="https://startupbase.io/products/instance-2?utm_source=startupbase&utm_medium=badge&utm_campaign=featured-badge-dark" target="_blank" rel="noopener noreferrer">
+  <img src="https://statics.startupbase.io/site/badges/featured-on-sb-dark.svg" alt="Featured on StartupBase" height="55" style="height:55px;width:auto;" />
 </a> <a href="https://nicklaunches.com/products/instance/" target="_blank" rel="noopener"><img src="https://nicklaunches.com/badges/featured-dark.png" alt="Instance on Nick Launches" width="244" height="56" /></a> <a href="https://www.opensourcealternatives.to"><img src="https://www.opensourcealternatives.to/badge-osa.svg" alt="As seen on Open Source Alternatives"></a> 

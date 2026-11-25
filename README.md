@@ -17,6 +17,8 @@
 
 <br />
 
+<a href="https://www.producthunt.com/products/instance-3?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-instance-3" target="_blank" rel="noopener noreferrer"><img alt="Instance - The Open-Source Alternative to ManyChat for Instagram | Product Hunt" width="250" height="54" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1329628&amp;theme=light&amp;t=1795603045979"></a>
+
 </div>
 
 Instance turns your Instagram presence into a 24/7 sales engine: building visual funnels, qualifying inbound leads, verifying followers before unlocking links, and capturing emails and phone numbers, all on your own infrastructure with zero monthly subscription fees and zero contact limits.
@@ -137,7 +139,3 @@ For vulnerability disclosures and security policies, please consult [SECURITY.md
 ## License
 
 Instance is open-source software licensed under the [AGPL-3.0 LICENSE](LICENSE).
-
-
-## Listing
-<a href="https://www.opensourcealternatives.to"><img src="https://www.opensourcealternatives.to/badge-osa.svg" alt="As seen on Open Source Alternatives"></a> 

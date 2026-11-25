@@ -141,4 +141,5 @@ For vulnerability disclosures and security policies, please consult [SECURITY.md
 Instance is open-source software licensed under the [AGPL-3.0 LICENSE](LICENSE).
 
 ## Listing
+<a href="https://fazier.com/launches/docs.instance.sale" target="_blank"><img src="https://fazier.com/api/v1//public/badges/launch_badges.svg?badge_type=featured&theme=dark" width=250 alt="Fazier badge" /></a>
 <a href="https://www.opensourcealternatives.to"><img src="https://www.opensourcealternatives.to/badge-osa.svg" alt="As seen on Open Source Alternatives"></a> 

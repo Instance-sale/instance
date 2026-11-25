@@ -139,3 +139,6 @@ For vulnerability disclosures and security policies, please consult [SECURITY.md
 ## License
 
 Instance is open-source software licensed under the [AGPL-3.0 LICENSE](LICENSE).
+
+## Listing
+<a href="https://www.opensourcealternatives.to"><img src="https://www.opensourcealternatives.to/badge-osa.svg" alt="As seen on Open Source Alternatives"></a> 

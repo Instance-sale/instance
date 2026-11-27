@@ -4,7 +4,6 @@
 
 **The open-source Manychat alternative. Scale your audience with zero subscription fees.**
 
-[![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Documentation](https://img.shields.io/badge/Docs-instance.sale%2Foss%2Fdocs-2563EB)](https://docs.instance.sale/oss)
 [![Next.js](https://img.shields.io/badge/Frontend-Next.js%2016-000000?logo=next.js)](apps/web/)
 [![NestJS](https://img.shields.io/badge/Backend-NestJS%2011-E0234E?logo=nestjs)](apps/api/)
@@ -16,8 +15,6 @@
 [![Docker](https://img.shields.io/badge/Docker-Containers-2496ED?logo=docker&logoColor=white)](docker-compose.yml)
 
 <br />
-
-<a href="https://www.producthunt.com/products/instance-3?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-instance-3" target="_blank" rel="noopener noreferrer"><img alt="Instance - The Open-Source Alternative to ManyChat for Instagram | Product Hunt" width="250" height="54" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1329628&amp;theme=light&amp;t=1795603045979"></a>
 
 </div>
 
@@ -139,7 +136,3 @@ For vulnerability disclosures and security policies, please consult [SECURITY.md
 ## License
 
 Instance is open-source software licensed under the [AGPL-3.0 LICENSE](LICENSE).
-
-## Listing
-
-<a href="https://www.opensourcealternatives.to"><img src="https://www.opensourcealternatives.to/badge-osa.svg" alt="As seen on Open Source Alternatives"></a> 
